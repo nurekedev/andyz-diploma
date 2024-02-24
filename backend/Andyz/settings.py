@@ -113,9 +113,6 @@ REST_FRAMEWORK = {
 
     'DATETIME_FORMAT': '%d.%m.%y %H:%M',
 
-    'DEFAULT_PERMISSIONS_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -144,23 +141,22 @@ SIMPLE_JWT = {
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE': True,
-    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
-    'SEND_CONFIRMATION_EMAIL': True,
-    'SET_USERNAME_RETYPE': True,
-    'SET_PASSWORD_RETYPE': True,
-    'SEND_ACTIVATION_EMAIL': True,
-    # 'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'auth/activate/?uid={uid}&token={token}',
-    'PASSWORD_RESET_CONFIRM_URL': 'auth/reset-password/?uid={uid}&token={token}',
-    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    # 'USER_CREATE_PASSWORD_RETYPE': True,
+    # 'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
+    # 'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    # 'SET_USERNAME_RETYPE': True,
+    # 'SET_PASSWORD_RETYPE': True,
 
-    'SERIALIZERS': {
-        'user_create': 'users.serializers.UserCreateSerializer',
-        'user': 'users.serializers.UserSerializer',
-        'current_user': 'users.serializers.UserSerializer',
-    }
+    # 'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
+    # 'ACTIVATION_URL': 'auth/activate/?uid={uid}&token={token}',
+    # 'PASSWORD_RESET_CONFIRM_URL': 'auth/reset-password/?uid={uid}&token={token}',
+    # 'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+
+    # 'SERIALIZERS': {
+    #     'user_create': 'users.serializers.UserCreateSerializer',
+    #     'user': 'users.serializers.UserSerializer',
+    #     'current_user': 'users.serializers.UserSerializer',
+    # }
 
 }
 

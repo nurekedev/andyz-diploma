@@ -27,7 +27,7 @@ class Course(models.Model):
     DRAFT = 'draft'
     PUBLISHED = 'published'
 
-    STATUS_CHOISES = (
+    STATUS_CHOICES = (
         (DRAFT, 'Draft'),
         (PUBLISHED, 'Published')
     )
@@ -41,7 +41,7 @@ class Course(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='courses', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='uploads', blank=True, null=True)
-    status = models.CharField(max_length=25, choices=STATUS_CHOISES, default=DRAFT)
+    status = models.CharField(max_length=25, choices=STATUS_CHOICES, default=DRAFT)
 
     class Meta:
         verbose_name = 'Courses'

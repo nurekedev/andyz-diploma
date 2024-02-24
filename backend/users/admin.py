@@ -1,36 +1,39 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
-
-from .forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser, Record
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 
-class UserAdmin(BaseUserAdmin):
-    form = UserChangeForm
-    add_form = UserCreationForm
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = CustomUser
+    list_display = ("email", "is_staff", "is_active",)
+    list_filter = ("is_staff", "is_active",)
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        ("Personal Info", {"fields": (
+            "first_name", "last_name", "gender", "identifier_number", "address_line", "date_of_birth", "blood_group",
+            "phone_number")}),
+        ("Permissions", {"fields": ("is_staff", "is_active", "groups", "user_permissions")}),
+    )
+    add_fieldsets = (
+        (None, {
+            "classes": ("wide",),
+            "fields": (
+                "email", "password1", "password2", "first_name", "last_name", "gender", "identifier_number",
+                "blood_group", "address_line", "date_of_birth", "phone_number", "is_staff", "is_active",
+                "groups", "user_permissions"
+            )}
+         ),
+    )
+    search_fields = ("email",)
+    ordering = ("email",)
 
-    list_display = ["email", "date_of_birth", "is_admin", "is_active", "is_deactivated"]
-    list_filter = ["is_admin"]
-    fieldsets = [
-        (None, {"fields": ["email", "password"]}),
-        ("Personal info", {"fields": ["first_name", "last_name", "date_of_birth"]}),
-        ("Permissions", {"fields": ["is_admin"]}),
-    ]
 
-    add_fieldsets = [
-        (
-            None,
-            {
-                "classes": ["wide"],
-                "fields": ["email", "first_name", "last_name", "date_of_birth", "password1", "password2"],
-            },
-        ),
-    ]
-    search_fields = ["email"]
-    ordering = ["email"]
-    filter_horizontal = []
+admin.site.register(CustomUser, CustomUserAdmin)
 
 
-admin.site.register(CustomUser, UserAdmin)
-admin.site.unregister(Group)
+@admin.register(Record)
+class RecordAdmin(admin.ModelAdmin):
+    list_display = ('date', 'title', 'description')
