@@ -1,4 +1,4 @@
-from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer, UserSerializer as BaseUserSerializer
+from djoser.serializers import UserSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
@@ -8,8 +8,24 @@ from .models import CustomUser
 user = get_user_model()
 
 
-class UserSerializer(BaseUserSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'email', 'first_name', 'last_name', 'date_of_birth', 'phone_number', 'is_staff', 'is_active',
-                  'date_joined']
+class DoctorHideSerializer(UserSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta(UserSerializer.Meta):
+        fields = ('full_name',)
+
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
+
+class PatientSerializer(UserSerializer):
+    class Meta(UserSerializer.Meta):
+        fields = ['email',
+                  'first_name',
+                  'last_name',
+                  'identifier_number',
+                  'gender',
+                  'blood_group',
+                  'address_line',
+                  'date_of_birth',
+                  'phone_number']

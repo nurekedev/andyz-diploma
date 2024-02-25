@@ -73,7 +73,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Record(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='records')
-    date = models.DateField(_("birthday"))
+    date = models.DateField(_("date"))
     title = models.CharField(_("record title"), max_length=255)
     description = models.TextField(_("record text"))
 
