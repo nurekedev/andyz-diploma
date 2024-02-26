@@ -1,24 +1,30 @@
-from rest_framework import serializers
-from .models import Category, Course, Lesson
 from django.contrib.auth.models import User
 
-from .models import *
+from rest_framework import serializers
+from rest_framework.request import Request
+from rest_framework.test import APIRequestFactory
 
-import sys
-
-# from backend.users.serializers import UserSerializer
+from .models import Category, Course, Lesson
+from users.serializers import DoctorHideSerializer
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('title',)
 
 
 class CourseListSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(read_only=True, many=True)
+    created_by = DoctorHideSerializer(read_only=True)
+    url = serializers.HyperlinkedIdentityField(
+        view_name='course-detail',
+        lookup_field='slug',
+    )
+
     class Meta:
         model = Course
-        fields = '__all__'
+        fields = ('title', 'slug', 'url', 'short_description', 'created_by', 'image', 'categories')
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -28,7 +34,8 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
-    # created_by = customserializer.UserSerializer(many=False)
+    categories = CategorySerializer(read_only=True, many=True)
+    created_by = DoctorHideSerializer(read_only=True)
 
     class Meta:
         model = Course

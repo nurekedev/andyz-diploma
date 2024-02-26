@@ -40,7 +40,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         (BLOOD_GROUP_NOT_SPECIFIED, 'Not specified')
     )
 
-    username = None
+    username = models.CharField(
+        _('username'),
+        max_length=150,
+        unique=True,
+        blank=True,
+        null=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
     email = models.EmailField(_("email address"), max_length=255, unique=True)
     first_name = models.CharField(_("first name"), max_length=255)
     last_name = models.CharField(_("last name"), max_length=255)
@@ -56,11 +66,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(_("phone number"), validators=[phone_regex], max_length=17, blank=True)
 
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone_number", "date_of_birth", "identifier_number"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "identifier_number", "date_of_birth"]
 
     objects = CustomUserManager()
 
@@ -73,7 +83,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Record(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='records')
-    date = models.DateField(_("birthday"))
+    date = models.DateField(_("date"))
     title = models.CharField(_("record title"), max_length=255)
     description = models.TextField(_("record text"))
 

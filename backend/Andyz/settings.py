@@ -5,10 +5,11 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^$#0yk%xkkf0$u9cn5cm(n1ris#nu1d&1u#kx=o*vk*^g8&1$i'
+SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -43,7 +44,7 @@ ROOT_URLCONF = 'Andyz.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build')],
+        'DIRS': [os.path.join(SETTINGS_PATH, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,17 +103,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # STATICFILES CONFIGURATIONS
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'build/static')
+# ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
 REST_FRAMEWORK = {
 
     'DATETIME_FORMAT': '%d.%m.%y %H:%M',
-
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -141,24 +144,31 @@ SIMPLE_JWT = {
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    # 'USER_CREATE_PASSWORD_RETYPE': True,
+    'USER_CREATE_PASSWORD_RETYPE': True,
     # 'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     # 'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     # 'SET_USERNAME_RETYPE': True,
     # 'SET_PASSWORD_RETYPE': True,
+    'SEND_ACTIVATION_EMAIL': True,
+    # 'SEND_CONFIRMATION_EMAIL': True,
 
     # 'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    # 'ACTIVATION_URL': 'auth/activate/?uid={uid}&token={token}',
-    # 'PASSWORD_RESET_CONFIRM_URL': 'auth/reset-password/?uid={uid}&token={token}',
-    # 'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    "ACTIVATION_URL": "api/v1/auth/users/activate/?uid={uid}&token={token}",
+    'PASSWORD_RESET_CONFIRM_URL': 'auth/reset-password/?uid={uid}&token={token}',
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
 
-    # 'SERIALIZERS': {
-    #     'user_create': 'users.serializers.UserCreateSerializer',
-    #     'user': 'users.serializers.UserSerializer',
-    #     'current_user': 'users.serializers.UserSerializer',
-    # }
+    'SERIALIZERS': {
+        'current_user': 'users.serializers.PatientSerializer',
+        # 'user_create': 'users.serializers.UserCreationSerializer'
+    },
+
+    'EMAIL': {
+        'activation': 'users.email.ActivationEmail',
+    }
 
 }
+
+DOMAIN = '127.0.0.1:8000'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
