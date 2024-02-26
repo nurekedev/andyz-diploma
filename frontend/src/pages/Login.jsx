@@ -1,146 +1,159 @@
+/* eslint-disable no-unused-vars */
 import {
-    Flex,
-    Box,
-    FormControl,
-    FormLabel,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Stack,
-    Button,
-    Heading,
-    Text,
-    useColorModeValue,
-    Link,
-    useToast
-  } from '@chakra-ui/react'
-  import { useSetRecoilState} from "recoil"
-  import  authAtom  from "../atoms/authAtom"
-  import { useState } from 'react'
-  import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-  import userAtom from '../atoms/userAtom'
-  
-  export default function Login() {
-    const [showPassword, setShowPassword] = useState(false);
-    const setAuthScreen = useSetRecoilState(authAtom);
-    const setUser = useSetRecoilState(userAtom);
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Button,
+  Heading,
+  Text,
+  useColorModeValue,
+  useToast
+} from "@chakra-ui/react";
+import { useRecoilState } from "recoil";
+import { useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import isAuthenticatedAtom from "../atoms/isAuthenticatedAtom";
+import accessTokenAtom from "../atoms/accessTokenAtom";
+import refreshTokenAtom from "../atoms/refreshTokenAtom";
+import Cookies from "js-cookie";
 
-    const [inputs, setInputs] = useState({
-      username: "",
-      password: "",
-    });
-    const toast = useToast();
-    const handleLogin = async () => {
-      
-      try {
-        console.log(inputs);
-        const res = await fetch("/api/users/login", {
-          method: 'POST',
+export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
+  const [refreshToken, setRefreshToken] = useRecoilState(refreshTokenAtom);
+  const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthenticatedAtom);
+
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: ""
+  });
+  const toast = useToast();
+
+  const handleLogin = async () => {
+    try {
+      console.log(inputs);
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/v1/auth/jwt/create/",
+        {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(inputs)
-        });
-        const data = await res.json();
-        if (data.error) {
-          toast({
-            title: "Error",
-            description: data.error,
-            status: "error",
-            duration: 2000,
-            isClosable: true,
-          })
-          return;
         }
-        console.log(data);
+      );
 
-        localStorage.setItem("user-threads", JSON.stringify(data));
-        setUser(data);
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        })
+      if (response.ok) {
+        const { access, refresh } = await response.json();
+
+        // Сохранение токенов и установка статуса аутентификации
+        setAccessToken(access);
+        // Установка куки для access token с сроком 5 минут
+        Cookies.set("access_token", access, { expires: 5 / (24 * 60) }); // 5 минут в долях от суток
+
+        setRefreshToken(refresh);
+        // Установка куки для refresh token с сроком 15 минут
+        Cookies.set("refresh_token", refresh, { expires: 15 / (24 * 60) }); // 15 минут в долях от суток
+
+        setIsAuthenticated(true);
+        Cookies.set("isAuthenticated", "true");
+        console.log(isAuthenticated); // Проверьте текущее значение isAuthenticated
+
+        // Перенаправление на главную страницу
       }
-
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true
+      });
     }
-    return (
-      <Flex
-        
-        align={'center'}
-        justify={'center'}
-        
-       >
-        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-          <Stack align={'center'}>
-            <Heading fontSize={'4xl'} textAlign={'center'}>
-              Login
-            </Heading>
-            <Text fontSize={'lg'} color={'gray.600'}>
-              Have a nice day ✌️
-            </Text>
-          </Stack>
-          <Box
-            rounded={'lg'}
-            bg={useColorModeValue('white', 'gray.dark')}
-            width={{
-                base: '100%',
-                sm: '400px',
-            }}
+  };
 
-            boxShadow={'lg'}
-            p={8}>
-            <Stack spacing={4}>
-              
-              <FormControl  isRequired>
-                <FormLabel>Username</FormLabel>
-                <Input type="text"
-                  value={inputs.username}
-                  onChange={(e) => setInputs((inputs) => ({ ...inputs, username: e.target.value }))}
-            
-                  />
-              </FormControl>
-              <FormControl  isRequired>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <Input type={showPassword ? 'text' : 'password'}
-               value={inputs.password}
-               onChange={(e) => setInputs((inputs) => ({ ...inputs, password: e.target.value }))}
-             />
-         <InputRightElement h={'full'}>
-                    <Button
-                      variant={'ghost'}
-                      onClick={() => setShowPassword((showPassword) => !showPassword)}>
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Stack spacing={10} pt={2}>
-                <Button
-                  loadingText="Submitting"
-                  size="lg"
-                  bg={useColorModeValue("gray.500", "gray.700")}
-                  color={'white'}
-                  _hover={{
-                    bg: useColorModeValue("gray.700", "gray.800"),
-                  }}
-                  onClick={handleLogin}>
-                  Login
-                </Button>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Do not have an account <Link color={'blue.400'}  onClick={() => setAuthScreen("signup")}
-                  >Sign up</Link>
-                </Text>
-              </Stack>
-            </Stack>
-          </Box>
+  return (
+    <Flex align={"center"} justify={"center"}>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"} textAlign={"center"}>
+            Login
+          </Heading>
+          <Text fontSize={"lg"} color={"gray.600"}>
+            Have a nice day ✌️
+          </Text>
         </Stack>
-      </Flex>
-    )
-  }
+        <Box
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.dark")}
+          width={{
+            base: "100%",
+            sm: "400px"
+          }}
+          boxShadow={"lg"}
+          p={8}
+        >
+          <Stack spacing={4}>
+            <FormControl isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="text"
+                value={inputs.email}
+                onChange={(e) =>
+                  setInputs((inputs) => ({
+                    ...inputs,
+                    email: e.target.value
+                  }))
+                }
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Password</FormLabel>
+              <InputGroup>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={inputs.password}
+                  onChange={(e) =>
+                    setInputs((inputs) => ({
+                      ...inputs,
+                      password: e.target.value
+                    }))
+                  }
+                />
+                <InputRightElement h={"full"}>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() =>
+                      setShowPassword((showPassword) => !showPassword)
+                    }
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <Stack spacing={10} pt={2}>
+              <Button
+                loadingText="Submitting"
+                size="lg"
+                bg={useColorModeValue("gray.500", "gray.700")}
+                color={"white"}
+                _hover={{
+                  bg: useColorModeValue("gray.700", "gray.800")
+                }}
+                onClick={handleLogin}
+              >
+                Login
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
+  );
+}

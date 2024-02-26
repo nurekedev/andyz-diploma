@@ -153,7 +153,7 @@ DJOSER = {
     # 'SEND_CONFIRMATION_EMAIL': True,
 
     # 'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    "ACTIVATION_URL": "api/v1/auth/users/activate/?uid={uid}&token={token}",
+    "ACTIVATION_URL": "activate/?uid={uid}&token={token}",
     'PASSWORD_RESET_CONFIRM_URL': 'auth/reset-password/?uid={uid}&token={token}',
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
 
@@ -168,7 +168,8 @@ DJOSER = {
 
 }
 
-DOMAIN = '127.0.0.1:8000'
+DOMAIN = 'localhost:3000'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

@@ -1,36 +1,24 @@
-import { Button, useToast } from '@chakra-ui/react'
-import { useSetRecoilState } from 'recoil';
-import authAtom from '../atoms/authAtom';
+/* eslint-disable no-unused-vars */
+import { Button} from '@chakra-ui/react'
+import { useRecoilState } from 'recoil';
+import accessTokenAtom from '../atoms/accessTokenAtom';
+import refreshTokenAtom from '../atoms/refreshTokenAtom';
+import isAuthenticatedAtom from '../atoms/isAuthenticatedAtom';
+import Cookies from 'js-cookie';
 
 export const LogoutButton = () => {
-    const setUser = useSetRecoilState(authAtom)
-    const toast = useToast();
-    const handleLogout = async() => {
-        try {
-            const res = await fetch("/api/users/logout", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            const data = await res.json();
-            
-            if (data.error) {
-                toast({
-                    title: "Error",
-                    description: data.error,
-                    status: "error",
-                    duration: 2000,
-                    isClosable: true,
-                })
-                return
-            }
-            localStorage.removeItem("user-threads");
-            setUser(null);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
+    const [refreshToken, setRefreshToken] = useRecoilState(refreshTokenAtom);
+    const [isAuthenticated, setIsAuthenticated] =
+      useRecoilState(isAuthenticatedAtom);
+
+    const handleLogout = () => {
+      setAccessToken(null);
+      setRefreshToken(null);
+      setIsAuthenticated(false);
+      Cookies.remove("isAuthenticated");  
+  };
+  
   return (
     <Button position={'fixed'} top={30} right={30} size={"sm"} onClick={handleLogout}>Logout</Button>
   )
