@@ -39,8 +39,8 @@ class Course(models.Model):
     long_description = models.TextField(blank=True, null=True)
     created_at = models.DateField(auto_now_add=True)
     created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='courses', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='uploads', blank=True, null=True)
+        settings.AUTH_USER_MODEL, related_name='course', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='uploads/courses', blank=True, null=True)
     status = models.CharField(max_length=25, choices=STATUS_CHOICES, default=DRAFT)
 
     class Meta:
@@ -52,16 +52,19 @@ class Course(models.Model):
     def __str__(self):
         return f"{self.title} - {self.slug}"
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
     def get_image(self):
         if self.image:
             return settings.WEBSITE_URL + self.image.url
         else:
             return 'https://bulma.io/images/placeholders/1280x960.png'
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
+    def get_absolute_url(self):
+        return reverse('course-detail', kwargs={'slug': self.slug})
 
 
 class Lesson(models.Model):

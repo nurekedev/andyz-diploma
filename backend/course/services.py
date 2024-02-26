@@ -30,3 +30,18 @@ def courses_newest(objects, **kwargs):
     return course_queryset.filter(**kwargs)
 
 
+def active_courses(objects, **kwargs):
+    course_queryset = all_objects(
+        objects=objects,
+        only=('title', 'slug', 'short_description', 'long_description', 'created_by', 'image')
+    )
+    return course_queryset.filter(**kwargs)
+
+
+def get_detailed_course(objects, **kwargs):
+    course_lessons_queryset = all_objects(
+        objects=objects,
+        only=('title', 'slug', 'short_description', 'long_description', 'created_by', 'image')
+    )
+
+    return course_lessons_queryset.filter(**kwargs).first()
