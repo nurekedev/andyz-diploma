@@ -5,6 +5,7 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^$#0yk%xkkf0$u9cn5cm(n1ris#nu1d&1u#kx=o*vk*^g8&1$i'
+SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = True
 
@@ -43,7 +44,7 @@ ROOT_URLCONF = 'Andyz.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build')],
+        'DIRS': [os.path.join(SETTINGS_PATH, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,17 +108,14 @@ STATIC_URL = '/static/'
 # ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
 REST_FRAMEWORK = {
 
     'DATETIME_FORMAT': '%d.%m.%y %H:%M',
-
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -162,6 +160,10 @@ DJOSER = {
     'SERIALIZERS': {
         'current_user': 'users.serializers.PatientSerializer',
         # 'user_create': 'users.serializers.UserCreationSerializer'
+    },
+
+    'EMAIL': {
+        'activation': 'users.email.ActivationEmail',
     }
 
 }
