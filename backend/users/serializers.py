@@ -29,3 +29,6 @@ class PatientSerializer(UserSerializer):
                   'address_line',
                   'date_of_birth',
                   'phone_number']
+
+
+

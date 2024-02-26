@@ -151,19 +151,22 @@ DJOSER = {
     # 'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     # 'SET_USERNAME_RETYPE': True,
     # 'SET_PASSWORD_RETYPE': True,
-    # 'SEND_ACTIVATION_EMAIL': True,
+    'SEND_ACTIVATION_EMAIL': True,
     # 'SEND_CONFIRMATION_EMAIL': True,
 
     # 'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    # "ACTIVATION_URL": "auth/request_activate/{uid}/{token}",
-    # 'PASSWORD_RESET_CONFIRM_URL': 'auth/reset-password/?uid={uid}&token={token}',
-    # 'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    "ACTIVATION_URL": "api/v1/auth/users/activate/?uid={uid}&token={token}",
+    'PASSWORD_RESET_CONFIRM_URL': 'auth/reset-password/?uid={uid}&token={token}',
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
 
     'SERIALIZERS': {
         'current_user': 'users.serializers.PatientSerializer',
+        # 'user_create': 'users.serializers.UserCreationSerializer'
     }
 
 }
+
+DOMAIN = '127.0.0.1:8000'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
