@@ -61,10 +61,17 @@ export default function Login() {
         Cookies.set("refresh_token", refresh, { expires: 15 / (24 * 60) }); // 15 минут в долях от суток
 
         setIsAuthenticated(true);
-        Cookies.set("isAuthenticated", "true");
-        console.log(isAuthenticated); // Проверьте текущее значение isAuthenticated
+        Cookies.set("isAuthenticated", "true", { expires: 15 / (24 * 60) });
 
         // Перенаправление на главную страницу
+      } else {
+        const { message } = await response.json();
+        toast({
+          title: "Ошибка авторизации",
+          description: message,
+          status: "error",
+          duration: 2000,
+        });
       }
     } catch (error) {
       toast({
@@ -78,7 +85,7 @@ export default function Login() {
   };
 
   return (
-    <Flex align={"center"} justify={"center"}>
+    <Flex align={"center"} justify={"center"} m={"auto"}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
