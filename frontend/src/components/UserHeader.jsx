@@ -1,15 +1,15 @@
 import {
   Avatar,
-  HStack,
+  Box,
   Heading,
   Image,
   Text,
   VStack,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useUserData } from "../token/UserData"; 
+import { useUserData } from "../token/UserData";
 const UserHeader = () => {
-const userData = useUserData();
+  const userData = useUserData();
   return (
     <>
       <VStack
@@ -32,27 +32,37 @@ const userData = useUserData();
             transform: "translateY(-60px)"
           }}
         />
-        <HStack
+        <Box
+          display={"flex"}
+          flexDir={{
+            base: "raw"
+          }}
           m={"auto"}
           p={"10px"}
-          gap={20}
+          gap={{
+            base: 5,
+            sm: 20,
+            md: 20
+          }}
           style={{
             transform: "translateY(-60px)"
           }}
         >
-          <VStack gap={2}>
-            <Heading fontSize={14}>Date of Birth</Heading>
-            <Text as={"h2"}>{userData?.date_of_birth}</Text>
+          <VStack gap={0}>
+            <Heading fontSize={{ base: 12, md: 16 }}>Blood Group</Heading>
+            <Text fontSize={{ base: 18, md: 24 }}>{userData?.blood_group}</Text>
           </VStack>
-          <VStack>
-            <Heading fontSize={14}>Identifier Number</Heading>
-            <Text as={"h2"}>{userData?.identifier_number}</Text>
+          <VStack gap={0}>
+            <Heading fontSize={{ base: 12, md: 16 }}>Identifier Number</Heading>
+            <Text fontSize={{ base: 18, md: 24 }}>
+              {userData?.identifier_number}
+            </Text>
           </VStack>
-          <VStack>
-            <Heading fontSize={14}>Gender</Heading>
-            <Text as={"h2"}>{userData?.gender}</Text>
+          <VStack gap={0}>
+            <Heading fontSize={{ base: 12, md: 16 }}>Gender</Heading>
+            <Text fontSize={{ base: 18, md: 24 }}>{userData?.gender}</Text>
           </VStack>
-        </HStack>
+        </Box>
       </VStack>
     </>
   );

@@ -1,13 +1,11 @@
-import { Box, Container} from "@chakra-ui/react";
+import { Container} from "@chakra-ui/react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import UserPage from "./pages/PasswordPage";
-import Header from "./components/Header";
 import { HomePage } from "./pages/HomePage";
 import { AuthPage } from "./pages/AuthPage";
 import { useRecoilValue } from "recoil";
-import { LogoutButton } from "./components/LogoutButton";
 import isAuthenticatedAtom from "./atoms/isAuthenticatedAtom";
-import Sidebar from "./components/Sidebar";
+import NavBar from "./components/NavBar";
 
 function App() {
   const user = useRecoilValue(isAuthenticatedAtom);
@@ -18,10 +16,8 @@ function App() {
         xl: "1200px"
       }}
     >
-      <Header />
-      <Box display={"flex"} gap={10}>
-        {user && <Sidebar />}
-        
+      {user && <NavBar />}
+
         <Routes>
           <Route
             path="/"
@@ -33,8 +29,6 @@ function App() {
           />
           <Route path="/profile/password" element={<UserPage />} />
         </Routes>
-      </Box>
-      {user && <LogoutButton />}
     </Container>
   );
 }

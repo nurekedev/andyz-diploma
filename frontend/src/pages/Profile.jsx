@@ -1,8 +1,8 @@
 import {
   Box,
-  Button,
   Divider,
-  HStack,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   useColorModeValue
@@ -20,66 +20,104 @@ const Profile = () => {
         borderRadius={10}
         bg={useColorModeValue("white", "gray.dark")}
         p={"20px"}
-              gap={10}
-              pb={10}
+        gap={10}
+        pb={10}
       >
         <Heading fontSize={25}>Basic Information</Heading>
         <Divider />
-        <HStack gap={"20px"}>
-          <Input
-            fontSize={20}
-            p={6}
-            color={useColorModeValue("gray.dark", "white")}
-            placeholder={userData?.first_name}
-            _placeholder={{ color: "inherit" }}
-            pointerEvents="none"
-          />
-          <Input
-            fontSize={20}
-            p={6}
-            color={useColorModeValue("gray.dark", "white")}
-            placeholder={userData?.last_name}
-            _placeholder={{ color: "inherit" }}
-            pointerEvents="none"
-          />
-        </HStack>
-        <HStack gap={"20px"}>
-          <Input
-            fontSize={20}
-            p={6}
-            color={useColorModeValue("gray.dark", "white")}
-            placeholder={userData?.address_line}
-            _placeholder={{ color: "inherit" }}
-            pointerEvents="none"
-          />
-          <Input
-            fontSize={20}
-            p={6}
-            color={useColorModeValue("gray.dark", "white")}
-            placeholder={userData?.date_of_birth}
-            _placeholder={{ color: "inherit" }}
-            pointerEvents="none"
-          />
-        </HStack>
-        <HStack gap={"20px"}>
-          <Input
-            fontSize={20}
-            p={6}
-            color={useColorModeValue("gray.dark", "white")}
-            placeholder={userData?.phone_number}
-            _placeholder={{ color: "inherit" }}
-            pointerEvents="none"
-          />
-          <Input
-            fontSize={20}
-            p={6}
-            color={useColorModeValue("gray.dark", "white")}
-            placeholder={userData?.email}
-            _placeholder={{ color: "inherit" }}
-            pointerEvents="none"
-          />
-        </HStack>
-        <Button>Save changes</Button>
+        <Box
+          gap={"20px"}
+          display={"flex"}
+          flexDir={{
+            base: "column",
+            md: "row"
+          }}
+        >
+          <FormControl>
+            <FormLabel>First Name</FormLabel>
+            <Input
+              fontSize={20}
+              p={6}
+              color={useColorModeValue("gray.dark", "white")}
+              value={userData?.first_name}
+              readonly="readonly"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Last Name</FormLabel>
+            <Input
+              fontSize={20}
+              p={6}
+              color={useColorModeValue("gray.dark", "white")}
+              placeholder={userData?.last_name}
+              _placeholder={{ color: "inherit" }}
+              readonly="readonly"
+            />
+          </FormControl>
+        </Box>
+        <Box
+          gap={"20px"}
+          display={"flex"}
+          flexDir={{
+            base: "column",
+            md: "row"
+          }}
+        >
+          <FormControl>
+            <FormLabel>Address</FormLabel>
+            <Input
+              fontSize={20}
+              p={6}
+              color={useColorModeValue("gray.dark", "white")}
+              placeholder={userData?.address_line}
+              _placeholder={{ color: "inherit" }}
+              readonly="readonly"
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Date of birth</FormLabel>
+            <Input
+              fontSize={20}
+              p={6}
+              color={useColorModeValue("gray.dark", "white")}
+              placeholder={userData?.date_of_birth}
+              _placeholder={{ color: "inherit" }}
+              readonly="readonly"
+            />
+          </FormControl>
+        </Box>
+        <Box
+          gap={"20px"}
+          display={"flex"}
+          flexDir={{
+            base: "column",
+            md: "row"
+          }}
+        >
+          <FormControl>
+            <FormLabel>Phone Number</FormLabel>
+            <Input
+              fontSize={20}
+              p={6}
+              color={useColorModeValue("gray.dark", "white")}
+              placeholder={userData?.phone_number}
+              _placeholder={{ color: "inherit" }}
+              readonly="readonly"
+            />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              fontSize={20}
+              p={6}
+              color={useColorModeValue("gray.dark", "white")}
+              placeholder={userData?.email}
+              _placeholder={{ color: "inherit" }}
+              readonly="readonly"
+            />
+          </FormControl>
+        </Box>
       </Box>
     </>
   );

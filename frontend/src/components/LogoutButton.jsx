@@ -20,6 +20,6 @@ export const LogoutButton = () => {
   };
   
   return (
-    <Button position={'fixed'} top={30} right={30} size={"sm"} onClick={handleLogout}>Logout</Button>
+    <Button  size={"sm"} onClick={handleLogout}>Logout</Button>
   )
 }
