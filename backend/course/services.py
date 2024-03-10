@@ -25,9 +25,9 @@ def courses_by_category(objects, category, **kwargs):
 def courses_newest(objects, **kwargs):
     course_queryset = all_objects(
         objects=objects,
-        only=('title',)
+        only=('title', 'slug', 'short_description', 'long_description', 'created_by', 'image')
     )
-    return course_queryset.filter(**kwargs)
+    return course_queryset.filter(**kwargs)[::4]
 
 
 def active_courses(objects, **kwargs):

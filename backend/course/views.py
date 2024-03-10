@@ -11,6 +11,7 @@ from rest_framework.test import APIRequestFactory
 from .models import Category
 from .serializers import (CategorySerializer, CourseListSerializer, LessonSerializer, CourseDetailSerializer)
 from .services import *
+from progress.models import Enrollment
 
 
 @api_view(['GET'])
@@ -56,17 +57,33 @@ def get_newest_courses(request):
     :param request: Запрос.
     :return: Список самых новых курсов или пустой список.
     """
+
+    serializer_context = {'request': request}
     courses = courses_newest(objects=Course.objects, status=Course.PUBLISHED)
     if len(courses):
-        serializer = CourseListSerializer(courses, many=True)
+        serializer = CourseListSerializer(courses, context=serializer_context, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
     else:
         return Response([], status=HTTP_200_OK)
+    
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_my_courses(request):
+    """Получить список курсов пользователя который он имеет доступ"""
+    enrollments = Enrollment.objects.filter(user=request.user)
+    courses = Course.objects.filter(
+        progress__in=enrollments,
+        status=Course.PUBLISHED,
+    )
+    
+    serializer_context = {'request': request}
+    serializer = CourseListSerializer(instance=courses, context=serializer_context, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
-@authentication_classes([])
-@permission_classes([])
+@permission_classes([IsAuthenticated])
 def get_course(request, slug):
     course = get_detailed_course(objects=Course.objects, status=Course.PUBLISHED, slug=slug)
     course_serializer = CourseDetailSerializer(course)
@@ -76,6 +93,7 @@ def get_course(request, slug):
         course_data = course_serializer.data
     else:
         course_data = {}
+
 
     return Response({
         'course': course_data,

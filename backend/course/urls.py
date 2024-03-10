@@ -4,7 +4,7 @@ from .views import *
 urlpatterns = [
     path('', get_courses),
     path('get-newest-courses/', get_newest_courses),
-    # path('/', get_categories),
+    path('my-courses/', get_my_courses),
     # path('create/', views.create_course),
     path('<slug:slug>/', get_course, name='course-detail'),
     # path('get-author-course/<int:user_id>/', views.get_author_courses),

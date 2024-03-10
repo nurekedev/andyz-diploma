@@ -6,6 +6,7 @@ from rest_framework.test import APIRequestFactory
 
 from .models import Category, Course, Lesson
 from users.serializers import DoctorHideSerializer
+from progress.serializers import EnrollmentSerializer
 
 
 class CategorySerializer(serializers.ModelSerializer):

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
 
     'course',
     'users',
+    'progress'
 ]
 
 MIDDLEWARE = [
@@ -134,7 +135,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=59),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('JWT',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
@@ -164,6 +165,7 @@ DJOSER = {
 
     'EMAIL': {
         'activation': 'users.email.ActivationEmail',
+
     }
 
 }

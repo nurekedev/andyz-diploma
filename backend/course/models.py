@@ -79,9 +79,12 @@ class Lesson(models.Model):
     ARTICLE = 'article'
     VIDEO = 'video'
 
+    ARTICLE_WEIGHT = 10
+    VIDEO_WEIGHT = 20
+    
     CHOICES_TYPE_LESSON = (
         (ARTICLE, 'Article'),
-        (VIDEO, 'Video'),
+        (VIDEO, 'Video')
     )
 
     course = models.ForeignKey(

@@ -5,7 +5,7 @@ from django.contrib.auth.tokens import default_token_generator
 
 
 class ActivationEmail(email.ActivationEmail):
-    template_name = 'users/ActivateEmail.html'
+    template_name = 'users/newfile.html'
 
     def get_context_data(self):
         # ActivationEmail can be deleted
