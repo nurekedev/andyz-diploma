@@ -63,7 +63,14 @@ const NavBar = () => {
     );
   } else {
     return (
-      <Box justifyContent={"space-between"} mt={6} mb={6} display={"flex"}>
+      <Box
+        justifyContent={"space-between"}
+        m={"auto"}
+        mt={6}
+        mb={6}
+        display={"flex"}
+        maxW={1400}
+      >
         <Text fontWeight={"bold"} fontSize={40}>
           ANDYZ
         </Text>

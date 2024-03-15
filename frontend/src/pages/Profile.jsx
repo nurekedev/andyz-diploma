@@ -7,7 +7,7 @@ import {
   Input,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useUserData } from "../token/UserData"; 
+import { useUserData } from "../requests/UserData"; 
 const Profile = () => {
   const userData = useUserData();
 
@@ -17,6 +17,7 @@ const Profile = () => {
         display={"flex"}
         flexDir={"column"}
         w={"100%"}
+        maxWidth={1200}
         borderRadius={10}
         bg={useColorModeValue("white", "gray.dark")}
         p={"20px"}
@@ -30,6 +31,7 @@ const Profile = () => {
           display={"flex"}
           flexDir={{
             base: "column",
+            sm: "row",
             md: "row"
           }}
         >
@@ -60,6 +62,7 @@ const Profile = () => {
           display={"flex"}
           flexDir={{
             base: "column",
+            sm: "row",
             md: "row"
           }}
         >
@@ -91,6 +94,7 @@ const Profile = () => {
           display={"flex"}
           flexDir={{
             base: "column",
+            sm: "row",
             md: "row"
           }}
         >
