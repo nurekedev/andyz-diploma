@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -47,7 +48,7 @@ class Course(models.Model):
         verbose_name = 'Courses'
         verbose_name_plural = 'Courses'
         db_table = 'courses'
-        ordering: '-created_at'
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"{self.title} - {self.slug}"
@@ -65,6 +66,22 @@ class Course(models.Model):
 
     def get_absolute_url(self):
         return reverse('course-detail', kwargs={'slug': self.slug})
+
+
+class Section(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(null=False, unique=True)
+    course = models.ForeignKey(
+        Course, related_name='sections', on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name = 'Sections'
+        verbose_name_plural = 'Sections'
+        db_table = 'sections'
+
+    def __str__(self):
+        return self.title
+
 
 
 class Lesson(models.Model):
@@ -87,8 +104,8 @@ class Lesson(models.Model):
         (VIDEO, 'Video')
     )
 
-    course = models.ForeignKey(
-        Course, related_name='lessons', on_delete=models.CASCADE)
+    section = models.ForeignKey(
+        Section, related_name='lessons', on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
     slug = models.SlugField(null=False, unique=True)
@@ -112,6 +129,9 @@ class Lesson(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
+    
+    def get_absolute_url(self):
+        return reverse('lesson-detail', kwargs={'slug': self.slug})
 
 
 class Comment(models.Model):
@@ -124,3 +144,27 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE)
+
+
+
+class Rating(models.Model):
+
+    RATING_CHOICES = (
+        (1, '1_STAR'),
+        (2, '2_STAR'),
+        (3, '3_STAR'),
+        (4, '4_STAR'),
+        (5, '5_STAR')
+    )
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='rating')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    description = models.TextField(blank=True, null=True)
+    rating = models.PositiveIntegerField(choices=RATING_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('course', 'user')
+
+    def __str__(self) -> str:
+        return f"{self.user} {self.rating} for {self.course}"

@@ -10,7 +10,7 @@ from rest_framework import status
 
 
 from course.serializers import CourseListSerializer, LessonSerializer
-from course.models import Course, Lesson
+from course.models import Course, Section, Lesson
 from progress.models import Progress, Enrollment
 from progress.serializers import ProgressSerializer, EnrollmentSerializer
 
@@ -29,11 +29,12 @@ def get_user_progress_by_course(request, course_slug):
         slug=course_slug
     ).distinct().first()
 
+
     if not course:
         return Response({"detail": "Course not found"}, status=status.HTTP_404_NOT_FOUND)
 
     lessons = Lesson.objects.filter(
-        course=course, 
+        section=course, 
         status=Lesson.PUBLISHED
     )
 
@@ -46,7 +47,9 @@ def get_user_progress_by_course(request, course_slug):
 
     current_user_progress = 0
 
+
     for lesson in lessons.filter(activities__in=activities):
+        print(f"LESSON GOT! {lesson}")
         first_activity = lesson.activities.first()
         if first_activity and first_activity.status == Progress.DONE:
             current_user_progress += lesson_weights.get(lesson.lesson_type, 0)
@@ -91,14 +94,15 @@ def get_enrollment_data(request, course_slug):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def track_started(request, course_slug, lesson_slug):
+def track_started(request, course_slug, section_slug, lesson_slug):
     course = Course.objects.get(slug=course_slug)
+    section = Section.objects.get(slug=section_slug)
     lesson = Lesson.objects.get(slug=lesson_slug)
 
-    if Progress.objects.filter(created_by=request.user, course=course, lesson=lesson).count() == 0:
-        Progress.objects.create(course=course, lesson=lesson, created_by=request.user)
+    if Progress.objects.filter(created_by=request.user, course=course, section=section, lesson=lesson).count() == 0:
+        Progress.objects.create(course=course, lesson=lesson, section=section, created_by=request.user)
     
-    activity = Progress.objects.get(created_by=request.user, course=course, lesson=lesson)
+    activity = Progress.objects.get(created_by=request.user, course=course, section=section, lesson=lesson)
 
     serializer = ProgressSerializer(activity)
 
@@ -107,11 +111,12 @@ def track_started(request, course_slug, lesson_slug):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def marks_as_done(request, course_slug, lesson_slug):
+def marks_as_done(request, course_slug, section_slug, lesson_slug):
     course = Course.objects.get(slug=course_slug)
+    section = Section.objects.get(slug=section_slug)
     lesson = Lesson.objects.get(slug=lesson_slug)
 
-    activity = Progress.objects.get(created_by=request.user, course=course, lesson=lesson)
+    activity = Progress.objects.get(created_by=request.user, course=course, section=section, lesson=lesson)
     activity.status = Progress.DONE
     activity.save()
 
