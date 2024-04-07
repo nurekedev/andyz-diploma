@@ -34,7 +34,7 @@ def get_user_progress_by_course(request, course_slug):
         return Response({"detail": "Course not found"}, status=status.HTTP_404_NOT_FOUND)
 
     lessons = Lesson.objects.filter(
-        course=course, 
+        section=course, 
         status=Lesson.PUBLISHED
     )
 
