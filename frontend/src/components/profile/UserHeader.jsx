@@ -7,21 +7,23 @@ import {
   VStack,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useUserData } from "../requests/UserData";
+import { useUserData } from "../../requests/UserData";
 const UserHeader = () => {
   const userData = useUserData();
   return (
     <>
       <VStack
         alignItems={"center"}
+        w={"100%"}
+        maxW={1000}
         bg={useColorModeValue("white", "gray.dark")}
-        h={300}
         borderRadius={10}
       >
         <Image
           src="../../public/bg.jpg"
           h={120}
-          w={1200}
+          w={"100%"}
+          maxW={1200}
           objectFit={"cover"}
           borderTop={10}
         />
@@ -35,7 +37,8 @@ const UserHeader = () => {
         <Box
           display={"flex"}
           flexDir={{
-            base: "raw"
+            base: "column",
+            md: "row"
           }}
           m={"auto"}
           p={"10px"}

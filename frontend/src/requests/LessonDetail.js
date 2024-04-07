@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { refreshAccessToken } from "./Token";
 
-async function fetchCourseData() {
+async function fetchDetailLessonData(slug) {
   try {
     const token = Cookies.get("access_token");
     if (!token) {
@@ -11,7 +11,7 @@ async function fetchCourseData() {
     }
 
     const response = await fetch(
-      "http://127.0.0.1:8000/api/v1/course/my-courses/",
+      `http://127.0.0.1:8000/api/v1/course/lessons/${slug}/`,
       {
         method: "GET",
         headers: {
@@ -20,7 +20,7 @@ async function fetchCourseData() {
       }
     );
 
-      if (response.ok) {
+    if (response.ok) {
       return await response.json();
     } else {
       console.error("Ошибка при получении данных:", response.status);
@@ -32,17 +32,21 @@ async function fetchCourseData() {
   }
 }
 
-export function useCourseData() {
-  const [courseData, setCourseData] = useState(null);
+export function useDetailLessonData(slug) {
+  const [lessonData, setLessonData] = useState(null);
 
-  useEffect(() => {
-    async function fetchData() {
-      const data = await fetchCourseData();
-      setCourseData(data);
-    }
+  useEffect(
+    () => {
+      async function fetchData() {
+        const data = await fetchDetailLessonData(slug);
+        console.log(data);
+        setLessonData(data);
+      }
 
-    fetchData();
-  }, []);
+      fetchData();
+    },
+    [slug]
+  );
 
-  return courseData;
+  return lessonData;
 }

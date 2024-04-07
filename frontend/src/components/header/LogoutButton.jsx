@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { Button} from '@chakra-ui/react'
 import { useRecoilState } from 'recoil';
-import accessTokenAtom from '../atoms/accessTokenAtom';
-import refreshTokenAtom from '../atoms/refreshTokenAtom';
-import isAuthenticatedAtom from '../atoms/isAuthenticatedAtom';
+import accessTokenAtom from '../../atoms/accessTokenAtom';
+import refreshTokenAtom from '../../atoms/refreshTokenAtom';
+import isAuthenticatedAtom from '../../atoms/isAuthenticatedAtom';
 import Cookies from 'js-cookie';
+import { MdLogout } from "react-icons/md";
 
 export const LogoutButton = () => {
     const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
@@ -20,6 +21,8 @@ export const LogoutButton = () => {
   };
   
   return (
-    <Button  size={"sm"} onClick={handleLogout}>Logout</Button>
-  )
+    <Button size={"md"} onClick={handleLogout}>
+      <MdLogout />
+    </Button>
+  );
 }

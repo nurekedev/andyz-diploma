@@ -1,6 +1,6 @@
 import { VStack} from "@chakra-ui/react";
-import UserHeader from "../components/UserHeader";
-import Profile from "./Profile";
+import UserHeader from "../../components/profile/UserHeader";
+import Profile from "../../components/profile/Profile";
 
 export const HomePage = () => {
   return (

@@ -1,14 +1,16 @@
 import {
   Box,
   Button,
+  Container,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
   HStack,
-  Text,
+  Image,
   useColorMode,
+  useColorModeValue,
   useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
@@ -16,7 +18,7 @@ import { Link } from "react-router-dom";
 import { LogoutButton } from "./LogoutButton";
 import { TiAdjustBrightness } from "react-icons/ti";
 import { FaRegMoon } from "react-icons/fa";
-
+import { AiOutlineMenu } from "react-icons/ai";
 const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,19 +42,33 @@ const NavBar = () => {
 
   if (windowSize.width < 600) {
     return (
-      <Box textAlign={"end"}>
-        <Button colorScheme="blue" onClick={onOpen} m={5}>
-          Menu
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        bg={useColorModeValue("white", "gray.dark")}
+        mb={10}
+      >
+        <Link to={"/"}>
+          <Image
+            src={"/logo.png"}
+            height={"60px"}
+            objectFit={"cover"}
+            w={250}
+          />
+        </Link>
+        <Button onClick={onOpen} m={5}>
+          <AiOutlineMenu />
         </Button>
         <Drawer onClose={onClose} isOpen={isOpen}>
           <DrawerOverlay />
           <DrawerContent>
             <DrawerHeader borderBottomWidth="1px">Menu</DrawerHeader>
             <DrawerBody display={"flex"} flexDir={"column"} gap={5}>
-              <Button>
+              <Button onClick={onClose}>
                 <Link to={"/"}>My Account</Link>
               </Button>
-              <Button>
+              <Button onClick={onClose}>
                 <Link to={"/courses"}>My Courses</Link>
               </Button>
               <LogoutButton />
@@ -64,26 +80,40 @@ const NavBar = () => {
   } else {
     return (
       <Box
-        justifyContent={"space-between"}
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        bg={useColorModeValue("white", "gray.dark")}
         m={"auto"}
-        mt={6}
+        p={6}
         mb={6}
         display={"flex"}
-        maxW={1400}
       >
-        <Text fontWeight={"bold"} fontSize={40}>
-          ANDYZ
-        </Text>
-        <HStack>
-          {colorMode === "dark" ? (
-            <TiAdjustBrightness onClick={toggleColorMode} fontSize={24} />
-          ) : (
-            <FaRegMoon onClick={toggleColorMode} fontSize={24} />
-          )}
-          <Link to={"/"}>My Account</Link>
-          <Link to={"/courses"}>My Courses</Link>
-          <LogoutButton />
-        </HStack>
+        <Container
+          maxW={1300}
+          justifyContent={"space-between"}
+          display={"flex"}
+        >
+          <Link to={"/"}>
+            <Image
+              src={"/logo.png"}
+              alt={"logo"}
+              height={"80px"}
+              objectFit={"cover"}
+              w={250}
+            />
+          </Link>
+          <HStack gap={5}>
+            {colorMode === "dark" ? (
+              <TiAdjustBrightness onClick={toggleColorMode} fontSize={24} />
+            ) : (
+              <FaRegMoon onClick={toggleColorMode} fontSize={24} />
+            )}
+            <Link to={"/"} activeClassName={"active"}>
+              My Account
+            </Link>
+            <Link to={"/courses"}>My Courses</Link>
+            <LogoutButton />
+          </HStack>
+        </Container>
       </Box>
     );
   }
