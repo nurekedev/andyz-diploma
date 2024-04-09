@@ -47,11 +47,7 @@ class LessonListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-<<<<<<< HEAD
         fields = ('title', 'slug', 'lesson_type', 'url')
-=======
-        fields = ('title', 'slug','lesson_type', 'url')
->>>>>>> 76365e32d41e0587f4b8bd234f74014ba827dd04
 
 
 
