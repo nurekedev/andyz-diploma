@@ -138,7 +138,7 @@ class Comment(models.Model):
     course = models.ForeignKey(
         Course, related_name='comments', on_delete=models.CASCADE)
     lesson = models.ForeignKey(
-        Lesson, related_name='comments', on_delete=models.CASCADE)
+        Lesson, related_name='comments', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

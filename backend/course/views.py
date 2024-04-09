@@ -16,10 +16,10 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import BasePermission
 
 
-from course.models import Category, Rating
+from course.models import Category, Rating, Comment
 from course.serializers import (CategorySerializer, CourseListSerializer, LessonSerializer,
                                 CourseDetailSerializer,  RatingSerializer, SectionSerializer, SectionListSerializer, LessonListSerializer,
-                                CourseLockSerializer)
+                                CourseLockSerializer, CommentSerializer)
 from course.services import *
 from progress.models import Enrollment
 from course.permissons import IsOwnerOrAdminPermission
@@ -115,6 +115,23 @@ def get_lesson_by_section(request, slug):
 
 
 class RatingAPIView(ListCreateAPIView):
+    """
+    Получение и создание рейтинга для курса.
+
+    Позволяет получить список рейтингов для определенного курса или создать новый рейтинг.
+
+    Параметры запроса:
+    - course_slug (str): Уникальный идентификатор курса.
+
+    Методы:
+    - GET: Получить список рейтингов для курса.
+    - POST: Создать новый рейтинг для курса.
+
+    Разрешения:
+    - Только аутентифицированным пользователям разрешено получать и создавать рейтинги.
+
+    """
+
     serializer_class = RatingSerializer
     permission_classes = [IsAuthenticated]
 
@@ -130,6 +147,27 @@ class RatingAPIView(ListCreateAPIView):
 
 
 class RatingUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    Обновление и удаление рейтинга для курса.
+
+    Позволяет обновить или удалить существующий рейтинг для определенного курса.
+
+    Параметры запроса:
+    - course_slug (str): Уникальный идентификатор курса.
+    - rating_id (int): Идентификатор рейтинга.
+
+    Методы:
+    - GET: Получить информацию о конкретном рейтинге.
+    - PUT: Обновить информацию о рейтинге.
+    - PATCH: Частично обновить информацию о рейтинге.
+    - DELETE: Удалить рейтинг.
+
+    Разрешения:
+    - Только аутентифицированным пользователям разрешено обновлять и удалять рейтинги.
+    - Только владельцы рейтинга или администраторы могут обновлять и удалять рейтинги.
+
+    """
+
     serializer_class = RatingSerializer
 
     def get_queryset(self):
@@ -141,11 +179,6 @@ class RatingUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
             self.permission_classes = [
                 IsAuthenticated, IsOwnerOrAdminPermission]
         return super().get_permissions()
-
-
-# queryset = queryset.annotate(total_ratings=Count('id'))
-# queryset = queryset.annotate(avg_rating=Avg('rating'))
-
 
 rating_api_view = RatingAPIView.as_view()
 rating_api_destroy_update_view = RatingUpdateDestroyAPIView.as_view()
@@ -194,3 +227,19 @@ def get_section(request, course_slug, slug):
     return Response({
         'section': section_data
     })
+
+
+
+class CommentAPIView(ListCreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        slug = self.kwargs["slug"]
+        queryset = Comment.objects.filter(course__slug=slug)
+        return queryset
+
+    def get_serializer_context(self):
+        user_id = self.request.user.id
+        course_slug = self.kwargs["slug"]
+        return {"user_id": user_id, "slug": course_slug}

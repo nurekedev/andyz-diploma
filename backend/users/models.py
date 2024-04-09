@@ -58,6 +58,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     gender = models.CharField(_("gender"), max_length=15, choices=GENDER, default=NOT_SPECIFIED)
     blood_group = models.CharField(_("blood_group"), max_length=15, choices=BLOOD_GROUP_CHOICES,
                                    default=BLOOD_GROUP_NOT_SPECIFIED)
+    avatar = models.ImageField(_("avatar"), upload_to='profile_images', default='default-avatar.jpg')
     address_line = models.CharField(_("address_line"), max_length=255, blank=True)
     date_of_birth = models.DateField(_("birthday"))
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',

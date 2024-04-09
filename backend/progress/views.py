@@ -20,44 +20,45 @@ import math
 @permission_classes([IsAuthenticated])
 def get_user_progress_by_course(request, course_slug):
 
-    enrollments = Enrollment.objects.filter(user=request.user)
-    activities = Progress.objects.filter(created_by=request.user)
+    lesson_weights = {
+        Lesson.ARTICLE: Lesson.ARTICLE_WEIGHT,
+        Lesson.VIDEO: Lesson.VIDEO_WEIGHT
+    }
 
+    enrollments = Enrollment.objects.filter(user=request.user)
     course = Course.objects.filter(
         progress__in=enrollments,
         status=Course.PUBLISHED,
         slug=course_slug
     ).distinct().first()
 
+    activities = Progress.objects.filter(created_by=request.user, course=course)
 
     if not course:
         return Response({"detail": "Course not found"}, status=status.HTTP_404_NOT_FOUND)
+    
 
-    lessons = Lesson.objects.filter(
-        section=course, 
-        status=Lesson.PUBLISHED
-    )
-
-    enrollment, created = enrollments.get_or_create(course=course, defaults={'progress': 0})
-
-    lesson_weights = {
-        Lesson.ARTICLE: Lesson.ARTICLE_WEIGHT,
-        Lesson.VIDEO: Lesson.VIDEO_WEIGHT
-    }
+    sections = Section.objects.filter(course=course)
 
     current_user_progress = 0
 
+    for section in sections:
+        lessons = section.lessons.all()
+        for lesson in lessons.filter(activities__in=activities):
+            print(lesson)
+            if lesson.activities.first().status == Progress.DONE:
+                current_user_progress += lesson_weights.get(lesson.lesson_type, 0)
 
-    for lesson in lessons.filter(activities__in=activities):
-        print(f"LESSON GOT! {lesson}")
-        first_activity = lesson.activities.first()
-        if first_activity and first_activity.status == Progress.DONE:
-            current_user_progress += lesson_weights.get(lesson.lesson_type, 0)
-
+                
+    enrollment, created = enrollments.get_or_create(course=course, defaults={'progress': 0})
+    
     total_points = lessons.aggregate(
         total_points=(Sum(Case(When(lesson_type=Lesson.VIDEO, then=Lesson.VIDEO_WEIGHT), default=0, output_field=IntegerField())) + 
                       Sum(Case(When(lesson_type=Lesson.ARTICLE, then=Lesson.ARTICLE_WEIGHT), default=0, output_field=IntegerField())))
     )['total_points'] or 0
+
+    print(total_points)
+
 
     if total_points == 0:
         custom_keff_of_course = 0
@@ -65,10 +66,11 @@ def get_user_progress_by_course(request, course_slug):
         custom_keff_of_course = 100 / total_points
 
     enrollment.progress = custom_keff_of_course * current_user_progress
+
     enrollment.save()
 
     serializer = EnrollmentSerializer(enrollment)
-
+    
     return Response(serializer.data)
 
 
