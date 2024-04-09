@@ -39,7 +39,6 @@ export function useDetailLessonData(slug) {
     () => {
       async function fetchData() {
         const data = await fetchDetailLessonData(slug);
-        console.log(data);
         setLessonData(data);
       }
 

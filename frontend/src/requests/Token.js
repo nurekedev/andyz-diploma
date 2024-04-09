@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 export async function refreshAccessToken() {
   try {
     const token = Cookies.get("refresh_token");
-    console.log(token);
     const response = await fetch(
       "http://127.0.0.1:8000/api/v1/auth/jwt/refresh/",
       {

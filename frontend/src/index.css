@@ -58,6 +58,21 @@
   transform: translateX(100%);
 }
 
+.active {
+  color: green;
+}
+
+.bottom-button {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  padding: 10px 40px;
+  background-color: #7e8e9e;
+  color: white;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+}
 
 
 @media(max-width: 400px) {

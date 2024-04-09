@@ -4,7 +4,7 @@ import {
   Divider,
   Heading,
   Image,
-  Tag,
+  Badge,
   Text,
   VStack,
   useColorModeValue
@@ -42,13 +42,17 @@ export default function CourseMain({ courseDetailData }) {
         >
           <Box>
             {courseDetailData?.course.categories.map((category, index) => (
-              <Tag mr={2} key={index}>
+              <Badge variant="solid" colorScheme="green" key={index} mr={2} p={1}>
                 {category.title}
-              </Tag>
+              </Badge>
             ))}
           </Box>
           <Link to={`/courses/${courseDetailData?.course.slug}/${firstLesson}`}>
-            <Button w={"100%"} bg={useColorModeValue("gray.400", "blue")} color={useColorModeValue("blue", "white")}>
+            <Button
+              w={"100%"}
+              bg={useColorModeValue("gray.400", "blue")}
+              color={useColorModeValue("blue", "white")}
+            >
               Continue the course <FaArrowRightLong className="right" />
             </Button>
           </Link>

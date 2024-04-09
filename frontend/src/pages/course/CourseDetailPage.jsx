@@ -12,7 +12,7 @@ const CourseDetailPage = () => {
       m={{
         md: 20,
         lg: 20,
-        xl: "auto",
+        xl: "0 auto 50px",
       }}
       maxWidth={1000}
       bg={useColorModeValue("white", "gray.dark")}

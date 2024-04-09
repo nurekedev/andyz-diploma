@@ -5,7 +5,6 @@ import {
   Text,
   VStack
 } from "@chakra-ui/react";
-
 import LessonList from "./LessonList";
 import { useParams } from "react-router-dom";
 import { useDetailLessonData } from "../../requests/LessonDetail";
@@ -13,13 +12,8 @@ import { useDetailLessonData } from "../../requests/LessonDetail";
 function LessonMain() {
   const { lessonSlug } = useParams();
   const lessonDetailData = useDetailLessonData(lessonSlug);
-
   return (
-    <Box
-      display="flex"
-      maxWidth={1200}
-      margin={"auto"}
-    >
+    <Box display={"flex"} margin={"auto"}>
       <Box>
         <VStack alignItems={"start"} mb={5}>
           <Heading fontSize={25}> {lessonDetailData?.lessons.title}</Heading>
@@ -41,7 +35,16 @@ function LessonMain() {
         <Text>{lessonDetailData?.lessons.short_description}</Text>
         <Divider mt={4} mb={2} />
       </Box>
-      <LessonList />
+      <Divider orientation="vertical" height={400} m={"0 30px"} display={{
+        base: "none",
+        md: "block"
+      }} />
+      <Box display={{
+        base: "none",
+        md: "block"
+      }}>
+        <LessonList />
+      </Box>
     </Box>
   );
 }

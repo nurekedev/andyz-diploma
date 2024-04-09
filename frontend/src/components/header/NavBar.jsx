@@ -46,15 +46,16 @@ const NavBar = () => {
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         bg={useColorModeValue("white", "gray.dark")}
         mb={10}
       >
         <Link to={"/"}>
           <Image
             src={"/logo.png"}
-            height={"60px"}
+            height={"40px"}
             objectFit={"cover"}
-            w={250}
+            w={180}
           />
         </Link>
         <Button onClick={onOpen} m={5}>
