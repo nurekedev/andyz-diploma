@@ -7,7 +7,7 @@ import {
   Input,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useUserData } from "../token/UserData"; 
+import { useUserData } from "../../requests/UserData"; 
 const Profile = () => {
   const userData = useUserData();
 
@@ -17,11 +17,13 @@ const Profile = () => {
         display={"flex"}
         flexDir={"column"}
         w={"100%"}
+        maxWidth={1000}
         borderRadius={10}
         bg={useColorModeValue("white", "gray.dark")}
         p={"20px"}
         gap={10}
-        pb={10}
+        pb={5}
+        mb={10}
       >
         <Heading fontSize={25}>Basic Information</Heading>
         <Divider />
@@ -30,6 +32,7 @@ const Profile = () => {
           display={"flex"}
           flexDir={{
             base: "column",
+            sm: "row",
             md: "row"
           }}
         >
@@ -40,6 +43,7 @@ const Profile = () => {
               p={6}
               color={useColorModeValue("gray.dark", "white")}
               value={userData?.first_name}
+              _placeholder={{ color: "inherit" }}
               readonly="readonly"
             />
           </FormControl>
@@ -47,7 +51,7 @@ const Profile = () => {
             <FormLabel>Last Name</FormLabel>
             <Input
               fontSize={20}
-              p={6}
+              p={4}
               color={useColorModeValue("gray.dark", "white")}
               placeholder={userData?.last_name}
               _placeholder={{ color: "inherit" }}
@@ -60,6 +64,7 @@ const Profile = () => {
           display={"flex"}
           flexDir={{
             base: "column",
+            sm: "row",
             md: "row"
           }}
         >
@@ -67,7 +72,7 @@ const Profile = () => {
             <FormLabel>Address</FormLabel>
             <Input
               fontSize={20}
-              p={6}
+              p={4}
               color={useColorModeValue("gray.dark", "white")}
               placeholder={userData?.address_line}
               _placeholder={{ color: "inherit" }}
@@ -78,7 +83,7 @@ const Profile = () => {
             <FormLabel>Date of birth</FormLabel>
             <Input
               fontSize={20}
-              p={6}
+              p={4}
               color={useColorModeValue("gray.dark", "white")}
               placeholder={userData?.date_of_birth}
               _placeholder={{ color: "inherit" }}
@@ -91,6 +96,7 @@ const Profile = () => {
           display={"flex"}
           flexDir={{
             base: "column",
+            sm: "row",
             md: "row"
           }}
         >

@@ -17,16 +17,18 @@ import {
 import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import isAuthenticatedAtom from "../atoms/isAuthenticatedAtom";
-import accessTokenAtom from "../atoms/accessTokenAtom";
-import refreshTokenAtom from "../atoms/refreshTokenAtom";
+import isAuthenticatedAtom from "../../atoms/isAuthenticatedAtom";
+import accessTokenAtom from "../../atoms/accessTokenAtom";
+import refreshTokenAtom from "../../atoms/refreshTokenAtom";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
   const [refreshToken, setRefreshToken] = useRecoilState(refreshTokenAtom);
-  const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthenticatedAtom);
+  const [isAuthenticated, setIsAuthenticated] =
+    useRecoilState(isAuthenticatedAtom);
 
   const [inputs, setInputs] = useState({
     email: "",
@@ -70,7 +72,7 @@ export default function Login() {
           title: "Ошибка авторизации",
           description: message,
           status: "error",
-          duration: 2000,
+          duration: 2000
         });
       }
     } catch (error) {
@@ -158,6 +160,17 @@ export default function Login() {
                 Login
               </Button>
             </Stack>
+            <Link to={"/reset-password"}>
+              <Text
+                textAlign={"center"}
+                color={"gray.400"}
+                _hover={{
+                  color: useColorModeValue("gray.600", "gray.700")
+                }}
+              >
+                Forgot password?
+              </Text>
+            </Link>
           </Stack>
         </Box>
       </Stack>
