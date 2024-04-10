@@ -28,7 +28,7 @@ const UserHeader = () => {
           borderTop={10}
         />
         <Avatar
-          src="../../public/zuck-avatar.png"
+          src={userData?.avatar}
           boxSize={120}
           style={{
             transform: "translateY(-60px)"

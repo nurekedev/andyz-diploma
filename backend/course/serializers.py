@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 
-from .models import Category, Course, Lesson, Rating, Section
+from .models import Category, Course, Lesson, Rating, Section, Comment
 from users.serializers import DoctorHideSerializer
 from progress.serializers import EnrollmentSerializer
 from django.urls import reverse
@@ -47,7 +47,7 @@ class LessonListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('title', 'slug','lesson_type', 'url')
+        fields = ('title', 'slug', 'lesson_type', 'url')
 
 
 
@@ -110,3 +110,12 @@ class RatingSerializer(serializers.ModelSerializer):
     #     user_id = self.context["user_id"]
     #     rating = Rating.objects.create(course_id=course_id, user_id=user_id, **valigated_data)
     #     return rating
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = DoctorHideSerializer(read_only=True)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'course', 'content', 'created_at']

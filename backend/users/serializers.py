@@ -12,7 +12,7 @@ class DoctorHideSerializer(UserSerializer):
     full_name = serializers.SerializerMethodField()
 
     class Meta(UserSerializer.Meta):
-        fields = ('full_name',)
+        fields = ('full_name', 'avatar')
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"

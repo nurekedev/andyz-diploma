@@ -22,10 +22,12 @@ class Enrollment(models.Model):
 
 # Create your models here.
 class Progress(models.Model):
+    NOT_STARTED = 'not_started'
     STARTED = 'started'
     DONE = 'done'
 
     STATUS_CHOISES = (
+        (NOT_STARTED, 'Not Started'),
         (STARTED, 'Started'),
         (DONE, 'Done'),
     )
