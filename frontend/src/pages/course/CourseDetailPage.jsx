@@ -1,25 +1,30 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
-import { CourseInfo } from "../../components/course/CourseInfo.JSX";
-import { useDetailCourseData } from "../../requests/CourseDetail";
-const CourseDetailPage = () => {
-  const { id } = useParams();
-  const courseDetailData = useDetailCourseData(id);
+import { Outlet } from "react-router-dom";
+import Sidebar from "../../components/header/Sidebar";
 
+const CourseDetailPage = () => {
   return (
     <Box
       display={"flex"}
       m={{
-        md: 20,
-        lg: 20,
-        xl: "0 auto 50px",
+        md: "0 30px",
+        lg: 10,
+        xl: "0 auto 50px"
       }}
-      maxWidth={1000}
-      bg={useColorModeValue("white", "gray.dark")}
-      p={5}
+      gap={5}
+      maxWidth={1400}
       borderRadius={10}
     >
-        <CourseInfo courseDetailData={courseDetailData} />
+      <Sidebar />
+      <Box
+        bg={useColorModeValue("white", "gray.dark")}
+        p={"10px"}
+        borderRadius={10}
+        ml={2}
+        w={"100%"}
+      >
+        <Outlet />
+      </Box>
     </Box>
   );
 };

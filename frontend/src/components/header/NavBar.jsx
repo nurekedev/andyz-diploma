@@ -84,12 +84,12 @@ const NavBar = () => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         bg={useColorModeValue("white", "gray.dark")}
         m={"auto"}
-        p={6}
+        p={4}
         mb={6}
         display={"flex"}
       >
         <Container
-          maxW={1300}
+          maxW={"100vw"}
           justifyContent={"space-between"}
           display={"flex"}
         >
@@ -97,9 +97,9 @@ const NavBar = () => {
             <Image
               src={"/logo.png"}
               alt={"logo"}
-              height={"80px"}
+              height={"40px"}
               objectFit={"cover"}
-              w={250}
+              w={140}
             />
           </Link>
           <HStack gap={5}>
