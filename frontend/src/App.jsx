@@ -9,6 +9,8 @@ import Courses from "./pages/course/Courses";
 import { Layout } from "./pages/Layout";
 import CourseDetailPage from "./pages/course/CourseDetailPage";
 import LessonPage from "./components/lessons/LessonPage";
+import CourseInfo from "./components/course/CourseInfo";
+import LessonList from "./components/lessons/LessonList";
 
 function App() {
   const user = useRecoilValue(isAuthenticatedAtom);
@@ -18,7 +20,10 @@ function App() {
         <Route path="/" element={user ? <Layout /> : <Navigate to="/auth" />}>
           <Route index element={<HomePage />} />
           <Route path="/courses" element={<Courses />} />
-          <Route path="/courses/:id" element={<CourseDetailPage />} />
+          <Route path="/courses/:id" element={<CourseDetailPage />}>
+            <Route index element={<CourseInfo />} />
+            <Route path="content" element={<LessonList />} />
+          </Route>
           <Route path="/courses/:id/:lessonSlug" element={<LessonPage />} />
         </Route>
         <Route
