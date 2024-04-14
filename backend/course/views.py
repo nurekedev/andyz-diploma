@@ -25,6 +25,8 @@ from progress.models import Enrollment
 from course.permissons import IsOwnerOrAdminPermission
 
 from pprint import pprint
+from rest_framework import status
+from rest_framework.response import Response
 
 
 @api_view(['GET'])
@@ -144,6 +146,20 @@ class RatingAPIView(ListCreateAPIView):
         user_id = self.request.user.id
         course_slug = self.kwargs["course_slug"]
         return {"user_id": user_id, "course_slug": course_slug}
+
+    def create(self, request, *args, **kwargs):
+        course_slug = self.kwargs["course_slug"]
+        user_id = request.user.id
+
+        existing_rating = Rating.objects.filter(course__slug=course_slug, user_id=user_id).first()
+        if existing_rating:
+            return Response({"detail": "You have already rated this course."}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class RatingUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
