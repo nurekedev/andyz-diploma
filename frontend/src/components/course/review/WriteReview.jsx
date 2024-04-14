@@ -81,15 +81,15 @@ const WriteReview = (slug) => {
             {rating === null ? (
               <p>How do you like our course?</p>
             ) : rating === 1 ? (
-              <p style={{ color: "red" }}>Very bad </p>
+              <p style={{ color: "red" }}>Very bad 😒</p>
             ) : rating === 2 ? (
-              <p style={{ color: "tomato" }}>Bad </p>
+              <p style={{ color: "tomato" }}>Bad 🙂</p>
             ) : rating === 3 ? (
-              <p style={{ color: "gray" }}>Neutral </p>
+              <p style={{ color: "gray" }}>Neutral 😊</p>
             ) : rating === 4 ? (
-              <p style={{ color: "yellowgreen" }}>Good! </p>
+              <p style={{ color: "yellowgreen" }}>Good! 🫰</p>
             ) : (
-              <p style={{ color: "green" }}>Excellent! </p>
+              <p style={{ color: "green" }}>Excellent! ❤️</p>
             )}
           </Text>
         </Box>

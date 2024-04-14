@@ -12,6 +12,7 @@ import CourseDetailPage from "./pages/course/CourseDetailPage";
 import LessonPage from "./components/lessons/LessonPage";
 import CourseInfo from "./components/course/CourseInfo";
 import LessonList from "./components/lessons/LessonList";
+import Comment from "./components/course/comment/Comment";
 
 function App() {
   const user = useRecoilValue(isAuthenticatedAtom);
@@ -25,6 +26,7 @@ function App() {
             <Route index element={<CourseInfo />} />
             <Route path="content" element={<LessonList />} />
             <Route path="review" element={<Review />} />
+            <Route path="comment" element={<Comment />} />
           </Route>
           <Route path="/courses/:id/:lessonSlug" element={<LessonPage />} />
         </Route>

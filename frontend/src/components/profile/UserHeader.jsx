@@ -44,7 +44,8 @@ const UserHeader = () => {
           gap={{
             base: 5,
             sm: 10,
-            md: 15
+            md: 15,
+            xl: 20
           }}
           justifyContent="center" // Выравнивание элементов по центру
           alignItems="center" // Выравнивание элементов по вертикали
