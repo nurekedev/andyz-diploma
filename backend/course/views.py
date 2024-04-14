@@ -10,21 +10,23 @@ from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet, ViewSet
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin
+from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView
+from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin, RetrieveModelMixin
 from rest_framework.permissions import BasePermission
 
 
-from course.models import Category, Rating, Comment
+from course.models import Category, Rating, CourseComment
 from course.serializers import (CategorySerializer, CourseListSerializer, LessonSerializer,
                                 CourseDetailSerializer,  RatingSerializer, SectionSerializer, SectionListSerializer, LessonListSerializer,
-                                CourseLockSerializer, CommentSerializer)
+                                CourseLockSerializer, CourseCommentSerializer)
 from course.services import *
 from progress.models import Enrollment
-from course.permissons import IsOwnerOrAdminPermission
+from course.permissons import IsOwnerOrAdminPermission, IsAdminOrAuthorPermission
 
 from pprint import pprint
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -51,14 +53,13 @@ def get_courses(request):
        :param request: Запрос.
        :return: Список курсов по категориям.
     """
-    
+
     serializer_context = {'request': request}
 
     courses = active_courses(objects=Course.objects)
     serializer = CourseListSerializer(
         instance=courses, context=serializer_context, many=True)
     return Response(serializer.data)
-
 
 
 @api_view(['GET'])
@@ -91,29 +92,31 @@ def get_course(request, slug):
     """
     course = get_detailed_course(
         objects=Course.objects, status=Course.PUBLISHED, slug=slug)
-    
+
     serializer_context = {'request': request}
 
     if request.user.is_authenticated and Enrollment.objects.filter(user=request.user, course=course).exists():
-        course_serializer = CourseDetailSerializer(instance=course, context=serializer_context).data
+        course_serializer = CourseDetailSerializer(
+            instance=course, context=serializer_context).data
     else:
-        course_serializer = CourseLockSerializer(instance=course, context=serializer_context).data
+        course_serializer = CourseLockSerializer(
+            instance=course, context=serializer_context).data
 
     return Response({
         'course': course_serializer,
     })
 
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_lesson_by_section(request, slug):
-    lesson = get_detailed_lesson(objects=Lesson.objects, status=Lesson.PUBLISHED, slug=slug)
+    lesson = get_detailed_lesson(
+        objects=Lesson.objects, status=Lesson.PUBLISHED, slug=slug)
     serializer_context = {'request': request}
-    lesson_serializer = LessonSerializer(instance=lesson, context=serializer_context)
+    lesson_serializer = LessonSerializer(
+        instance=lesson, context=serializer_context)
     lesssons_data = lesson_serializer.data if request.user.is_authenticated else {}
     return Response({'lessons': lesssons_data})
-
 
 
 class RatingAPIView(ListCreateAPIView):
@@ -151,7 +154,8 @@ class RatingAPIView(ListCreateAPIView):
         course_slug = self.kwargs["course_slug"]
         user_id = request.user.id
 
-        existing_rating = Rating.objects.filter(course__slug=course_slug, user_id=user_id).first()
+        existing_rating = Rating.objects.filter(
+            course__slug=course_slug, user_id=user_id).first()
         if existing_rating:
             return Response({"detail": "You have already rated this course."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -196,66 +200,88 @@ class RatingUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
                 IsAuthenticated, IsOwnerOrAdminPermission]
         return super().get_permissions()
 
+
 rating_api_view = RatingAPIView.as_view()
 rating_api_destroy_update_view = RatingUpdateDestroyAPIView.as_view()
-
-
-
 
 
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([])
 def get_sections(request, course_slug):
-    course = get_detailed_course(objects=Course.objects, status=Course.PUBLISHED, slug=course_slug)
+    course = get_detailed_course(
+        objects=Course.objects, status=Course.PUBLISHED, slug=course_slug)
     sections = course.sections.all()
 
     serializer_context = {'request': request}
-    section_serializer = SectionListSerializer(instance=sections, context=serializer_context, many=True)
+    section_serializer = SectionListSerializer(
+        instance=sections, context=serializer_context, many=True)
 
     print("REQUEST IS LIVE")
-
 
     return Response({
         'sections': section_serializer.data
     })
 
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_section(request, course_slug, slug):
-    course = get_detailed_course(objects=Course.objects, status=Course.PUBLISHED, slug=course_slug)
+    course = get_detailed_course(
+        objects=Course.objects, status=Course.PUBLISHED, slug=course_slug)
     section = course.sections.get(slug=slug)
 
     print("SECTION SLUG IS WORKS")
 
     serializer_context = {'request': request}
-    section_serializer = SectionSerializer(instance=section, context=serializer_context)
-
+    section_serializer = SectionSerializer(
+        instance=section, context=serializer_context)
 
     if request.user.is_authenticated:
         section_data = section_serializer.data
     else:
-        section_data = {"key":0}
-
+        section_data = {"key": 0}
 
     return Response({
         'section': section_data
     })
 
 
-
-class CommentAPIView(ListCreateAPIView):
-    serializer_class = CommentSerializer
+class CourseCommentAPIView(ListCreateAPIView):
+    serializer_class = CourseCommentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        slug = self.kwargs["slug"]
-        queryset = Comment.objects.filter(course__slug=slug)
+        course_slug = self.kwargs["course_slug"]
+        queryset = CourseComment.objects.filter(course__slug=course_slug)
         return queryset
 
     def get_serializer_context(self):
         user_id = self.request.user.id
-        course_slug = self.kwargs["slug"]
-        return {"user_id": user_id, "slug": course_slug}
+        course_slug = self.kwargs["course_slug"]
+        return {"user_id": user_id, "course_slug": course_slug}
+
+
+
+    
+class CourseCommentUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = CourseCommentSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrAuthorPermission]
+
+    def get_queryset(self):
+        course_slug = self.kwargs["course_slug"]
+        return CourseComment.objects.filter(course__slug=course_slug, active=True)
+
+    def get_serializer_context(self):
+        user_id = self.request.user.id
+        course_slug = self.kwargs["course_slug"]
+        return {"user_id": user_id, "course_slug": course_slug}
+    
+
+
+
+
+rating_api_view = RatingAPIView.as_view()
+rating_api_destroy_update_view = RatingUpdateDestroyAPIView.as_view()
+course_comment_api_view = CourseCommentAPIView.as_view()
+course_api_destroy_update_view = CourseCommentUpdateDestroyAPIView.as_view()
