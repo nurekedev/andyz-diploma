@@ -25,45 +25,48 @@ const UserHeader = () => {
           w={"100%"}
           maxW={1200}
           objectFit={"cover"}
-          borderTop={10}
+          className="profile-img"
         />
         <Avatar
           src={userData?.avatar}
+          m={"auto"}
           boxSize={120}
           style={{
             transform: "translateY(-60px)"
           }}
         />
         <Box
-          display={"flex"}
-          flexDir={{
+          display="flex"
+          flexDirection={{
             base: "column",
-            md: "row"
+            sm: "row"
           }}
-          m={"auto"}
-          p={"10px"}
           gap={{
             base: 5,
-            sm: 20,
-            md: 20
+            sm: 10,
+            md: 15
           }}
+          justifyContent="center" // Выравнивание элементов по центру
+          alignItems="center" // Выравнивание элементов по вертикали
           style={{
-            transform: "translateY(-60px)"
+            transform: "translateY(-40px)"
           }}
         >
-          <VStack gap={0}>
+          <VStack gap={0} w={100}>
             <Heading fontSize={{ base: 12, md: 16 }}>Blood Group</Heading>
-            <Text fontSize={{ base: 18, md: 24 }}>{userData?.blood_group}</Text>
+            <Text fontSize={{ base: 20, md: 24 }}>
+              {userData?.blood_group}
+            </Text>
           </VStack>
-          <VStack gap={0}>
+          <VStack gap={0} w={200}>
             <Heading fontSize={{ base: 12, md: 16 }}>Identifier Number</Heading>
-            <Text fontSize={{ base: 18, md: 24 }}>
+            <Text fontSize={{ base: 20, md: 24 }}>
               {userData?.identifier_number}
             </Text>
           </VStack>
-          <VStack gap={0}>
+          <VStack gap={0} w={100}>
             <Heading fontSize={{ base: 12, md: 16 }}>Gender</Heading>
-            <Text fontSize={{ base: 18, md: 24 }}>{userData?.gender}</Text>
+            <Text fontSize={{ base: 20, md: 24 }}>{userData?.gender}</Text>
           </VStack>
         </Box>
       </VStack>

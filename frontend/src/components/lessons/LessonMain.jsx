@@ -1,10 +1,4 @@
-import {
-  Box,
-  Divider,
-  Heading,
-  Text,
-  VStack
-} from "@chakra-ui/react";
+import { Box, Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import LessonList from "./LessonList";
 import { useParams } from "react-router-dom";
 import { useDetailLessonData } from "../../requests/LessonDetail";
@@ -32,17 +26,35 @@ function LessonMain() {
         <Text as={"b"} fontSize={24}>
           What is this course about?
         </Text>
+        <Box>
+          {lessonDetailData?.lessons.yt_id ? (
+            <iframe
+              src={`https://www.youtube.com/embed/${lessonDetailData?.lessons.yt_id}`}
+              width="100%"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"
+              allowfullscreen
+            ></iframe>
+          ) : null}
+        </Box>
+
         <Text>{lessonDetailData?.lessons.short_description}</Text>
         <Divider mt={4} mb={2} />
       </Box>
-      <Divider orientation="vertical" height={400} m={"0 30px"} display={{
-        base: "none",
-        md: "block"
-      }} />
-      <Box display={{
-        base: "none",
-        md: "block"
-      }}>
+      <Divider
+        orientation="vertical"
+        height={400}
+        m={"0 30px"}
+        display={{
+          base: "none",
+          md: "block"
+        }}
+      />
+      <Box
+        display={{
+          base: "none",
+          md: "block"
+        }}
+      >
         <LessonList />
       </Box>
     </Box>

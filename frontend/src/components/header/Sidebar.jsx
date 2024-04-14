@@ -62,7 +62,9 @@ const Sidebar = () => {
         <NavLink to={`/courses/${id}/content`} className="side-link">
           Content
         </NavLink>
-        <NavLink className="side-link">Reviews</NavLink>
+        <NavLink to={`/courses/${id}/review`} className="side-link">
+          Reviews
+        </NavLink>
         <NavLink className="side-link">Comments</NavLink>
       </Box>
     </Box>
