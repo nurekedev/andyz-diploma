@@ -6,6 +6,7 @@ import  PasswordPage  from "./pages/auth/PasswordPage";
 import { useRecoilValue } from "recoil";
 import isAuthenticatedAtom from "./atoms/isAuthenticatedAtom";
 import Courses from "./pages/course/Courses";
+import Review from "./components/course/review/Review";
 import { Layout } from "./pages/Layout";
 import CourseDetailPage from "./pages/course/CourseDetailPage";
 import LessonPage from "./components/lessons/LessonPage";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/courses/:id" element={<CourseDetailPage />}>
             <Route index element={<CourseInfo />} />
             <Route path="content" element={<LessonList />} />
+            <Route path="review" element={<Review />} />
           </Route>
           <Route path="/courses/:id/:lessonSlug" element={<LessonPage />} />
         </Route>
