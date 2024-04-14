@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 
-from .models import Category, Course, Lesson, Rating, Section, Comment
+from .models import Category, Course, Lesson, Rating, Section, CourseComment
 from users.serializers import DoctorHideSerializer
 from progress.serializers import EnrollmentSerializer
 from django.urls import reverse
@@ -87,12 +87,12 @@ class CourseLockSerializer(serializers.ModelSerializer):
 
 
 class RatingSerializer(serializers.ModelSerializer):
-
     user = DoctorHideSerializer(read_only=True)
 
     class Meta:
         model = Rating
-        fields = ['id', 'rating', 'description', 'user']
+        fields = ['id', 'rating', 'description', 'user', ]
+
 
     def create(self, validated_data):
         course_slug = self.context.get("course_slug")
@@ -105,17 +105,22 @@ class RatingSerializer(serializers.ModelSerializer):
             course=course, user=user, **validated_data)
         return rating
 
-    # def create(self, valigated_data):
-    #     course_id = self.context["course_id"]
-    #     user_id = self.context["user_id"]
-    #     rating = Rating.objects.create(course_id=course_id, user_id=user_id, **valigated_data)
-    #     return rating
 
-
-class CommentSerializer(serializers.ModelSerializer):
+class CourseCommentSerializer(serializers.ModelSerializer):
     user = DoctorHideSerializer(read_only=True)
-    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
 
     class Meta:
-        model = Comment
-        fields = ['id', 'user', 'course', 'content', 'created_at']
+        model = CourseComment
+        fields = ['id', 'user', 'body', 'created', 'updated']
+
+    def create(self, validated_data):
+        course_slug = self.context.get("course_slug")
+        user_id = self.context.get("user_id")
+
+        course = Course.objects.get(slug=course_slug)
+        user = User.objects.get(id=user_id)
+
+        comment = CourseComment.objects.create(
+            course=course, created_by=user, **validated_data)
+        return comment
+

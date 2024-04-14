@@ -8,11 +8,13 @@ from .models import CustomUser
 user = get_user_model()
 
 
+
+
 class DoctorHideSerializer(UserSerializer):
     full_name = serializers.SerializerMethodField()
 
     class Meta(UserSerializer.Meta):
-        fields = ('full_name', 'avatar')
+        fields = ('id', 'full_name', 'avatar')
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
@@ -20,7 +22,8 @@ class DoctorHideSerializer(UserSerializer):
 
 class PatientSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
-        fields = ['email',
+        fields = ['id',
+                  'email',
                   'first_name',
                   'last_name',
                   'identifier_number',
