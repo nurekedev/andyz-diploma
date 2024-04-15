@@ -134,21 +134,13 @@ class Lesson(models.Model):
         return reverse('lesson-detail', kwargs={'slug': self.slug})
 
 
-# class Comment(models.Model):
-#     course = models.ForeignKey(
-#         Course, related_name='comments', on_delete=models.CASCADE)
-#     lesson = models.ForeignKey(
-#         Lesson, related_name='comments', on_delete=models.CASCADE, null=True)
-#     name = models.CharField(max_length=100)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE)
 
-
-class CourseComment(models.Model):
+class Comment(models.Model):
     course = models.ForeignKey(
         Course, related_name='comments', on_delete=models.CASCADE)
+    
+    lesson = models.ForeignKey(
+        Lesson, related_name='comments', on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=80)
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -162,7 +154,7 @@ class CourseComment(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return 'Comment by {} on {}'.format(self.name, self.post)
+        return 'Comment by {} on {}'.format(self.name, self.course or self.lesson)
 
 
 class Rating(models.Model):

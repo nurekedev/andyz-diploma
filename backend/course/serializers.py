@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 
-from .models import Category, Course, Lesson, Rating, Section, CourseComment
+from .models import Category, Course, Lesson, Rating, Section, Comment
 from users.serializers import DoctorHideSerializer
 from progress.serializers import EnrollmentSerializer
 from django.urls import reverse
@@ -107,11 +107,11 @@ class RatingSerializer(serializers.ModelSerializer):
 
 
 class CourseCommentSerializer(serializers.ModelSerializer):
-    user = DoctorHideSerializer(read_only=True)
+    created_by = DoctorHideSerializer(read_only=True)
 
     class Meta:
-        model = CourseComment
-        fields = ['id', 'user', 'body', 'created', 'updated']
+        model = Comment
+        fields = ['id', 'body', 'created', 'updated', 'created_by']
 
     def create(self, validated_data):
         course_slug = self.context.get("course_slug")
@@ -120,7 +120,36 @@ class CourseCommentSerializer(serializers.ModelSerializer):
         course = Course.objects.get(slug=course_slug)
         user = User.objects.get(id=user_id)
 
-        comment = CourseComment.objects.create(
+        comment = Comment.objects.create(
             course=course, created_by=user, **validated_data)
         return comment
+    
+
+
+
+
+class LessonCommentSerializer(serializers.ModelSerializer):
+    created_by = DoctorHideSerializer(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'body', 'created', 'updated', 'created_by']
+
+    def create(self, validated_data):
+        course_slug = self.context.get("course_slug")
+        lesson_slug = self.context.get("lesson_slug")
+        user_id = self.context.get("user_id")
+        
+        course = Course.objects.get(slug=course_slug)
+        lesson = Lesson.objects.get(slug=lesson_slug)
+        user = User.objects.get(id=user_id)
+
+        comment = Comment.objects.create(
+            course=course,
+            lesson=lesson, 
+            created_by=user, **validated_data)
+        return comment
+
+
+    
 

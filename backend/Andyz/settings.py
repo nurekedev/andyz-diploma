@@ -104,9 +104,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # STATICFILES CONFIGURATIONS
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'build/static')
-# ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
@@ -116,16 +113,18 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 REST_FRAMEWORK = {
 
-    'DATETIME_FORMAT': '%d.%m.%y %H:%M',
+    'DATETIME_FORMAT': '%H:%M %d.%m.%y',
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+
+    'DEFAULT_THROTTLE_RATES': {
+        'comment': '4/min'
+    },
+
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 
-    # 'DEFAULT_THROTTLE_RATES': {
-    #     'contact_form': '5/min'
-    # },
 
 }
 
@@ -181,3 +180,4 @@ EMAIL_HOST_USER = 'snurekeee03@gmail.com'
 EMAIL_HOST_PASSWORD = 'ckdzmasobwtcqjej'
 
 CORS_ALLOW_ALL_ORIGINS = True
+HOST_NAME = 'http://127.0.0.1:8000/'
