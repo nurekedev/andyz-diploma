@@ -8,12 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { NavLink, Link,useParams } from "react-router-dom";
-import { useDetailCourseData } from "../../requests/CourseDetail";
+import { useFetchData } from "../../requests/FetchData";
 
 const Sidebar = () => {
   const { id } = useParams();
-  const courseDetailData = useDetailCourseData(id);
-  const firstLesson = courseDetailData?.course.sections[0]?.lessons[0].slug;
+  const courseDetailData = useFetchData("course", id);
+    const firstLesson = courseDetailData?.course.sections[0]?.lessons[0].slug;
 
   return (
     <Box

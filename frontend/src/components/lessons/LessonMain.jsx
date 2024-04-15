@@ -1,11 +1,11 @@
 import { Box, Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import LessonList from "./LessonList";
 import { useParams } from "react-router-dom";
-import { useDetailLessonData } from "../../requests/LessonDetail";
+import { useFetchData } from "../../requests/FetchData";
 
 function LessonMain() {
   const { lessonSlug } = useParams();
-  const lessonDetailData = useDetailLessonData(lessonSlug);
+  const lessonDetailData = useFetchData("course/lessons", lessonSlug);
   return (
     <Box display={"flex"} margin={"auto"}>
       <Box>
@@ -32,7 +32,6 @@ function LessonMain() {
               src={`https://www.youtube.com/embed/${lessonDetailData?.lessons.yt_id}`}
               width="100%"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"
-              allowfullscreen
             ></iframe>
           ) : null}
         </Box>

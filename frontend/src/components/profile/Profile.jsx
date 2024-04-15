@@ -7,9 +7,7 @@ import {
   Input,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useUserData } from "../../requests/UserData"; 
-const Profile = () => {
-  const userData = useUserData();
+const Profile = ({ userData }) => {
 
   return (
     <>

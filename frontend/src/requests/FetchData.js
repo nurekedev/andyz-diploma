@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { refreshAccessToken } from "./Token";
+import { useEffect, useState } from "react";
 
-async function fetchDetailLessonData(slug) {
+async function fetchData(pre_slug, slug) {
   try {
     const token = Cookies.get("access_token");
     if (!token) {
@@ -11,7 +11,7 @@ async function fetchDetailLessonData(slug) {
     }
 
     const response = await fetch(
-      `http://127.0.0.1:8000/api/v1/course/lessons/${slug}/`,
+      `http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`,
       {
         method: "GET",
         headers: {
@@ -32,20 +32,20 @@ async function fetchDetailLessonData(slug) {
   }
 }
 
-export function useDetailLessonData(slug) {
-  const [lessonData, setLessonData] = useState(null);
+export function useFetchData(pre_slug, slug) {
+  const [data, setData] = useState(null);
 
   useEffect(
     () => {
-      async function fetchData() {
-        const data = await fetchDetailLessonData(slug);
-        setLessonData(data);
+      async function usefetchData() {
+        const data = await fetchData(pre_slug, slug);
+        setData(data);
       }
 
-      fetchData();
+      usefetchData();
     },
-    [slug]
+    [pre_slug, slug]
   );
 
-  return lessonData;
+  return data;
 }

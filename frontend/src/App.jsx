@@ -6,7 +6,7 @@ import  PasswordPage  from "./pages/auth/PasswordPage";
 import { useRecoilValue } from "recoil";
 import isAuthenticatedAtom from "./atoms/isAuthenticatedAtom";
 import Courses from "./pages/course/Courses";
-import Review from "./components/course/review/Review";
+import Review from "./pages/course/review/Review";
 import { Layout } from "./pages/Layout";
 import CourseDetailPage from "./pages/course/CourseDetailPage";
 import LessonPage from "./components/lessons/LessonPage";

@@ -23,6 +23,7 @@ class DoctorHideSerializer(UserSerializer):
 class PatientSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = ['id',
+                  
                   'email',
                   'first_name',
                   'last_name',

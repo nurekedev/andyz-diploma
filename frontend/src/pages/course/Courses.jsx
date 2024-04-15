@@ -10,13 +10,13 @@ import {
   Text,
   useColorModeValue
 } from "@chakra-ui/react";
-import { useCourseData } from "../../requests/MyCourses";
 import { fetchData } from "../../requests/DataFetcher";
 import { Link } from "react-router-dom";
 import NotCoursePage from "./NotCoursePage";
+import { useFetchData } from "../../requests/FetchData";
 
 const Courses = () => {
-  const courseData = useCourseData();
+  const courseData = useFetchData("course", "my-courses/");
   const [progressData, setProgressData] = useState([]);
 
   useEffect(() => {
@@ -41,9 +41,9 @@ const Courses = () => {
         xl: "0 100px",
         "2xl": "auto"
       }}
-      mt={10}
       justifyContent={"center"}
-      maxWidth={1400}
+      mt={10}
+      maxWidth={1200}
     >
       {courseData &&
         courseData.length > 0 ?
@@ -53,7 +53,7 @@ const Courses = () => {
               boxShadow="md"
               borderRadius={15}
               bg={useColorModeValue("white", "gray.dark")}
-              w={{ base: "300px", xl: "400px" }}
+              w={{ base: "300px", xl: "360px" }}
               m={"auto"}
             >
               <Image
@@ -64,7 +64,7 @@ const Courses = () => {
                 m={"auto"}
                 w={{
                   base: "280px",
-                  xl: "380px"
+                  xl: "340px"
                 }}
               />
               <Box

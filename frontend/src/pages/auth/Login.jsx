@@ -38,7 +38,6 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      console.log(inputs);
       const response = await fetch(
         "http://127.0.0.1:8000/api/v1/auth/jwt/create/",
         {

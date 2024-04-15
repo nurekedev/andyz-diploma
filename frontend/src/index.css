@@ -5,6 +5,10 @@
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 
+.read-more {
+  color: rgb(89, 119, 218) !important;
+}
+
 .rating-input { 
   display: none; 
 } 

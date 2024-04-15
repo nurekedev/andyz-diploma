@@ -11,14 +11,15 @@ import {
   useColorModeValue,
   CircularProgress
 } from "@chakra-ui/react";
-import {  NavLink, useParams } from "react-router-dom";
-import { useDetailCourseData } from "../../requests/CourseDetail";
+import { NavLink, useParams } from "react-router-dom";
 import { GoVideo } from "react-icons/go";
 import { MdOutlineArticle } from "react-icons/md";
+import { useFetchData } from "../../requests/FetchData";
 
 function LessonList() {
   const { id } = useParams();
-  const courseDetailData = useDetailCourseData(id);
+  const courseDetailData = useFetchData("course", id);
+
   return (
     <div>
       <Box borderRadius={20}>
@@ -66,6 +67,7 @@ function LessonList() {
                   >
                     <NavLink
                       to={`/courses/${courseDetailData?.course.slug}/${lesson.slug}`}
+                      activeClassName="active"
                       style={{
                         display: "flex",
                         flexDirection: "row",
@@ -103,4 +105,3 @@ function LessonList() {
 }
 
 export default LessonList;
-
