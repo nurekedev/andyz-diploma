@@ -16,19 +16,21 @@ from rest_framework.mixins import UpdateModelMixin, DestroyModelMixin, RetrieveM
 from rest_framework.permissions import BasePermission
 
 
-from course.models import Category, Rating, CourseComment
+from course.models import Category, Rating, Comment
 from course.serializers import (CategorySerializer, CourseListSerializer, LessonSerializer,
                                 CourseDetailSerializer,  RatingSerializer, SectionSerializer, SectionListSerializer, LessonListSerializer,
-                                CourseLockSerializer, CourseCommentSerializer)
+                                CourseLockSerializer, CourseCommentSerializer, LessonCommentSerializer)
 from course.services import *
 from progress.models import Enrollment
 from course.permissons import IsOwnerOrAdminPermission, IsAdminOrAuthorPermission
+from course.throttling import CommentThrottling
 
 from pprint import pprint
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 
 @api_view(['GET'])
@@ -250,10 +252,11 @@ def get_section(request, course_slug, slug):
 class CourseCommentAPIView(ListCreateAPIView):
     serializer_class = CourseCommentSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [CommentThrottling]
 
     def get_queryset(self):
         course_slug = self.kwargs["course_slug"]
-        queryset = CourseComment.objects.filter(course__slug=course_slug)
+        queryset = Comment.objects.filter(course__slug=course_slug, lesson__slug=None, active=True)
         return queryset
 
     def get_serializer_context(self):
@@ -262,22 +265,50 @@ class CourseCommentAPIView(ListCreateAPIView):
         return {"user_id": user_id, "course_slug": course_slug}
 
 
-
-    
 class CourseCommentUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = CourseCommentSerializer
     permission_classes = [IsAuthenticated, IsAdminOrAuthorPermission]
 
     def get_queryset(self):
         course_slug = self.kwargs["course_slug"]
-        return CourseComment.objects.filter(course__slug=course_slug, active=True)
+        return Comment.objects.filter(course__slug=course_slug, active=True)
 
     def get_serializer_context(self):
         user_id = self.request.user.id
         course_slug = self.kwargs["course_slug"]
         return {"user_id": user_id, "course_slug": course_slug}
+
+
+
+class LessonCommentAPIView(ListCreateAPIView):
+    serializer_class = LessonCommentSerializer
+    permission_classes = [IsAuthenticated]
+    throttle_classes = [CommentThrottling]
+
+    def get_queryset(self):
+        course_slug = self.kwargs["course_slug"]
+        lesson_slug = self.kwargs["lesson_slug"]
+        return Comment.objects.filter(course__slug=course_slug, lesson__slug=lesson_slug, active=True)
+
+    def get_serializer_context(self):
+        user_id = self.request.user.id
+        course_slug = self.kwargs["course_slug"]
+        lesson_slug = self.kwargs["lesson_slug"]
+        return {"user_id": user_id, "lesson_slug": lesson_slug, "course_slug": course_slug}
     
 
+class LessonCommentUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = LessonCommentSerializer
+    permission_classes = [IsAuthenticated, IsAdminOrAuthorPermission]
+
+    def get_queryset(self):
+        lesson_slug = self.kwargs["lesson_slug"]
+        return Comment.objects.filter(lesson__slug=lesson_slug, active=True)
+
+    def get_serializer_context(self):
+        user_id = self.request.user.id
+        lesson_slug = self.kwargs["lesson_slug"]
+        return {"user_id": user_id, "lesson_slug": lesson_slug}
 
 
 
@@ -285,3 +316,5 @@ rating_api_view = RatingAPIView.as_view()
 rating_api_destroy_update_view = RatingUpdateDestroyAPIView.as_view()
 course_comment_api_view = CourseCommentAPIView.as_view()
 course_api_destroy_update_view = CourseCommentUpdateDestroyAPIView.as_view()
+lesson_comment_api_view = LessonCommentAPIView.as_view()
+lesson_api_destroy_update_view = LessonCommentUpdateDestroyAPIView.as_view()
