@@ -12,7 +12,7 @@ const CourseDetailPage = () => {
         xl: "0 auto 50px"
       }}
       gap={5}
-      maxWidth={1400}
+      maxWidth={1200}
       borderRadius={10}
     >
       <Sidebar />

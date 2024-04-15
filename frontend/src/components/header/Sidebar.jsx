@@ -65,7 +65,7 @@ const Sidebar = () => {
         <NavLink to={`/courses/${id}/review`} className="side-link">
           Reviews
         </NavLink>
-        <NavLink className="side-link">Comments</NavLink>
+        <NavLink to={`/courses/${id}/comment`} className="side-link">Comments</NavLink>
       </Box>
     </Box>
   );
