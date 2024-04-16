@@ -30,7 +30,7 @@ const CommentCard = ({ id, lesson_slug, comment }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await PatchComment(`${id}`, lesson_slug, newComment, comment?.id);
+      await PatchComment(id, lesson_slug, newComment, comment?.id);
       console.log("Review submitted successfully!");
       setNewComment("null");
       location.reload();
@@ -38,11 +38,7 @@ const CommentCard = ({ id, lesson_slug, comment }) => {
       console.error("Error submitting review:", error);
     }
   };
-  if (!lesson_slug) {
-    lesson_slug = "";
-  } else {
-    lesson_slug = `${lesson_slug}/`;
-  }
+  
   const handleDelete = async (event) => {
     event.preventDefault();
     try {

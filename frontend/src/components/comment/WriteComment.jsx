@@ -9,7 +9,7 @@ const WriteComment = ({ course_slug, lesson_slug }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await PostComment(`${course_slug}/`, `${lesson_slug}/`, comment);
+      await PostComment(`${course_slug}`, `${lesson_slug}`, comment);
       console.log("Comment submitted successfully!");
       setComment("");
       location.reload();

@@ -31,7 +31,7 @@ function LessonMain() {
 
         <Text>{lessonDetailData?.lessons.short_description}</Text>
         <Divider mt={4} mb={2} />
-        <Comment id={id} lessonSlug={`/${lessonSlug}`}/>
+        <Comment id={id} lessonSlug={`${lessonSlug}`}/>
       </Box>
       <Box display={"flex"}>
         <Divider

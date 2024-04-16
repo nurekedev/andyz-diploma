@@ -27,7 +27,7 @@ const ReviewCard = ({slug, review, edit }) => {
   // Состояние для отслеживания развернуто ли описание
   const [isExpanded, setIsExpanded] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState(review?.rating);
   const [hover, setHover] = useState(null);
   const [description, setDescription] = useState(review?.description); // Add state for description
 
