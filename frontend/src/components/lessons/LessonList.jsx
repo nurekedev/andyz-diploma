@@ -23,7 +23,7 @@ function LessonList() {
   return (
     <div>
       <Box borderRadius={20}>
-        <Accordion allowMultiple w={"full"} minW={330}>
+        <Accordion allowMultiple w={"full"} minW={300}>
           {courseDetailData?.course.sections.map((section, index) => (
             <AccordionItem key={index}>
               <h2>

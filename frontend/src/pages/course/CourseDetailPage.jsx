@@ -15,12 +15,22 @@ const CourseDetailPage = () => {
       maxWidth={1200}
       borderRadius={10}
     >
-      <Sidebar />
+      <Box
+        as="aside" // Indicate this is an aside element for screen readers
+        position="sticky" // Make the sidebar sticky
+        top={"30px"} // Position it at the top of the viewport
+        height="30vh" // Make it as tall as the viewport
+        borderRadius="10px"
+      >
+        <Sidebar />
+      </Box>
       <Box
         bg={useColorModeValue("white", "gray.dark")}
-        p={"10px"}
+        p={"20px"}
         borderRadius={10}
         ml={2}
+        maxW={850}
+        overflow={"overlay"}
         w={"100%"}
       >
         <Outlet />

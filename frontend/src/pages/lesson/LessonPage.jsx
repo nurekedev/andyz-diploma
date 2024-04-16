@@ -9,17 +9,17 @@ import {
   Button,
   useDisclosure
 } from "@chakra-ui/react";
-import LessonMain from "./LessonMain";
-import LessonComment from "./LessonComment";
-import LessonList from "./LessonList";
+import LessonMain from "../../components/lessons/LessonMain";
+import LessonList from "../../components/lessons/LessonList";
 import { IoClose } from "react-icons/io5";
 const LessonPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box
+      maxW={1200}
       margin={"auto"}
-      p={10}
+      p={5}
       borderRadius={10}
       bg={useColorModeValue("white", "gray.dark")}
     >
@@ -50,7 +50,7 @@ const LessonPage = () => {
       </Box>
 
       <LessonMain />
-      <LessonComment />
+
     </Box>
   );
 };

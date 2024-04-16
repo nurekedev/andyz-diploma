@@ -12,12 +12,17 @@ import {
   ModalCloseButton,
   ModalBody,
   useDisclosure,
-  Textarea
+  Textarea,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
 } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { PatchData } from "../../../requests/PatchData";
 import { DeleteData } from "../../../requests/DeleteData";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 const ReviewCard = ({slug, review, edit }) => {
   // Состояние для отслеживания развернуто ли описание
   const [isExpanded, setIsExpanded] = useState(false);
@@ -45,7 +50,7 @@ const ReviewCard = ({slug, review, edit }) => {
   const handleDelete = async (event) => {
     event.preventDefault();
     try {
-      await DeleteData(slug, review?.id);
+      await DeleteData(`${slug}/review`, review?.id);
       console.log("Review submitted successfully!");
       location.reload();
     } catch (error) {
@@ -63,9 +68,9 @@ const ReviewCard = ({slug, review, edit }) => {
   };
 
   return (
-    <div>
-      <Box display={"flex"} justifyContent={"space-between"}>
-        <Box display={"flex"} gap={3} mb={2}>
+    <Box mb={"25px"}>
+      <Box display={"flex"} justifyContent={"space-between"} mb={2}>
+        <Box display={"flex"} gap={3}>
           <Avatar src={review.user?.avatar} />
           <Box>
             <Text>
@@ -85,13 +90,21 @@ const ReviewCard = ({slug, review, edit }) => {
             </Text>
           </Box>
         </Box>
-        <Box display={edit ? "flex" : "none"} gap={4}>
-          <Button onClick={onOpen}>
-            <AiFillEdit fontSize={20} />
-          </Button>
-          <Button onClick={handleDelete}>
-            <AiFillDelete fontSize={20} />
-          </Button>
+        <Box display={edit ? "block" : "none"} gap={4}>
+          <Menu>
+            <MenuButton>
+              <BiDotsHorizontalRounded fontSize={25} />
+            </MenuButton>
+            <MenuList>
+              <MenuItem gap={3} onClick={onOpen}>
+                Edit <AiFillEdit fontSize={20} />
+              </MenuItem>
+              <MenuItem gap={3} onClick={handleDelete}>
+                Delete
+                <AiFillDelete fontSize={20} />
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Box>
       </Box>
 
@@ -194,7 +207,7 @@ const ReviewCard = ({slug, review, edit }) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </div>
+    </Box>
   );
 };
 

@@ -3,6 +3,7 @@ import { refreshAccessToken } from "./Token";
 import { useEffect, useState } from "react";
 
 async function fetchData(pre_slug, slug) {
+  console.log(`http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`);
   try {
     const token = Cookies.get("access_token");
     if (!token) {
@@ -35,17 +36,17 @@ async function fetchData(pre_slug, slug) {
 export function useFetchData(pre_slug, slug) {
   const [data, setData] = useState(null);
 
-  useEffect(
-    () => {
+  useEffect(() => {
       async function usefetchData() {
         const data = await fetchData(pre_slug, slug);
         setData(data);
       }
 
-      usefetchData();
-    },
-    [pre_slug, slug]
-  );
+     
+        usefetchData();
+      
+    }, [pre_slug, slug]); // Добавлен data в зависимости
+
 
   return data;
 }
