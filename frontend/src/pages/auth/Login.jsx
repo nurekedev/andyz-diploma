@@ -12,7 +12,8 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast
+  useToast,
+  Image
 } from "@chakra-ui/react";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
@@ -68,26 +69,26 @@ export default function Login() {
       } else {
         const { message } = await response.json();
         toast({
-          title: "Ошибка авторизации",
+          title: "Неправильный логин или пароль",
           description: message,
           status: "error",
           duration: 2000
         });
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true
-      });
+          toast({
+          title: "Error",
+          description: error.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true
+        });
     }
   };
 
   return (
-    <Flex align={"center"} justify={"center"} m={"auto"}>
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+    <Flex justify={"center"} m={"10vh auto 0"} >
+      <Stack spacing={8} px={6} >
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Login
@@ -106,6 +107,13 @@ export default function Login() {
           boxShadow={"lg"}
           p={8}
         >
+          <Image
+            w={100}
+            mb={4}
+            scale={2}
+            objectFit={"cover"}
+            src="../../public/logo.png"
+          />
           <Stack spacing={4}>
             <FormControl isRequired>
               <FormLabel>Email</FormLabel>

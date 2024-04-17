@@ -53,9 +53,8 @@ const NavBar = () => {
         <Link to={"/"}>
           <Image
             src={"/logo.png"}
-            height={"40px"}
+            height={"70px"}
             objectFit={"cover"}
-            w={180}
           />
         </Link>
         <Button onClick={onOpen} m={5}>
@@ -97,9 +96,8 @@ const NavBar = () => {
             <Image
               src={"/logo.png"}
               alt={"logo"}
-              height={"40px"}
+              height={"50px"}
               objectFit={"cover"}
-              w={140}
             />
           </Link>
           <HStack gap={5}>

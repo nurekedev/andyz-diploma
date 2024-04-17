@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
   Divider,
@@ -5,10 +6,10 @@ import {
   FormLabel,
   Heading,
   Input,
+  Skeleton,
   useColorModeValue
 } from "@chakra-ui/react";
 const Profile = ({ userData }) => {
-
   return (
     <>
       <Box
@@ -36,25 +37,33 @@ const Profile = ({ userData }) => {
         >
           <FormControl>
             <FormLabel>First Name</FormLabel>
-            <Input
-              fontSize={20}
-              p={6}
-              color={useColorModeValue("gray.dark", "white")}
-              value={userData?.first_name}
-              _placeholder={{ color: "inherit" }}
-              readonly="readonly"
-            />
+            {userData ? (
+              <Input
+                fontSize={20}
+                p={6}
+                color={useColorModeValue("gray.dark", "white")}
+                value={userData?.first_name}
+                _placeholder={{ color: "inherit" }}
+                readonly="readonly"
+              />
+            ) : (
+              <Skeleton height="40px" w={"full"} />
+            )}
           </FormControl>
           <FormControl>
             <FormLabel>Last Name</FormLabel>
-            <Input
-              fontSize={20}
-              p={4}
-              color={useColorModeValue("gray.dark", "white")}
-              placeholder={userData?.last_name}
-              _placeholder={{ color: "inherit" }}
-              readonly="readonly"
-            />
+            {userData ? (
+              <Input
+                fontSize={20}
+                p={4}
+                color={useColorModeValue("gray.dark", "white")}
+                value={userData?.last_name}
+                _placeholder={{ color: "inherit" }}
+                readonly="readonly"
+              />
+            ) : (
+              <Skeleton height="40px" w={"full"} />
+            )}
           </FormControl>
         </Box>
         <Box
@@ -68,25 +77,33 @@ const Profile = ({ userData }) => {
         >
           <FormControl>
             <FormLabel>Address</FormLabel>
-            <Input
-              fontSize={20}
-              p={4}
-              color={useColorModeValue("gray.dark", "white")}
-              placeholder={userData?.address_line}
-              _placeholder={{ color: "inherit" }}
-              readonly="readonly"
-            />
+            {userData ? (
+              <Input
+                fontSize={20}
+                p={4}
+                color={useColorModeValue("gray.dark", "white")}
+                value={userData?.address_line}
+                _placeholder={{ color: "inherit" }}
+                readonly="readonly"
+              />
+            ) : (
+              <Skeleton height="40px" w={"full"} />
+            )}
           </FormControl>
           <FormControl>
             <FormLabel>Date of birth</FormLabel>
-            <Input
-              fontSize={20}
-              p={4}
-              color={useColorModeValue("gray.dark", "white")}
-              placeholder={userData?.date_of_birth}
-              _placeholder={{ color: "inherit" }}
-              readonly="readonly"
-            />
+            {userData ? (
+              <Input
+                fontSize={20}
+                p={4}
+                color={useColorModeValue("gray.dark", "white")}
+                value={userData?.date_of_birth}
+                _placeholder={{ color: "inherit" }}
+                readonly="readonly"
+              />
+            ) : (
+              <Skeleton height="40px" w={"full"} />
+            )}
           </FormControl>
         </Box>
         <Box
@@ -100,26 +117,35 @@ const Profile = ({ userData }) => {
         >
           <FormControl>
             <FormLabel>Phone Number</FormLabel>
-            <Input
-              fontSize={20}
-              p={6}
-              color={useColorModeValue("gray.dark", "white")}
-              placeholder={userData?.phone_number}
-              _placeholder={{ color: "inherit" }}
-              readonly="readonly"
-            />
+
+            {userData ? (
+              <Input
+                fontSize={20}
+                p={6}
+                color={useColorModeValue("gray.dark", "white")}
+                value={userData?.phone_number}
+                _placeholder={{ color: "inherit" }}
+                readonly="readonly"
+              />
+            ) : (
+              <Skeleton height="40px" w={"full"} />
+            )}
           </FormControl>
 
           <FormControl>
             <FormLabel>Email</FormLabel>
-            <Input
-              fontSize={20}
-              p={6}
-              color={useColorModeValue("gray.dark", "white")}
-              placeholder={userData?.email}
-              _placeholder={{ color: "inherit" }}
-              readonly="readonly"
-            />
+            {userData ? (
+              <Input
+                fontSize={20}
+                p={6}
+                color={useColorModeValue("gray.dark", "white")}
+                value={userData?.email}
+                _placeholder={{ color: "inherit" }}
+                readonly="readonly"
+              />
+            ) : (
+              <Skeleton height="40px" w={"full"} />
+            )}
           </FormControl>
         </Box>
       </Box>

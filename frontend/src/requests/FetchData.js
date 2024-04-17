@@ -2,13 +2,20 @@ import Cookies from "js-cookie";
 import { refreshAccessToken } from "./Token";
 import { useEffect, useState } from "react";
 
-async function fetchData(pre_slug, slug) {
+async function fetchData(pre_slug, slug, retryCount = 0) {
   console.log(`http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`);
+
   try {
     const token = Cookies.get("access_token");
+    const savedPreSlug = pre_slug;
+    const savedSlug = slug;
+
     if (!token) {
       await refreshAccessToken();
-      return null;
+
+      // Повторный запрос с обновленным токеном
+      const data = await fetchData(savedPreSlug, savedSlug);
+      return data;
     }
 
     const response = await fetch(
@@ -24,8 +31,20 @@ async function fetchData(pre_slug, slug) {
     if (response.ok) {
       return await response.json();
     } else {
-      console.error("Ошибка при получении данных:", response.status);
-      return null;
+      // Проверка на количество попыток
+      if (retryCount < 2) {
+        console.warn(
+          "Ошибка получения данных. Повторная попытка:",
+          retryCount + 1
+        );
+        return await fetchData(savedPreSlug, savedSlug, retryCount + 1); // Рекурсивный вызов с увеличением счетчика попыток
+      } else {
+        console.error(
+          "Все попытки получения данных завершились ошибкой:",
+          response.status
+        );
+        return null;
+      }
     }
   } catch (error) {
     console.error("Ошибка:", error);
