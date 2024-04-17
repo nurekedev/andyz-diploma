@@ -7,16 +7,20 @@ const OtherReviews = ({ reviews, userData }) => {
     return <div><Spinner /></div>;
   }
 
-  const filteredData = reviews?.find((item) => item?.user?.id !== userData.id);
+  const filteredReviews = reviews.filter(
+    (review) => review.user?.id !== userData.id
+  );
 
-  if (!filteredData) {
+  if (!filteredReviews) {
     // Handle no review case (optional: display a message)
     return <div>No reviews found for this course.</div>;
   }
 
   return (
     <Box>
-      <ReviewCard key={filteredData.id} review={filteredData} edit={false}/> {/* Use ID for key */}
+      {filteredReviews.map((review) => (
+        <ReviewCard key={review.id} review={review} edit={false} />
+      ))}
     </Box>
   );
 }

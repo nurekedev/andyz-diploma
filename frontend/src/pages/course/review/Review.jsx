@@ -11,8 +11,7 @@ const Review = () => {
   return (
     <Box display={"flex"} flexDir={"column"} gap={2} p={4} maxW={850}>
       <WriteReview slug={id} reviews={reviews} userData={userData} />
-      <Divider p={0} />
-      <Text fontSize={24} fontWeight={"medium"}>
+      <Text fontSize={24} fontWeight={"bold"} mt={5}>
         Other rewies
       </Text>
       <Divider />

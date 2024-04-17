@@ -9,7 +9,7 @@ const CourseInfo = () => {
   const courseDetailData = useFetchData("course", id);
   return (
     <>
-      <Box display={"flex"} flexDir={"column"} p={"10px 20px"} maxH={"80vh"} overflow={"overlay"}>
+      <Box display={"flex"} flexDir={"column"} >
         {courseDetailData? <CourseMain courseDetailData={courseDetailData} /> : <CourseMainSkeleton />}
       </Box>
     </>

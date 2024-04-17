@@ -20,6 +20,7 @@ const Sidebar = () => {
       minW={300}
       height={400}
       bg={useColorModeValue("white", "gray.dark")}
+      position={"sticky"}
       p={5}
       borderRadius={10}
     >

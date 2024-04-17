@@ -41,27 +41,27 @@ function useCatData() {
 const NotCoursePage = () => {
   const catData = useCatData();
 
-  if (catData && catData[0] && catData[0].url) {
-    return (
-      <Box
-        margin={"auto"}
-        alignItems={"center"}
-        display={"flex"}
-        flexDir={"column"}
-        mt={20}
-        p={10}
-        borderRadius={10}
-        bg={useColorModeValue("white", "gray.dark")}
-        textAlign={"center"}
+  return (
+    <Box
+      margin={"auto"}
+      alignItems={"center"}
+      display={"flex"}
+      flexDir={"column"}
+      mt={20}
+      p={10}
+      borderRadius={10}
+      bg={useColorModeValue("white", "gray.dark")}
+      textAlign={"center"}
+    >
+      <Text
+        fontSize={{
+          base: 20,
+          md: 25
+        }}
       >
-        <Text
-          fontSize={{
-            base: 20,
-            md: 25
-          }}
-        >
-          You don&apos;t have any courses yet 😊❤️
-        </Text>
+        You don&apos;t have any courses yet 😊❤️
+      </Text>
+      {catData ? (
         <Image
           src={catData[0].url}
           alt="Wait the cat"
@@ -69,15 +69,11 @@ const NotCoursePage = () => {
           objectFit={"cover"}
           mt={10}
         />
-      </Box>
-    );
-  } else {
-    return (
-      <Box margin={"auto"}>
+      ) : (
         <Spinner size="xl" />
-      </Box>
-    );
-  }
+      )}
+    </Box>
+  );
 };
 
 export default NotCoursePage;

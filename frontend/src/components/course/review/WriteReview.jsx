@@ -32,7 +32,7 @@ const WriteReview = ({slug, reviews, userData}) => {
       {filteredData === undefined ? (
         <>
           <Textarea
-            minHeight={50}
+            minHeight={150}
             resize={"none"}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
