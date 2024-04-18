@@ -9,6 +9,7 @@ export async function PostComment(course_slug, lesson_slug, comment) {
     const data = await PostComment(course_slug, lesson_slug, comment);
     return data;
   }
+
   const response = await fetch(
     `http://127.0.0.1:8000/api/v1/course/${course_slug}${lesson_slug}/comments/`,
     {
@@ -24,10 +25,10 @@ export async function PostComment(course_slug, lesson_slug, comment) {
   );
 
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(`Error submitting review: ${errorData.message}`);
+    // Возвращает только статус ошибки
+    return response.status;
+  } else {
+    return response.json();
   }
-
-  console.log("Comment submitted successfully!");
-  return response.json();
 }
+
