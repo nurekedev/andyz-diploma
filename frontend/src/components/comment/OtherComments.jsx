@@ -1,6 +1,7 @@
 import CommentCard from "./CommentCard";
 
-const OtherComments = ({ comments, id, lesson_slug }) => {
+const OtherComments = ({ comments, id, lesson_slug, data }) => {
+  
   return (
     <div>
       {comments?.map((comment) => (
@@ -9,6 +10,7 @@ const OtherComments = ({ comments, id, lesson_slug }) => {
           comment={comment}
           id={id}
           lesson_slug={lesson_slug}
+          data={data}
         />
       ))}
     </div>

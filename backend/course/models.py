@@ -151,7 +151,7 @@ class Comment(models.Model):
         settings.AUTH_USER_MODEL, related_name='comments', on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
 
     def __str__(self):
         return 'Comment by {} on {}'.format(self.name, self.course or self.lesson)

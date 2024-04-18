@@ -26,15 +26,25 @@ import { BiDotsHorizontalRounded } from "react-icons/bi";
 const ReviewCard = ({slug, review, edit }) => {
   // Состояние для отслеживания развернуто ли описание
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [rating, setRating] = useState(null);
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose
+  } = useDisclosure(); // Edit modal
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose
+  } = useDisclosure(); // Delete modal
+  
+  const [rating, setRating] = useState(review?.rating);
   const [hover, setHover] = useState(null);
   const [description, setDescription] = useState(review?.description); // Add state for description
 
   if (!review) {
     return null;
   }
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -47,16 +57,19 @@ const ReviewCard = ({slug, review, edit }) => {
       console.error("Error submitting review:", error);
     }
   };
-  const handleDelete = async (event) => {
-    event.preventDefault();
+  const handleDeleteConfirmation = async () => {
     try {
       await DeleteData(`${slug}/review`, review?.id);
-      console.log("Review submitted successfully!");
-      location.reload();
+      console.log("Comment deleted successfully!");
+      // Consider additional actions after successful deletion (e.g., remove comment from UI, reload page)
     } catch (error) {
-      console.error("Error submitting review:", error);
+      console.error("Error deleting comment:", error);
+    } finally {
+      onDeleteClose(); // Close delete confirmation modal
+      location.reload(); // Reload page after successful deletion
     }
   };
+
 
   const stars = Array(5)
     .fill(0)
@@ -96,10 +109,10 @@ const ReviewCard = ({slug, review, edit }) => {
               <BiDotsHorizontalRounded fontSize={25} />
             </MenuButton>
             <MenuList>
-              <MenuItem gap={3} onClick={onOpen}>
+              <MenuItem gap={3} onClick={onEditOpen}>
                 Edit <AiFillEdit fontSize={20} />
               </MenuItem>
-              <MenuItem gap={3} onClick={handleDelete}>
+              <MenuItem gap={3} onClick={onDeleteOpen}>
                 Delete
                 <AiFillDelete fontSize={20} />
               </MenuItem>
@@ -135,8 +148,8 @@ const ReviewCard = ({slug, review, edit }) => {
         )}
       </Text>
       <Modal
-        onClose={onClose}
-        isOpen={isOpen}
+        onClose={onEditClose}
+        isOpen={isEditOpen}
         scrollBehavior={"inside"}
         size={"xl"}
       >
@@ -204,6 +217,31 @@ const ReviewCard = ({slug, review, edit }) => {
                 <Button onClick={handleSubmit}>Submit</Button>
               </Box>
             </>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Delete confirmation modal */}
+      <Modal onClose={onDeleteClose} isOpen={isDeleteOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm Deletion</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Are you sure you want to delete this comment?</Text>
+            <Text mb={10}>This action cannot be undone.</Text>
+
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={3}
+              mt={4}
+            >
+              <Button onClick={onDeleteClose}>Cancel</Button>
+              <Button colorScheme="red" onClick={handleDeleteConfirmation}>
+                Delete
+              </Button>
+            </Box>
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom"
 const CourseComment = () => {
   const { id } = useParams();
   return (
-    <Box><Comment id={id} lessonSlug={""}/></Box>
+    <Box><Comment id={id} /></Box>
   )
 }
 

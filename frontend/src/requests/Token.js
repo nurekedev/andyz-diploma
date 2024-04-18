@@ -21,8 +21,10 @@ export async function refreshAccessToken() {
     if (response.ok) {
       const { access } = await response.json();
       Cookies.set("access_token", access, { expires: 5 / (24 * 60) });
+      
     } else {
       console.error("Ошибка обновления токена");
+      location.reload()
     }
   } catch (error) {
     console.error("Ошибка:", error);
