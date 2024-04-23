@@ -9,7 +9,7 @@ import {
   Skeleton,
   useColorModeValue
 } from "@chakra-ui/react";
-const Profile = ({ userData }) => {
+const UserMainInfo = ({ userData }) => {
   return (
     <>
       <Box
@@ -153,4 +153,4 @@ const Profile = ({ userData }) => {
   );
 };
 
-export default Profile;
+export default UserMainInfo;

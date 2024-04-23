@@ -1,18 +1,18 @@
 import { Container } from "@chakra-ui/react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/profile/HomePage";
-import { AuthPage } from "./pages/auth/AuthPage";
+import { AuthPage } from "./containers/AuthPage";
 import  PasswordPage  from "./pages/auth/PasswordPage";
 import { useRecoilValue } from "recoil";
 import isAuthenticatedAtom from "./atoms/isAuthenticatedAtom";
 import Courses from "./pages/course/Courses";
-import Review from "./pages/course/review/Review";
-import { Layout } from "./pages/Layout";
-import CourseDetailPage from "./pages/course/CourseDetailPage";
-import LessonPage from "./pages/lesson/LessonPage";
+import Review from "./pages/review/Review";
+import { Layout } from "./containers/Layout";
+import CourseDetailPage from "./containers/CourseDetailPage";
+import LessonPage from "./containers/LessonPage";
 import CourseInfo from "./components/course/CourseInfo";
 import LessonList from "./components/lessons/LessonList";
-import CourseComment from "./pages/course/Comment/CourseComment";
+import CourseComment from "./pages/course/CourseComment";
 
 function App() {
   const user = useRecoilValue(isAuthenticatedAtom);

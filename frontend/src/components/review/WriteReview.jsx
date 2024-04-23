@@ -1,7 +1,7 @@
 import { Box, Textarea, Text, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { PostData } from "../../../requests/PostData";
+import { PostData } from "../../requests/PostData";
 import ReviewCard from "./ReviewCard";
 
 const WriteReview = ({slug, reviews, userData}) => {

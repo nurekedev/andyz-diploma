@@ -1,4 +1,4 @@
-import Login from "./Login"
+import Login from "../pages/auth/Login"
 
 export const AuthPage = () => {
     return (
