@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Flex,
   Box,
@@ -12,83 +11,49 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast,
-  Image
+  Image,
+  useToast
 } from "@chakra-ui/react";
-import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import isAuthenticatedAtom from "../../atoms/isAuthenticatedAtom";
-import accessTokenAtom from "../../atoms/accessTokenAtom";
-import refreshTokenAtom from "../../atoms/refreshTokenAtom";
-import Cookies from "js-cookie";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import handleLogin from "../../services/AuthService";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
-  const [refreshToken, setRefreshToken] = useRecoilState(refreshTokenAtom);
-  const [isAuthenticated, setIsAuthenticated] =
-    useRecoilState(isAuthenticatedAtom);
-
+  const toast = useToast();
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     email: "",
     password: ""
   });
-  const toast = useToast();
 
-  const handleLogin = async () => {
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/v1/auth/jwt/create/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(inputs)
-        }
-      );
-
-      if (response.ok) {
-        const { access, refresh } = await response.json();
-
-        // Сохранение токенов и установка статуса аутентификации
-        setAccessToken(access);
-        // Установка куки для access token с сроком 5 минут
-        Cookies.set("access_token", access, { expires: 5 / (24 * 60) }); // 5 минут в долях от суток
-
-        setRefreshToken(refresh);
-        // Установка куки для refresh token с сроком 15 минут
-        Cookies.set("refresh_token", refresh, { expires: 15 / (24 * 60) }); // 15 минут в долях от суток
-
-        setIsAuthenticated(true);
-        Cookies.set("isAuthenticated", "true", { expires: 15 / (24 * 60) });
-
-        // Перенаправление на главную страницу
-      } else {
-        const { message } = await response.json();
+  const handleLoginClick = () => {
+    handleLogin(inputs)
+      .then(() => {
+        navigate("/");
         toast({
-          title: "Неправильный логин или пароль",
-          description: message,
-          status: "error",
-          duration: 2000
+          title: "Success Login",
+          status: "success",
+          duration: 2000,
+          isClosable: true
         });
-      }
-    } catch (error) {
-          toast({
+      })
+      .catch((error) => {
+        // Обработка ошибки, например, показ toast с сообщением об ошибке
+        toast({
           title: "Error",
           description: error.message,
           status: "error",
           duration: 2000,
           isClosable: true
         });
-    }
+      });
   };
 
   return (
-    <Flex justify={"center"} m={"10vh auto 0"} >
-      <Stack spacing={8} px={6} >
+    <Flex justify={"center"} m={"10vh auto 0"}>
+      <Stack spacing={8} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Login
@@ -162,7 +127,7 @@ export default function Login() {
                 _hover={{
                   bg: useColorModeValue("gray.700", "gray.800")
                 }}
-                onClick={handleLogin}
+                onClick={handleLoginClick}
               >
                 Login
               </Button>

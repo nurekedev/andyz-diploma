@@ -15,7 +15,9 @@ export const LogoutButton = () => {
 
     const handleLogout = () => {
       setAccessToken(null);
+      Cookies.remove("access_token");
       setRefreshToken(null);
+      Cookies.remove("refresh_token");
       setIsAuthenticated(false);
       Cookies.remove("isAuthenticated");  
   };

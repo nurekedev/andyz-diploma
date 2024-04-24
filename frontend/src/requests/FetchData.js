@@ -6,7 +6,7 @@ async function fetchData(pre_slug, slug, retryCount = 0) {
   console.log(`http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`);
 
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get("accessToken");
     const savedPreSlug = pre_slug;
     const savedSlug = slug;
 
@@ -23,7 +23,7 @@ async function fetchData(pre_slug, slug, retryCount = 0) {
       {
         method: "GET",
         headers: {
-          Authorization: `JWT ${Cookies.get("access_token")}`
+          Authorization: `JWT ${Cookies.get("accessToken")}`
         }
       }
     );

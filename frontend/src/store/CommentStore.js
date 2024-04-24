@@ -3,8 +3,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { refreshAccessToken } from "../requests/Token";
 
-const authToken = Cookies.get("access_token");
-console.log(authToken);
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1",
   // Добавляем заголовки по умолчанию, включая авторизацию с токеном
@@ -26,7 +24,7 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const useCommentStore = create(set => ({
+const useCommentStore = create((set, get) => ({
   comments: [],
   setComments: comments => set({ comments }),
   fetchComments: async (courseId, lessonSlug) => {
@@ -34,9 +32,15 @@ const useCommentStore = create(set => ({
       const response = await axiosInstance.get(
         `/course/${courseId}${lessonSlug}/comments/`
       );
+      if (response.status === 401) {
+        // Обновляем токен и повторяем запрос
+        await refreshAccessToken();
+        get().fetchComments(courseId, lessonSlug);
+      }
       set({ comments: response.data });
     } catch (error) {
-      console.error("Failed to fetch comments:", error);
+        // Любая другая ошибка - выводим сообщение в консоль
+        console.error("Failed to fetch comments:", error);
     }
   },
   addComment: async (courseId, lessonSlug, body) => {
