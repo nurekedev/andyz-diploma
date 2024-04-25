@@ -2,9 +2,7 @@ import { Container } from "@chakra-ui/react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/profile/HomePage";
 import { AuthPage } from "./containers/AuthPage";
-import  PasswordPage  from "./pages/auth/PasswordPage";
-import { useRecoilValue } from "recoil";
-import isAuthenticatedAtom from "./atoms/isAuthenticatedAtom";
+import PasswordPage from "./pages/auth/PasswordPage";
 import Courses from "./pages/course/Courses";
 import Review from "./pages/review/Review";
 import { Layout } from "./containers/Layout";
@@ -13,13 +11,18 @@ import LessonPage from "./containers/LessonPage";
 import CourseInfo from "./components/course/CourseInfo";
 import LessonList from "./components/lessons/LessonList";
 import CourseComment from "./pages/course/CourseComment";
+import useAuthStore from "./store/AuthStore";
 
 function App() {
-  const user = useRecoilValue(isAuthenticatedAtom);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated); 
+
   return (
     <Container maxWidth={"100vw"} padding={0}>
       <Routes>
-        <Route path="/" element={user ? <Layout /> : <Navigate to="/auth" />}>
+        <Route
+          path="/"
+          element={isAuthenticated ? <Layout /> : <Navigate to="/auth" />}
+        >
           <Route index element={<HomePage />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:id" element={<CourseDetailPage />}>
@@ -32,7 +35,7 @@ function App() {
         </Route>
         <Route
           path="/auth"
-          element={!user ? <AuthPage /> : <Navigate to="/" />}
+          element={!isAuthenticated ? <AuthPage /> : <Navigate to="/" />}
         />
         <Route path="/reset-password" element={<PasswordPage />} />
       </Routes>

@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { refreshAccessToken } from "./Token";
+import { RefreshAccessToken } from "./Token";
 import { useEffect, useState } from "react";
 
 async function fetchData(pre_slug, slug, retryCount = 0) {
@@ -11,7 +11,7 @@ async function fetchData(pre_slug, slug, retryCount = 0) {
     const savedSlug = slug;
 
     if (!token) {
-      await refreshAccessToken();
+      await RefreshAccessToken();
 
       // Повторный запрос с обновленным токеном
       const data = await fetchData(savedPreSlug, savedSlug);

@@ -16,13 +16,12 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import handleLogin from "../../services/AuthService";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
-  const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     email: "",
     password: ""
@@ -31,7 +30,6 @@ export default function Login() {
   const handleLoginClick = () => {
     handleLogin(inputs)
       .then(() => {
-        navigate("/");
         toast({
           title: "Success Login",
           status: "success",

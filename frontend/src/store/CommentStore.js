@@ -1,13 +1,12 @@
 import create from "zustand";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { refreshAccessToken } from "../requests/Token";
+import { RefreshAccessToken } from "../requests/Token";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1",
   // Добавляем заголовки по умолчанию, включая авторизацию с токеном
   headers: {
-    Authorization: `JWT ${Cookies.get("access_token")}`,
     "Content-Type": "application/json"
   }
 });
@@ -16,9 +15,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   response => response,
   error => {
-    if (error.response && error.response.status === 401) {
-      return refreshAccessToken();
-    }
     console.error("Request error:", error);
     return Promise.reject(error);
   }
@@ -29,12 +25,13 @@ const useCommentStore = create((set, get) => ({
   setComments: comments => set({ comments }),
   fetchComments: async (courseId, lessonSlug) => {
     try {
+      axiosInstance.defaults.headers.common["Authorization"] = `JWT ${Cookies.get("accessToken")}`;
       const response = await axiosInstance.get(
         `/course/${courseId}${lessonSlug}/comments/`
       );
+      console.log(response);
       if (response.status === 401) {
-        // Обновляем токен и повторяем запрос
-        await refreshAccessToken();
+        await RefreshAccessToken();
         get().fetchComments(courseId, lessonSlug);
       }
       set({ comments: response.data });
@@ -50,6 +47,7 @@ const useCommentStore = create((set, get) => ({
         { body }
       );
       set(state => ({ comments: [...state.comments, response.data] }));
+      return response.status;
     } catch (error) {
       console.error("Failed to add comment:", error);
     }

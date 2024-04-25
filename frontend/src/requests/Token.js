@@ -1,7 +1,10 @@
 import Cookies from "js-cookie";
+import useAuthStore from "../store/AuthStore";
 
 
-export async function refreshAccessToken() {
+export async function RefreshAccessToken() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const logout = useAuthStore(state => state.logout); 
   try {
     const token = Cookies.get("refreshToken");
     const response = await fetch(
@@ -24,7 +27,7 @@ export async function refreshAccessToken() {
       
     } else {
       console.error("Ошибка обновления токена");
-      location.reload()
+      logout();
     }
   } catch (error) {
     console.error("Ошибка:", error);
