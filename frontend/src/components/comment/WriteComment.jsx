@@ -1,128 +1,106 @@
-import { PostComment } from "../../requests/PostComment";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Input, useToast } from "@chakra-ui/react";
 import { MdSend } from "react-icons/md";
-import Cookies from "js-cookie";
+import useCommentStore from "../../store/CommentStore";
 
-const WriteComment = ({ course_slug, lesson_slug }) => {
+const WriteComment = ({ courseId, lessonSlug }) => {
   const toast = useToast();
   const [comment, setComment] = useState("");
-  const [disabled, setDisabled] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
+  const { addComment } = useCommentStore((state) => ({
+    addComment: state.addComment
+  }));
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRateLimited, setIsRateLimited] = useState(
+    localStorage.getItem("rateLimited") === "true"
+  );
+  const [remainingTime, setRemainingTime] = useState(0);
 
-  // Инициализация состояния `disabled` и `timeLeft` из localStorage при загрузке компонента
-  useEffect(() => {
-    const savedDisabledState = localStorage.getItem("commentDisabled");
-    const savedTimeLeft = localStorage.getItem("timeLeft");
-
-    console.log("Saved Disabled State:", savedDisabledState);
-    console.log("Saved Time Left:", savedTimeLeft);
-
-    if (savedDisabledState !== null) {
-      setDisabled(savedDisabledState === "true");
-    }
-
-    if (savedTimeLeft !== null) {
-      setTimeLeft(Number(savedTimeLeft));
-    }
-  }, []);
-
-  console.log(disabled, timeLeft);
-  // Сохранение состояния `disabled` и `timeLeft` в localStorage при изменении
-  useEffect(() => {
-    if (disabled) {
-      localStorage.setItem("commentDisabled", "true");
-      localStorage.setItem("timeLeft", timeLeft);
-    } else {
-      localStorage.removeItem("commentDisabled");
-      localStorage.removeItem("timeLeft");
-    }
-  }, [disabled, timeLeft]);
-
-  // Управление таймером
   useEffect(() => {
     let timer;
-    if (disabled && timeLeft > 0) {
-      // Уменьшаем оставшееся время каждую секунду
+    if (isRateLimited) {
       timer = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
+        const errorDate = localStorage.getItem("errorDate");
+        if (errorDate) {
+          const elapsedTime = Date.now() - parseInt(errorDate);
+          const remaining = 60000 - elapsedTime;
+          if (remaining <= 0) {
+            setIsRateLimited(false);
+            localStorage.removeItem("rateLimited");
+            localStorage.removeItem("errorDate");
+          } else {
+            setRemainingTime(remaining);
+          }
+        }
       }, 1000);
     }
 
-    // Когда время истекает, сбрасываем состояние `disabled` и очищаем таймер
-    if (timeLeft <= 0) {
-      setDisabled(false);
-      setTimeLeft(0);
-      clearInterval(timer);
-    }
-
     return () => clearInterval(timer);
-  }, [disabled, timeLeft]);
+  }, [isRateLimited]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Проверка на пустой комментарий
-    if (!comment) {
+    if (!comment.trim()) {
       toast({
-        title: "Комментарий не может быть пустым",
+        title: "Comment cannot be empty",
         status: "error",
         duration: 2000
       });
       return;
     }
-
     try {
-      const data = await PostComment(course_slug, lesson_slug, comment);
-      setComment("");
-      console.log(data);
-
-      // Если код ответа 429, установить `disabled` в `true`, показать уведомление и запустить таймер
-      if (data === 429) {
-        setDisabled(true);
-        setTimeLeft(40); // Устанавливаем 40 секунд
+      setIsSubmitting(true);
+      const response = await addComment(courseId, lessonSlug, comment);
+      if (response === undefined) {
+        setIsRateLimited(true);
+        localStorage.setItem("rateLimited", "true");
+        localStorage.setItem("errorDate", Date.now().toString());
+        setRemainingTime(60000);
         toast({
-          title: "Слишком много запросов",
-          description:
-            "Пожалуйста, подождите 40 секунд перед отправкой еще одного комментария.",
+          title: "Too many requests for minute, wait 1 minute for next comment",
           status: "error",
-          duration: 2000
+          duration: 5000
         });
+        return;
       }
+      setComment("");
+      setIsRateLimited(false);
+      localStorage.removeItem("rateLimited");
+      localStorage.removeItem("errorDate");
+      toast({
+        title: "Comment added successfully",
+        status: "success",
+        duration: 2000
+      });
     } catch (error) {
       toast({
-        title: `Ошибка: ${error.message}`,
+        title: `Error: ${error.message}`,
         status: "error",
         duration: 2000
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <Box display="flex" alignItems="end" gap={2}>
       <Input
-        resize="none"
-        maxLength={100}
+        disabled={isSubmitting || isRateLimited}
         value={comment}
         variant="flushed"
         onChange={(e) => setComment(e.target.value)}
-        disabled={disabled}
       />
-
-      <Box display="flex" gap="3px">
-        <Button bg="none" size="sm" onClick={() => setComment("")}>
-          Очистить
-        </Button>
-        <Button
-          bg="none"
-          size="sm"
-          onClick={handleSubmit}
-          loadingText={timeLeft}
-          isLoading={disabled}
-        >
-          <MdSend fontSize={25} />
-        </Button>
-      </Box>
+      <Button
+        onClick={handleSubmit}
+        isLoading={isSubmitting || isRateLimited}
+        loadingText={
+          isRateLimited
+            ? `${Math.ceil(remainingTime / 1000)} seconds`
+            : undefined
+        }
+      >
+        <MdSend fontSize={25} />
+      </Button>
     </Box>
   );
 };

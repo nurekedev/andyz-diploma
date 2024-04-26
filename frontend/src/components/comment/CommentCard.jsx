@@ -15,91 +15,157 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Textarea
+  Textarea,
+  useToast
 } from "@chakra-ui/react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
-import { PatchComment } from "../../requests/PatchComment";
 import { useState } from "react";
-import { DeleteData } from "../../requests/DeleteData";
+import useCommentStore from "../../store/CommentStore";
 
-const CommentCard = ({ id, lesson_slug, comment }) => {
-  const [newComment, setNewComment] = useState(comment?.body);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+const CommentCard = ({ course_slug, lesson_slug, comment, data }) => {
+  console.log(course_slug, lesson_slug);
+  const [newComment, setNewComment] = useState(comment.body);
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose
+  } = useDisclosure();
+  const { updateComment, deleteComment } = useCommentStore((state) => ({
+    updateComment: state.updateComment,
+    deleteComment: state.deleteComment
+  }));
+  const toast = useToast();
+  const canEdit = comment?.created_by.id === data?.id;
+  const handleEdit = async () => {
     try {
-      await PatchComment(id, lesson_slug, newComment, comment?.id);
-      console.log("Review submitted successfully!");
-      setNewComment("null");
-      location.reload();
+      await updateComment(course_slug, lesson_slug, comment.id, newComment);
+      onEditClose();
+      toast({
+        title: "Comment Updated",
+        description: "The comment has been updated successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
     } catch (error) {
-      console.error("Error submitting review:", error);
+      toast({
+        title: "Failed to Update Comment",
+        description:
+          error.response?.data?.message ||
+          "An error occurred while updating the comment.",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
     }
   };
-  
-  const handleDelete = async (event) => {
-    event.preventDefault();
+
+  const handleDelete = async () => {
     try {
-      await DeleteData(`${id}${lesson_slug}/comments`, comment?.id);
-      console.log("Review submitted successfully!");
-      location.reload();
+      await deleteComment(course_slug, lesson_slug, comment.id);
+      onDeleteClose();
+      toast({
+        title: "Comment Deleted",
+        description: "The comment has been successfully deleted.",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
     } catch (error) {
-      console.error("Error submitting review:", error);
+      toast({
+        title: "Failed to Delete Comment",
+        description:
+          error.response?.data?.message ||
+          "An error occurred while deleting the comment.",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
     }
   };
+
   return (
     <Box mb={"20px"} minW={320}>
       <Box display={"flex"} justifyContent={"space-between"}>
         <Box display={"flex"} alignItems={"center"} gap={2}>
           <Avatar src={comment.created_by.avatar} size={"sm"} />
-          <Text>{comment?.created_by?.full_name}</Text>
+          <Text>{comment.created_by.full_name}</Text>
         </Box>
-        <Menu>
-          <MenuButton>
-            <BiDotsHorizontalRounded fontSize={25} />
-          </MenuButton>
-          <MenuList>
-            <MenuItem gap={3} onClick={onOpen}>
-              Edit <AiFillEdit fontSize={20} />
-            </MenuItem>
-            <MenuItem gap={3} onClick={handleDelete}>
-              Delete
-              <AiFillDelete fontSize={20} />
-            </MenuItem>
-          </MenuList>
-        </Menu>
+
+        {canEdit && (
+          <Menu>
+            <MenuButton>
+              <BiDotsHorizontalRounded fontSize={25} />
+            </MenuButton>
+            <MenuList>
+              <MenuItem gap={3} onClick={onEditOpen}>
+                Edit <AiFillEdit fontSize={20} />
+              </MenuItem>
+              <MenuItem gap={3} onClick={onDeleteOpen}>
+                Delete <AiFillDelete fontSize={20} />
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        )}
       </Box>
-      <Text>{comment?.body}</Text>
+
+      <Text>{comment.body}</Text>
       <Divider mt={2} />
+
       <Modal
-        onClose={onClose}
-        isOpen={isOpen}
+        onClose={onEditClose}
+        isOpen={isEditOpen}
         scrollBehavior={"inside"}
         size={"xl"}
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Edit Comment</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <>
-              <Textarea
-                minHeight={350}
-                resize={"none"}
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-              ></Textarea>
-              <Box
-                display={"flex"}
-                justifyContent={"space-between"}
-                gap={3}
-                mt={3}
-              >
-                <Button onClick={handleSubmit}>Submit</Button>
-              </Box>
-            </>
+            <Textarea
+              minHeight={150}
+              resize={"none"}
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={3}
+              mt={3}
+            >
+              <Button onClick={handleEdit}>Submit</Button>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Modal onClose={onDeleteClose} isOpen={isDeleteOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm Deletion</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Are you sure you want to delete this comment?</Text>
+            <Text mb={10}>This action cannot be undone.</Text>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              gap={3}
+              mt={4}
+            >
+              <Button onClick={onDeleteClose}>Cancel</Button>
+              <Button colorScheme="red" onClick={handleDelete}>
+                Delete
+              </Button>
+            </Box>
           </ModalBody>
         </ModalContent>
       </Modal>

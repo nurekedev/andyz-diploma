@@ -1,11 +1,12 @@
 import Cookies from "js-cookie";
-import { refreshAccessToken } from "./Token";
+import { RefreshAccessToken } from "./Token";
 
 export async function fetchData(course_slug) {
+  
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get("accessToken");
     if (!token) {
-      await refreshAccessToken();
+      await RefreshAccessToken();
       return null;
     }
 
@@ -14,7 +15,7 @@ export async function fetchData(course_slug) {
       {
         method: "GET",
         headers: {
-          Authorization: `JWT ${Cookies.get("access_token")}`
+          Authorization: `JWT ${Cookies.get("accessToken")}`
         }
       }
     );

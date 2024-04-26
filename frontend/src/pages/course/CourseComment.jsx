@@ -1,10 +1,9 @@
 import { Box } from "@chakra-ui/react"
-import Comment from "../../comment/Comment"
+import Comment from "../comment/Comment"
 import { useParams } from "react-router-dom"
 
 const CourseComment = () => {
   const { id } = useParams();
-  let lessonSlug = ""
   return (
     <Box><Comment id={id} /></Box>
   )

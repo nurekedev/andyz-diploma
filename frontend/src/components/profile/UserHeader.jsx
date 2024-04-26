@@ -3,35 +3,35 @@ import {
   Box,
   Heading,
   Image,
+  Skeleton,
+  SkeletonCircle,
   Text,
   VStack,
   useColorModeValue
 } from "@chakra-ui/react";
-import {  } from "../../requests/FetchData";
+import {} from "../../requests/FetchData";
 
-const UserHeader = ({userData}) => {
-
-
-  // Условный рендеринг для отображения информации о пользователе
-  if (userData) {
-    return (
-      <>
-        <VStack
-          alignItems={"center"}
+const UserHeader = ({ userData }) => {
+  
+  return (
+    <>
+      <VStack
+        alignItems={"center"}
+        w={"100%"}
+        maxW={1000}
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        bg={useColorModeValue("white", "gray.dark")}
+        borderRadius={10}
+      >
+        <Image
+          src="../../public/bg.jpg"
+          h={120}
           w={"100%"}
-          maxW={1000}
-          // eslint-disable-next-line react-hooks/rules-of-hooks
-          bg={useColorModeValue("white", "gray.dark")}
-          borderRadius={10}
-        >
-          <Image
-            src="../../public/bg.jpg"
-            h={120}
-            w={"100%"}
-            maxW={1200}
-            objectFit={"cover"}
-            className="profile-img"
-          />
+          maxW={1200}
+          objectFit={"cover"}
+          className="profile-img"
+        />
+        {userData?.avatar ? (
           <Avatar
             src={userData?.avatar}
             m={"auto"}
@@ -40,50 +40,61 @@ const UserHeader = ({userData}) => {
               transform: "translateY(-60px)"
             }}
           />
-          <Box
-            display="flex"
-            flexDirection={{
-              base: "column",
-              sm: "row"
-            }}
-            gap={{
-              base: 5,
-              sm: 10,
-              md: 15,
-              xl: 20
-            }}
-            justifyContent="center" // Выравнивание элементов по центру
-            alignItems="center" // Выравнивание элементов по вертикали
-            style={{
-              transform: "translateY(-40px)"
-            }}
-          >
-            <VStack gap={0} w={100}>
-              <Heading fontSize={{ base: 12, md: 16 }}>Blood Group</Heading>
+        ) : (
+          <SkeletonCircle size="120" transform={"translateY(-60px)"} />
+        )}
+        <Box
+          display="flex"
+          flexDirection={{
+            base: "column",
+            sm: "row"
+          }}
+          gap={{
+            base: 5,
+            sm: 10,
+            md: 15,
+            xl: 20
+          }}
+          justifyContent="center" // Выравнивание элементов по центру
+          alignItems="center" // Выравнивание элементов по вертикали
+          style={{
+            transform: "translateY(-40px)"
+          }}
+        >
+          <VStack gap={0} w={100}>
+            <Heading fontSize={{ base: 12, md: 16 }}>Blood Group</Heading>
+
+            {userData ? (
               <Text fontSize={{ base: 20, md: 24 }}>
                 {userData?.blood_group}
               </Text>
-            </VStack>
-            <VStack gap={0} w={200}>
-              <Heading fontSize={{ base: 12, md: 16 }}>
-                Identifier Number
-              </Heading>
+            ) : (
+              <Skeleton height="30px" w={"full"} />
+            )}
+          </VStack>
+          <VStack gap={0} w={200}>
+            <Heading fontSize={{ base: 12, md: 16 }}>Identifier Number</Heading>
+
+            {userData ? (
               <Text fontSize={{ base: 20, md: 24 }}>
                 {userData?.identifier_number}
               </Text>
-            </VStack>
-            <VStack gap={0} w={100}>
-              <Heading fontSize={{ base: 12, md: 16 }}>Gender</Heading>
+            ) : (
+              <Skeleton height="30px" w={"full"} />
+            )}
+          </VStack>
+          <VStack gap={0} w={100}>
+            <Heading fontSize={{ base: 12, md: 16 }}>Gender</Heading>
+            {userData ? (
               <Text fontSize={{ base: 20, md: 24 }}>{userData?.gender}</Text>
-            </VStack>
-          </Box>
-        </VStack>
-      </>
-    );
-  }
-
-  // Если данные пользователя отсутствуют, можно вернуть null или какое-либо другое значение по умолчанию.
-  return null;
+            ) : (
+              <Skeleton height="30px" w={"full"} />
+            )}
+          </VStack>
+        </Box>
+      </VStack>
+    </>
+  );
 };
 
 export default UserHeader;

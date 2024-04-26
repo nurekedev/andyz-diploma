@@ -11,7 +11,7 @@ export async function PatchData(slug, rating, description, id) {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `JWT ${Cookies.get("access_token")}`
+      Authorization: `JWT ${Cookies.get("accessToken")}`
     },
     body: JSON.stringify({
       rating,

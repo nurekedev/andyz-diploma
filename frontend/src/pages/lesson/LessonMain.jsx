@@ -1,13 +1,14 @@
 import { Box, Divider, Heading, Text, VStack } from "@chakra-ui/react";
-import LessonList from "./LessonList";
+import LessonList from "../../components/lessons/LessonList";
 import { useParams } from "react-router-dom";
 import { useFetchData } from "../../requests/FetchData";
-import Comment from "../../pages/comment/Comment";
+import Comment from "../comment/Comment";
 
 function LessonMain() {
   const {id} = useParams();
   const { lessonSlug } = useParams();
   const lessonDetailData = useFetchData("course/lessons", lessonSlug);
+  
   return (
     <Box display={"flex"} margin={"auto"} justifyContent={"space-between"}>
       <Box w={"full"}>

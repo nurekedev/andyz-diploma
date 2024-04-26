@@ -1,7 +1,7 @@
 import { Box, Textarea, Text, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { PostData } from "../../../requests/PostData";
+import { PostData } from "../../requests/PostData";
 import ReviewCard from "./ReviewCard";
 
 const WriteReview = ({slug, reviews, userData}) => {
@@ -13,6 +13,9 @@ const WriteReview = ({slug, reviews, userData}) => {
   const [hover, setHover] = useState(null);
   const [description, setDescription] = useState(""); // Add state for description
 
+  const handleRatingChange = (currentRating) => {
+    currentRating === rating ? setRating(null) : setRating(currentRating);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -49,7 +52,7 @@ const WriteReview = ({slug, reviews, userData}) => {
                       name="rating"
                       value={currentRating}
                       checked={rating === currentRating} // Set checked based on state
-                      onChange={() => setRating(currentRating)}
+                      onChange={() => handleRatingChange(currentRating)}
                     />
                     <FaStar
                       size={35}
