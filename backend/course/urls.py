@@ -18,3 +18,4 @@ urlpatterns = [
     path('<slug:course_slug>/<slug:lesson_slug>/comments/', lesson_comment_api_view),
     path('<slug:course_slug>/<slug:lesson_slug>/comments/<int:pk>/', lesson_api_destroy_update_view)
 ]
+    

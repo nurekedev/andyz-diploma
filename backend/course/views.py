@@ -31,6 +31,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
+from rest_framework.throttling import UserRateThrottle
 
 
 @api_view(['GET'])
@@ -283,7 +284,7 @@ class CourseCommentUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 class LessonCommentAPIView(ListCreateAPIView):
     serializer_class = LessonCommentSerializer
     permission_classes = [IsAuthenticated]
-    throttle_classes = [CommentThrottling]
+    throttle_classes = [UserRateThrottle]  # Apply throttling only to POST requests
 
     def get_queryset(self):
         course_slug = self.kwargs["course_slug"]

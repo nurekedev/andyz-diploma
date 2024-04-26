@@ -51,6 +51,6 @@ def get_detailed_course(objects, **kwargs):
 def get_detailed_lesson(objects, **kwargs):
     lesson_queryset = all_objects(
         objects=objects,
-        only=('title', 'slug', 'short_description', 'long_description', 'section', 'status', 'lesson_type', 'yt_id')
+        only=('title', 'slug', 'section', 'status', 'lesson_type',)
     )
     return lesson_queryset.get(**kwargs)
