@@ -31,18 +31,15 @@ const UserHeader = ({ userData }) => {
           objectFit={"cover"}
           className="profile-img"
         />
-        {userData?.avatar ? (
           <Avatar
-            src={userData?.avatar}
+            src={userData?.avatar || ""}
             m={"auto"}
             boxSize={120}
             style={{
               transform: "translateY(-60px)"
             }}
           />
-        ) : (
-          <SkeletonCircle size="120" transform={"translateY(-60px)"} />
-        )}
+        
         <Box
           display="flex"
           flexDirection={{

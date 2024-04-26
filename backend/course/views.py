@@ -284,7 +284,7 @@ class CourseCommentUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 class LessonCommentAPIView(ListCreateAPIView):
     serializer_class = LessonCommentSerializer
     permission_classes = [IsAuthenticated]
-    throttle_classes = [UserRateThrottle]  # Apply throttling only to POST requests
+    throttle_classes = [CommentThrottling]
 
     def get_queryset(self):
         course_slug = self.kwargs["course_slug"]
