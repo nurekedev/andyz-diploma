@@ -1,17 +1,17 @@
 import Cookies from "js-cookie";
-import { refreshAccessToken } from "./Token";
+import { RefreshAccessToken } from "./Token";
 import { useEffect, useState } from "react";
 
 async function fetchData(pre_slug, slug, retryCount = 0) {
   console.log(`http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`);
 
   try {
-    const token = Cookies.get("access_token");
+    const token = Cookies.get("accessToken");
     const savedPreSlug = pre_slug;
     const savedSlug = slug;
 
     if (!token) {
-      await refreshAccessToken();
+      await RefreshAccessToken();
 
       // Повторный запрос с обновленным токеном
       const data = await fetchData(savedPreSlug, savedSlug);
@@ -23,7 +23,7 @@ async function fetchData(pre_slug, slug, retryCount = 0) {
       {
         method: "GET",
         headers: {
-          Authorization: `JWT ${Cookies.get("access_token")}`
+          Authorization: `JWT ${Cookies.get("accessToken")}`
         }
       }
     );

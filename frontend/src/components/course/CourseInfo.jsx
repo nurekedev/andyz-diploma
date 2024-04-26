@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import  CourseMain  from "./CourseMain";
 import { useParams } from "react-router-dom";
-import CourseMainSkeleton from "./skeleton/CourseMainSkeleton";
+import CourseMainSkeleton from "./CourseMainSkeleton";
 import { useFetchData } from "../../requests/FetchData";
 
 const CourseInfo = () => {

@@ -7,7 +7,7 @@ export async function DeleteData(slug, id) {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `JWT ${Cookies.get("access_token")}`
+      Authorization: `JWT ${Cookies.get("accessToken")}`
     },
   });
 

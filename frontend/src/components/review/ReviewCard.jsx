@@ -20,8 +20,8 @@ import {
 } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
-import { PatchData } from "../../../requests/PatchData";
-import { DeleteData } from "../../../requests/DeleteData";
+import { PatchData } from "../../requests/PatchData";
+import { DeleteData } from "../../requests/DeleteData";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 const ReviewCard = ({slug, review, edit }) => {
   // Состояние для отслеживания развернуто ли описание
