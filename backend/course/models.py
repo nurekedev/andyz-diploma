@@ -3,7 +3,6 @@ from django.conf import settings
 from django.utils.text import slugify
 from django.urls import reverse
 
-
 class Category(models.Model):
     title = models.CharField(verbose_name='Title', max_length=255)
     slug = models.SlugField(null=False, unique=True)
