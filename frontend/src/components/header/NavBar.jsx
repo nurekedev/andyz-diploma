@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import MobileMenu from "../components/header/MobileMenu";
-import DesktopMenu from "../components/header/DesktopMenu";
+import MobileMenu from "./MobileMenu";
+import DesktopMenu from "./DesktopMenu";
 
 const NavBar = () => {
   const [windowSize, setWindowSize] = useState({

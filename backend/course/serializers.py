@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 
-from .models import Category, Course, Lesson, Rating, Section, Comment
+from .models import Category, Course, Lesson, Rating, Section, Comment, ArticleСontent, VideoContent
 from users.serializers import DoctorHideSerializer
 from progress.serializers import EnrollmentSerializer
 from django.urls import reverse
@@ -32,12 +32,33 @@ class CourseListSerializer(serializers.ModelSerializer):
                   'created_by', 'image', 'categories')
 
 
+
+class ArticleContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ArticleСontent
+        fields = ('__all__')
+
+class VideoContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoContent
+        fields = ('__all__')
+
+
+
 class LessonSerializer(serializers.ModelSerializer):
+
+    contents = serializers.SerializerMethodField()
 
     class Meta:
         model = Lesson
-        fields = ['title', 'slug', 'short_description',
-                  'long_description', 'lesson_type', 'yt_id']
+        fields = ('__all__')
+        
+    def get_contents(self, obj):
+        return (
+            ArticleContentSerializer(obj.contents.all(), many=True).data + 
+            VideoContentSerializer(obj.videos.all(), many=True).data
+        )
+
 
 class LessonListSerializer(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(

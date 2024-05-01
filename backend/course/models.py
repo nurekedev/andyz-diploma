@@ -1,7 +1,13 @@
-from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.urls import reverse
+
+
+from django.db import models
+
+User = settings.AUTH_USER_MODEL
+
+
 
 class Category(models.Model):
     title = models.CharField(verbose_name='Title', max_length=255)
@@ -73,10 +79,17 @@ class Section(models.Model):
     course = models.ForeignKey(
         Course, related_name='sections', on_delete=models.CASCADE)
     
+    my_order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+    )
+    
     class Meta:
         verbose_name = 'Sections'
         verbose_name_plural = 'Sections'
         db_table = 'sections'
+        ordering = ['my_order']
 
     def __str__(self):
         return self.title
@@ -107,19 +120,24 @@ class Lesson(models.Model):
         Section, related_name='lessons', on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
-    slug = models.SlugField(null=False, unique=True)
-    short_description = models.TextField(blank=True, null=True)
-    long_description = models.TextField(blank=True, null=True)
-    status = models.CharField(
-        max_length=20, choices=CHOICES_STATUS, default=PUBLISHED)
+    short_description = models.CharField(max_length=255, blank=True)
     lesson_type = models.CharField(
         max_length=20, choices=CHOICES_TYPE_LESSON, default=ARTICLE)
-    yt_id = models.CharField(max_length=20, blank=True, null=True)
+    slug = models.SlugField(null=False, unique=True)
+    status = models.CharField(
+        max_length=20, choices=CHOICES_STATUS, default=PUBLISHED)
+    
+    my_order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+    )
 
     class Meta:
         verbose_name = 'Lessons'
         verbose_name_plural = 'Lessons'
         db_table = 'lessons'
+        ordering = ['my_order']
 
     def __str__(self):
         return self.title
@@ -131,8 +149,41 @@ class Lesson(models.Model):
     
     def get_absolute_url(self):
         return reverse('lesson-detail', kwargs={'slug': self.slug})
+    
 
 
+class VideoContent(models.Model):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='videos')
+    yt_id = models.CharField(max_length=20)
+    description = models.TextField(blank=True)
+    my_order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+    )
+
+    class Meta:
+        ordering = ['my_order']
+
+    def __str__(self):
+        return 'Video for {}'.format(self.lesson.title)
+
+class ArticleСontent(models.Model):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='contents')
+    text = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='article_photos/', blank=True)
+    my_order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+    )
+
+    class Meta:
+        ordering = ['my_order']
+
+    def __str__(self):
+        return 'Content for {}'.format(self.lesson.title)
+    
 
 class Comment(models.Model):
     course = models.ForeignKey(
@@ -177,3 +228,4 @@ class Rating(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user} {self.rating} for {self.course}"
+

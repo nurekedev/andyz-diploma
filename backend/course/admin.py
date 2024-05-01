@@ -1,5 +1,8 @@
 from django.contrib import admin
-from course.models import Category, Course, Lesson, Rating, Section, Comment
+
+from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
+
+from course.models import *
 
 
 @admin.register(Category)
@@ -17,17 +20,32 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ('title', 'slug', 'short_description',)
     prepopulated_fields = {'slug': ['title', ]}
 
+class LessonInlineAdmin(SortableInlineAdminMixin, admin.TabularInline):
+    model = ArticleСontent
+    extra = 0
+
+class VideoInlineAdmin(SortableInlineAdminMixin, admin.TabularInline):
+    model = VideoContent
+    extra = 0
+
 
 @admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
+class LessonAdmin(SortableAdminMixin, admin.ModelAdmin):
     prepopulated_fields = {'slug': ['title', ]}
+    inlines = [LessonInlineAdmin, VideoInlineAdmin]
+
+
+
+
+@admin.register(Section)
+class SectionAdmin(SortableAdminMixin, admin.ModelAdmin):
+    prepopulated_fields = {'slug': ['title', ]}
+
+
 
 
 admin.site.register(Comment)
 admin.site.register(Rating)
 
 
-@admin.register(Section)
-class SectionAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ['title', ]}
 

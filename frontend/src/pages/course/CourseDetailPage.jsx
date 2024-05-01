@@ -1,6 +1,6 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/header/Sidebar";
+import Sidebar from "../../components/header/Sidebar";
 
 const CourseDetailPage = () => {
   return (

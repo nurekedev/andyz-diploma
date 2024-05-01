@@ -1,6 +1,6 @@
+import { IoClose } from "react-icons/io5";
 import {
   Box,
-  useColorModeValue,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -9,20 +9,13 @@ import {
   Button,
   useDisclosure
 } from "@chakra-ui/react";
-import LessonMain from "../pages/lesson/LessonMain";
-import LessonList from "../components/lessons/LessonList";
-import { IoClose } from "react-icons/io5";
-const LessonPage = () => {
+import LessonList from "./LessonList";
+
+const MobileLessonMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box
-      maxW={1200}
-      margin={"auto"}
-      p={5}
-      borderRadius={10}
-      bg={useColorModeValue("white", "gray.dark")}
-    >
+    <div>
       <Box
         display={{
           base: "flex",
@@ -36,7 +29,12 @@ const LessonPage = () => {
         <Drawer onClose={onClose} isOpen={isOpen} placement="bottom">
           <DrawerOverlay />
           <DrawerContent pb={20}>
-            <DrawerHeader borderBottomWidth="1px" display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+            <DrawerHeader
+              borderBottomWidth="1px"
+              display={"flex"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
               Lesson List{" "}
               <Button onClick={onClose}>
                 <IoClose />
@@ -48,11 +46,8 @@ const LessonPage = () => {
           </DrawerContent>
         </Drawer>
       </Box>
-
-      <LessonMain />
-
-    </Box>
+    </div>
   );
-};
+}
 
-export default LessonPage;
+export default MobileLessonMenu

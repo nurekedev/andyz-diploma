@@ -1,7 +1,7 @@
 import create from "zustand";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { RefreshAccessToken } from "../requests/Token";
+import { refreshAccessToken } from "../requests/Token";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1",
@@ -31,7 +31,7 @@ const useCommentStore = create((set, get) => ({
       );
       console.log(response);
       if (response.status === 401) {
-        await RefreshAccessToken();
+        await refreshAccessToken();
         get().fetchComments(courseId, lessonSlug);
       }
       set({ comments: response.data });

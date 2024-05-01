@@ -95,7 +95,7 @@ const WriteComment = ({ courseId, lessonSlug }) => {
         isLoading={isSubmitting || isRateLimited}
         loadingText={
           isRateLimited
-            ? `${Math.ceil(remainingTime / 1000)} seconds`
+            ? `${Math.ceil(remainingTime / 1000)}`
             : undefined
         }
       >
