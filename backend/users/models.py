@@ -83,6 +83,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f"{self.first_name} {self.last_name}"
 
 
+class Marker(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='markers')
+    date = models.DateField(_("date"))
+    title = models.CharField(_("title"), max_length=255)
+    description = models.TextField(_("description"))
+
+    def __str__(self):
+        return self.title
+    
 class Record(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='records')
     date = models.DateField(_("date"))

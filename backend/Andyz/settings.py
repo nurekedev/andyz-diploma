@@ -1,7 +1,10 @@
 from pathlib import Path
 from datetime import timedelta
-
+from os import getenv
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^$#0yk%xkkf0$u9cn5cm(n1ris#nu1d&1u#kx=o*vk*^g8&1$i'
@@ -64,10 +67,21 @@ WSGI_APPLICATION = 'Andyz.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'andyz-db',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -170,15 +184,15 @@ DJOSER = {
 
 }
 
-DOMAIN = 'localhost:3000'
+CORS_ALLOW_ALL_ORIGINS = True
 
-
+DOMAIN = getenv('DOMAIN')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'snurekeee03@gmail.com'
-EMAIL_HOST_PASSWORD = 'ckdzmasobwtcqjej'
+EMAIL_PORT = getenv('EMAIL_PORT')
+EMAIL_USE_TLS = getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER = getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = getenv('EMAIL_HOST_PASSWORD')
 
-CORS_ALLOW_ALL_ORIGINS = True
-HOST_NAME = 'http://127.0.0.1:8000/'
+
+HOST_NAME = getenv('HOST_NAME')

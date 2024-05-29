@@ -10,7 +10,7 @@ class EnrollmentAdmin(admin.ModelAdmin):
             "Perform enrollment",
             {
                 "classes": ["wide"],
-                "fields": ["course", "user"],
+                "fields": ["course", "user", 'progress'],
             },
         ),
     ]

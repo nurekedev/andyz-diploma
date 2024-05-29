@@ -36,7 +36,6 @@ class LessonAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 
 
-
 @admin.register(Section)
 class SectionAdmin(SortableAdminMixin, admin.ModelAdmin):
     prepopulated_fields = {'slug': ['title', ]}
