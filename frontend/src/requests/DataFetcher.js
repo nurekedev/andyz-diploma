@@ -1,12 +1,12 @@
 import Cookies from "js-cookie";
-import { RefreshAccessToken } from "./Token";
+import { refreshAccessToken } from "./Token";
 
 export async function fetchData(course_slug) {
   
   try {
     const token = Cookies.get("accessToken");
     if (!token) {
-      await RefreshAccessToken();
+      await refreshAccessToken();
       return null;
     }
 

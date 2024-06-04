@@ -1,50 +1,31 @@
 import Cookies from "js-cookie";
-import { RefreshAccessToken } from "./Token";
+import { refreshAccessToken } from "./Token";
 import { useEffect, useState } from "react";
 
-async function fetchData(pre_slug, slug, retryCount = 0) {
-  console.log(`http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`);
-
-  try {
-    const token = Cookies.get("accessToken");
-    const savedPreSlug = pre_slug;
-    const savedSlug = slug;
-
-    if (!token) {
-      await RefreshAccessToken();
-
-      // Повторный запрос с обновленным токеном
-      const data = await fetchData(savedPreSlug, savedSlug);
-      return data;
+async function fetchData(pre_slug, slug) {
+  let token = Cookies.get("accessToken");
+    if (!token || token === "undefined" || token === "null") {
+      const response = await refreshAccessToken();
+      if (!response.ok) {
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
+        Cookies.remove("isAuthenticated");
+        location.reload();
+      }
     }
-
-    const response = await fetch(
+  try {
+        const response = await fetch(
       `http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`,
       {
         method: "GET",
         headers: {
-          Authorization: `JWT ${Cookies.get("accessToken")}`
+          Authorization: `JWT ${token}`
         }
       }
     );
 
     if (response.ok) {
       return await response.json();
-    } else {
-      // Проверка на количество попыток
-      if (retryCount < 2) {
-        console.warn(
-          "Ошибка получения данных. Повторная попытка:",
-          retryCount + 1
-        );
-        return await fetchData(savedPreSlug, savedSlug, retryCount + 1); // Рекурсивный вызов с увеличением счетчика попыток
-      } else {
-        console.error(
-          "Все попытки получения данных завершились ошибкой:",
-          response.status
-        );
-        return null;
-      }
     }
   } catch (error) {
     console.error("Ошибка:", error);
@@ -55,17 +36,17 @@ async function fetchData(pre_slug, slug, retryCount = 0) {
 export function useFetchData(pre_slug, slug) {
   const [data, setData] = useState(null);
 
-  useEffect(() => {
+  useEffect(
+    () => {
       async function usefetchData() {
         const data = await fetchData(pre_slug, slug);
         setData(data);
       }
 
-     
-        usefetchData();
-      
-    }, [pre_slug, slug]); // Добавлен data в зависимости
-
+      usefetchData();
+    },
+    [pre_slug, slug]
+  );
 
   return data;
 }

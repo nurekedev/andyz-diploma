@@ -2,8 +2,6 @@
 import useAuthStore from "../store/AuthStore";
 
 const handleLogin = async credentials => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  console.log(123);
   try {
     const response = await fetch(
       "http://127.0.0.1:8000/api/v1/auth/jwt/create/",

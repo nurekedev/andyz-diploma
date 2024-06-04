@@ -23,7 +23,10 @@ import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { PatchData } from "../../requests/PatchData";
 import { DeleteData } from "../../requests/DeleteData";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
-const ReviewCard = ({slug, review, edit }) => {
+const ReviewCard = ({ slug, review, edit }) => {
+
+  console.log(review);
+  
   // Состояние для отслеживания развернуто ли описание
   const [isExpanded, setIsExpanded] = useState(false);
   const {
@@ -39,11 +42,7 @@ const ReviewCard = ({slug, review, edit }) => {
   
   const [rating, setRating] = useState(review?.rating);
   const [hover, setHover] = useState(null);
-  const [description, setDescription] = useState(review?.description); // Add state for description
-
-  if (!review) {
-    return null;
-  }
+  const [description, setDescription] = useState(review?.description);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,12 +60,11 @@ const ReviewCard = ({slug, review, edit }) => {
     try {
       await DeleteData(`${slug}/review`, review?.id);
       console.log("Comment deleted successfully!");
-      // Consider additional actions after successful deletion (e.g., remove comment from UI, reload page)
     } catch (error) {
       console.error("Error deleting comment:", error);
     } finally {
-      onDeleteClose(); // Close delete confirmation modal
-      location.reload(); // Reload page after successful deletion
+      onDeleteClose(); 
+      location.reload(); 
     }
   };
 
@@ -84,7 +82,7 @@ const ReviewCard = ({slug, review, edit }) => {
     <Box mb={"25px"}>
       <Box display={"flex"} justifyContent={"space-between"} mb={2}>
         <Box display={"flex"} gap={3}>
-          <Avatar src={review.user?.avatar} />
+          <Avatar src={review?.user?.avatar} />
           <Box>
             <Text>
               {review?.user?.full_name}
@@ -93,7 +91,7 @@ const ReviewCard = ({slug, review, edit }) => {
                   <span
                     key={star}
                     className={`star ${
-                      star <= review.rating ? "gold" : "gray"
+                      star <= review?.rating ? "gold" : "gray"
                     }`}
                   >
                     <FaStar />
@@ -126,7 +124,7 @@ const ReviewCard = ({slug, review, edit }) => {
         {isExpanded ? (
           // Если описание развернуто, показать все описание
           <>
-            {review.description}
+            {review?.description}
             <Link onClick={toggleExpand} className="read-more">
               {" "}
               Read Less
@@ -135,8 +133,8 @@ const ReviewCard = ({slug, review, edit }) => {
         ) : (
           // Если описание не развернуто, обрезать его до 200 символов и показать "Read More"
           <>
-            {review.description.slice(0, 300)}
-            {review.description.length > 300 && (
+            {review?.description?.slice(0, 300)}
+            {review?.description?.length > 300 && (
               <>
                 ...{" "}
                 <Link onClick={toggleExpand} className="read-more">

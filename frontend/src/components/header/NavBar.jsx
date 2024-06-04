@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import MobileMenu from "../components/header/MobileMenu";
-import DesktopMenu from "../components/header/DesktopMenu";
+import MobileMenu from "./MobileMenu";
+import DesktopMenu from "./DesktopMenu";
 
 const NavBar = () => {
   const [windowSize, setWindowSize] = useState({
@@ -21,7 +21,7 @@ const NavBar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return windowSize.width < 600 ? <MobileMenu /> : <DesktopMenu />;
+  return windowSize.width < 768 ? <MobileMenu /> : <DesktopMenu />;
 };
 
 export default NavBar;

@@ -15,11 +15,10 @@ import {
   useToast
 } from "@chakra-ui/react";
 import loginBanner from '../../../public/login.jpg'
-import { useState } from "react";
+import {  useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import handleLogin from "../../services/AuthService";
-
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
@@ -38,7 +37,6 @@ export default function Login() {
       });
       return;
     }
-    
     handleLogin(inputs)
       .then(() => {
         toast({
@@ -49,7 +47,6 @@ export default function Login() {
         });
       })
       .catch((error) => {
-        // Обработка ошибки, например, показ toast с сообщением об ошибке
         toast({
           title: "Error",
           description: error.message,
@@ -61,23 +58,35 @@ export default function Login() {
   };
 
   return (
-    <Flex justify={"center"} m={"10vh auto 0"}>
+    <Flex justify={"center"} m={"6rem auto 0"}>
       <Stack spacing={8} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
-            Login
+            Sign-In
           </Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
-            Have a nice day ✌️
+            Regain, Retrain, Reclaim ✌️
           </Text>
         </Stack>
-        <Box display={"flex"} boxShadow={"lg"} borderRadius={10}>
-          <Image src={loginBanner} height={500} w={400} objectFit={"cover"} />
+        <Box display={"flex"} boxShadow={"lg"} borderRadius={10} width={"100%"}>
+          <Image
+            src={loginBanner}
+            height={500}
+            w={"50%"}
+            maxW={500}
+            objectFit={"cover"}
+            borderLeftRadius={10}
+            display={{
+              base: "none",
+              md: "block"
+            }}
+          />
           <Box
             bg={useColorModeValue("white", "gray.dark")}
+            borderRightRadius={10}
             width={{
               base: "100%",
-              sm: "400px"
+              md: "500px"
             }}
             p={8}
           >

@@ -2,20 +2,35 @@ import { useParams } from "react-router-dom";
 import OtherReviews from "../../components/review/OtherReviews";
 import WriteReview from "../../components/review/WriteReview";
 import { Divider, Box, Text } from "@chakra-ui/react";
-import { useFetchData } from "../../requests/FetchData";
+import useReviewStore from "../../store/ReviewStore";
+import { useEffect } from "react";
+import ReviewCard from "../../components/review/ReviewCard";
 const Review = () => {
   const { id } = useParams();
-  const reviews = useFetchData(`course/${id}`, "review/");
-  const userData = useFetchData("auth/users/me", "");
+  const { fetchReviews, fetchUser, getUserReview, getOtherUserReviews } =
+    useReviewStore();
+
+  useEffect(() => {
+    fetchUser();
+    fetchReviews(id);
+  }, [fetchUser, fetchReviews, id]);
+
+  const userReview = getUserReview();
+  const otherUserReviews = getOtherUserReviews();
+  console.log(userReview);
 
   return (
     <Box display={"flex"} flexDir={"column"} gap={2} p={4} maxW={850}>
-      <WriteReview slug={id} reviews={reviews} userData={userData} />
+      {userReview ? (
+        <ReviewCard review={userReview[0]} slug={id} edit={true} />
+      ) : (
+        <WriteReview slug={id} />
+      )}
       <Text fontSize={24} fontWeight={"bold"} mt={5}>
         Other rewies
       </Text>
       <Divider />
-      <OtherReviews reviews={reviews} userData={userData} />
+      <OtherReviews reviews={otherUserReviews} />
     </Box>
   );
 };

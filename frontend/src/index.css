@@ -3,6 +3,7 @@
   padding: 0;
   margin: 0;
   font-family: "Plus Jakarta Sans", sans-serif;
+  box-sizing: border-box;
 }
 
 .read-more {
@@ -76,19 +77,4 @@
   border: none;
   border-radius: 5px 5px 0 0;
   cursor: pointer;
-}
-
-
-@media(max-width: 400px) {
-  .line {
-    position: absolute;
-    display: none;
-  }
-  .avatars {
-    position: absolute;
-    display: none;
-  }
-  .post_img {
-    margin-left: -50px;
-  }
 }

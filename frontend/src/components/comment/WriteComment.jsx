@@ -39,29 +39,8 @@ const WriteComment = ({ courseId, lessonSlug }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!comment.trim()) {
-      toast({
-        title: "Comment cannot be empty",
-        status: "error",
-        duration: 2000
-      });
-      return;
-    }
     try {
-      setIsSubmitting(true);
-      const response = await addComment(courseId, lessonSlug, comment);
-      if (response === undefined) {
-        setIsRateLimited(true);
-        localStorage.setItem("rateLimited", "true");
-        localStorage.setItem("errorDate", Date.now().toString());
-        setRemainingTime(60000);
-        toast({
-          title: "Too many requests for minute, wait 1 minute for next comment",
-          status: "error",
-          duration: 5000
-        });
-        return;
-      }
+      await addComment(`${courseId}`, `${lessonSlug}`, comment);
       setComment("");
       setIsRateLimited(false);
       localStorage.removeItem("rateLimited");
@@ -95,7 +74,7 @@ const WriteComment = ({ courseId, lessonSlug }) => {
         isLoading={isSubmitting || isRateLimited}
         loadingText={
           isRateLimited
-            ? `${Math.ceil(remainingTime / 1000)} seconds`
+            ? `${Math.ceil(remainingTime / 1000)}`
             : undefined
         }
       >

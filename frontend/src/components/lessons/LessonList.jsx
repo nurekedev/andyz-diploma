@@ -22,7 +22,7 @@ function LessonList() {
 
   return (
     <div>
-      <Box borderRadius={20}>
+      <Box  bg={useColorModeValue("white", "gray.dark")}>
         <Accordion allowMultiple w={"full"} minW={300}>
           {courseDetailData?.course.sections.map((section, index) => (
             <AccordionItem key={index}>

@@ -1,84 +1,82 @@
-import create from "zustand";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { RefreshAccessToken } from "../requests/Token";
-
-const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/v1",
-  headers: {
-    "Content-Type": "application/json"
-  }
-});
-
-// Интерцептор для обработки успешных ответов
-axiosInstance.interceptors.response.use(
-  response => response,
-  error => {
-    console.error("Request error:", error);
-    return Promise.reject(error);
-  }
-);
+import { create } from "zustand";
+import {
+  fetchReviews,
+  addReview,
+  updateReview,
+  deleteReview,
+  fetchUser
+} from "../services/api";
 
 const useReviewStore = create((set, get) => ({
   reviews: [],
+  userData: [],
+  setUserData: userData => set({ userData }),
   setReviews: reviews => set({ reviews }),
-  fetchReviews: async courseId => {
+
+  fetchUser: async () => {
     try {
-      axiosInstance.defaults.headers.common[
-        "Authorization"
-      ] = `JWT ${Cookies.get("accessToken")}`;
-      const response = await axiosInstance.get(`/course/${courseId}/reciew/`);
-      if (response.status === 401) {
-        await RefreshAccessToken();
-        get().fetchReviews(courseId);
-      }
-      set({ reviews: response.data });
+      const userData = await fetchUser();
+      set({ userData });
     } catch (error) {
-      // Любая другая ошибка - выводим сообщение в консоль
       console.error("Failed to fetch reviews:", error);
     }
   },
-  addReview: async (courseId, rating, description) => {
+
+  fetchReviews: async courseId => {
     try {
-      const response = await axiosInstance.post(
-        `/course/${courseId}/reviews/`,
-        { rating, description }
-      );
-      set(state => ({ reviews: [...state.reviews, response.data] }));
+      const reviews = await fetchReviews(courseId);
+      set({ reviews });
     } catch (error) {
-      console.error("Failed to add reviews:", error);
+      console.error("Failed to fetch reviews:", error);
     }
   },
-  updateReview: async (course_slug, commentId, rating, description) => {
+
+  addReview: async (courseId, rating, description) => {
     try {
-      const response = await axiosInstance.patch(
-        `/course/${course_slug}/reviews/${commentId}/`,
-        { rating, description }
+      const newReview = await addReview(courseId, rating, description);
+      set(state => ({ reviews: [...state.reviews, newReview] }));
+    } catch (error) {
+      console.error("Failed to add review:", error);
+    }
+  },
+
+  updateReview: async (courseSlug, reviewId, rating, description) => {
+    try {
+      const updatedReview = await updateReview(
+        courseSlug,
+        reviewId,
+        rating,
+        description
       );
-      console.log(response);
       set(state => ({
         reviews: state.reviews.map(
-          reviews =>
-            reviews.id === commentId
-              ? { ...reviews, body: rating, description }
-              : reviews
+          review => (review.id === reviewId ? updatedReview : review)
         )
       }));
     } catch (error) {
       console.error("Failed to update review:", error);
     }
   },
-  deleteReview: async (course_slug, review_id) => {
+
+  deleteReview: async (courseSlug, reviewId) => {
     try {
-      await axiosInstance.delete(
-        `/course/${course_slug}/review/${review_id}/`
-      );
+      await deleteReview(courseSlug, reviewId);
       set(state => ({
-        reviews: state.reviews.filter(review => review.id !== review_id)
+        reviews: state.reviews.filter(review => review.id !== reviewId)
       }));
     } catch (error) {
-      console.error("Failed to delete comment:", error);
+      console.error("Failed to delete review:", error);
     }
+  },
+
+  getUserReview: () => {
+    const { reviews, userData } = get();
+    return reviews.filter(review => review.user.id === userData.id);
+  },
+
+  getOtherUserReviews: () => {
+    const { reviews, userData } = get();
+    return reviews.filter(review => review.user.id !== userData.id);
   }
 }));
 

@@ -62,6 +62,8 @@ const Courses = () => {
                 alt={course.title}
                 transform={"translateY(10px)"}
                 m={"auto"}
+                objectFit={"cover"}
+                height={200}
                 w={{
                   base: "280px",
                   xl: "340px"

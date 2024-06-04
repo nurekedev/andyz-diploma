@@ -1,79 +1,49 @@
-import create from "zustand";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { RefreshAccessToken } from "../requests/Token";
+import { create } from "zustand";
+import { fetchComments, addComment, updateComment, deleteComment } from "../services/api";
 
-const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/v1",
-  // Добавляем заголовки по умолчанию, включая авторизацию с токеном
-  headers: {
-    "Content-Type": "application/json"
-  }
-});
-
-// Добавляем интерцептор для обработки успешных ответов
-axiosInstance.interceptors.response.use(
-  response => response,
-  error => {
-    console.error("Request error:", error);
-    return Promise.reject(error);
-  }
-);
-
-const useCommentStore = create((set, get) => ({
+const useCommentStore = create(set => ({
   comments: [],
   setComments: comments => set({ comments }),
+
   fetchComments: async (courseId, lessonSlug) => {
     try {
-      axiosInstance.defaults.headers.common["Authorization"] = `JWT ${Cookies.get("accessToken")}`;
-      const response = await axiosInstance.get(
-        `/course/${courseId}${lessonSlug}/comments/`
-      );
-      console.log(response);
-      if (response.status === 401) {
-        await RefreshAccessToken();
-        get().fetchComments(courseId, lessonSlug);
-      }
-      set({ comments: response.data });
+      const comments = await fetchComments(courseId, lessonSlug);
+      set({ comments });
     } catch (error) {
-        // Любая другая ошибка - выводим сообщение в консоль
-        console.error("Failed to fetch comments:", error);
+      console.error("Failed to fetch comments:", error);
     }
   },
+
   addComment: async (courseId, lessonSlug, body) => {
     try {
-      const response = await axiosInstance.post(
-        `/course/${courseId}${lessonSlug}/comments/`,
-        { body }
-      );
-      set(state => ({ comments: [...state.comments, response.data] }));
-      return response.status;
+      const newComment = await addComment(courseId, lessonSlug, body);
+      set(state => ({ comments: [...state.comments, newComment] }));
     } catch (error) {
       console.error("Failed to add comment:", error);
     }
   },
-  updateComment: async (course_slug, lesson_slug, commentId, body) => {
+
+  updateComment: async (courseId, lessonSlug, commentId, body) => {
     try {
-      const response = await axiosInstance.patch(
-        `/course/${course_slug}${lesson_slug}/comments/${commentId}/`,
-        { body }
+      const updatedComment = await updateComment(
+        courseId,
+        lessonSlug,
+        commentId,
+        body
       );
-      console.log(response);
       set(state => ({
         comments: state.comments.map(
-          comment =>
-            comment.id === commentId ? { ...comment, body: body } : comment
+          comment => (comment.id === commentId ? updatedComment : comment)
         )
       }));
     } catch (error) {
       console.error("Failed to update comment:", error);
     }
   },
-  deleteComment: async (course_slug, lesson_slug, commentId) => {
+
+  deleteComment: async (courseId, lessonSlug, commentId) => {
     try {
-      await axiosInstance.delete(
-        `/course/${course_slug}${lesson_slug}/comments/${commentId}/`
-      );
+      await deleteComment(courseId, lessonSlug, commentId);
       set(state => ({
         comments: state.comments.filter(comment => comment.id !== commentId)
       }));
