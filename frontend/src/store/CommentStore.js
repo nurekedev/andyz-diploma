@@ -5,13 +5,11 @@ import { refreshAccessToken } from "../requests/Token";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1",
-  // Добавляем заголовки по умолчанию, включая авторизацию с токеном
   headers: {
     "Content-Type": "application/json"
   }
 });
 
-// Добавляем интерцептор для обработки успешных ответов
 axiosInstance.interceptors.response.use(
   response => response,
   error => {
@@ -36,7 +34,6 @@ const useCommentStore = create((set, get) => ({
       }
       set({ comments: response.data });
     } catch (error) {
-        // Любая другая ошибка - выводим сообщение в консоль
         console.error("Failed to fetch comments:", error);
     }
   },

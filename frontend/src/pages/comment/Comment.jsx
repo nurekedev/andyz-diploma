@@ -7,12 +7,13 @@ import useCommentStore from "../../store/CommentStore";
 
 const Comment = ({ id, lessonSlug }) => {
   const userData = useFetchData("auth/users/me", "");
+  
   if (!lessonSlug) {
     lessonSlug = "";
   } else {
     lessonSlug = `/${lessonSlug}`;
   }
-  console.log(lessonSlug);
+
   const { comments, fetchComments } = useCommentStore((state) => ({
     comments: state.comments,
     fetchComments: state.fetchComments

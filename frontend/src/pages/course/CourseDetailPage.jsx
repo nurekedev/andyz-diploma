@@ -16,10 +16,10 @@ const CourseDetailPage = () => {
       borderRadius={10}
     >
       <Box
-        as="aside" // Indicate this is an aside element for screen readers
-        position="sticky" // Make the sidebar sticky
-        top={"30px"} // Position it at the top of the viewport
-        height="30vh" // Make it as tall as the viewport
+        as="aside" 
+        position="sticky" 
+        top={"30px"} 
+        height="30vh" 
         borderRadius="10px"
       >
         <Sidebar />
