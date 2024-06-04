@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import Cookies from "js-cookie";
 
 const useAuthStore = create(set => ({
@@ -17,7 +17,6 @@ const useAuthStore = create(set => ({
   }
 }));
 
-// Восстановление состояния из куки при загрузке страницы
 if (Cookies.get("isAuthenticated") === "true") {
   useAuthStore
     .getState()

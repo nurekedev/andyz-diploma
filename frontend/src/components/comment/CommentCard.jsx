@@ -24,8 +24,9 @@ import { useState } from "react";
 import useCommentStore from "../../store/CommentStore";
 
 const CommentCard = ({ course_slug, lesson_slug, comment, data }) => {
-  console.log(course_slug, lesson_slug);
+
   const [newComment, setNewComment] = useState(comment.body);
+
   const {
     isOpen: isEditOpen,
     onOpen: onEditOpen,
@@ -36,12 +37,15 @@ const CommentCard = ({ course_slug, lesson_slug, comment, data }) => {
     onOpen: onDeleteOpen,
     onClose: onDeleteClose
   } = useDisclosure();
+
   const { updateComment, deleteComment } = useCommentStore((state) => ({
     updateComment: state.updateComment,
     deleteComment: state.deleteComment
   }));
+
   const toast = useToast();
   const canEdit = comment?.created_by.id === data?.id;
+  
   const handleEdit = async () => {
     try {
       await updateComment(course_slug, lesson_slug, comment.id, newComment);

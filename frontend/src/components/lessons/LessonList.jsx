@@ -8,22 +8,55 @@ import {
   AccordionIcon,
   Tag,
   TagLabel,
-  useColorModeValue,
-  CircularProgress
+  useColorModeValue
 } from "@chakra-ui/react";
 import { NavLink, useParams } from "react-router-dom";
 import { GoVideo } from "react-icons/go";
 import { MdOutlineArticle } from "react-icons/md";
 import { useFetchData } from "../../requests/FetchData";
+import { useEffect, useState } from "react";
+import useCourseStore from "../../store/CourseStore";
 
 function LessonList() {
-  const { id } = useParams();
+  const { id, lessonSlug } = useParams();
   const courseDetailData = useFetchData("course", id);
+
+  const { defaultSectionIndex, setDefaultSectionIndex, setCourseDetailData } =
+    useCourseStore();
+
+  const [accordionIndex, setAccordionIndex] = useState([]);
+
+  useEffect(() => {
+    if (courseDetailData) {
+      setCourseDetailData(courseDetailData);
+      const sectionIndex = courseDetailData.course.sections.findIndex(
+        (section) =>
+          section.lessons.some((lesson) => lesson.slug === lessonSlug)
+      );
+      setDefaultSectionIndex(sectionIndex);
+      setAccordionIndex([sectionIndex]);
+    }
+  }, [
+    courseDetailData,
+    lessonSlug,
+    setCourseDetailData,
+    setDefaultSectionIndex
+  ]);
+
+  if (defaultSectionIndex === null) {
+    return null;
+  }
 
   return (
     <div>
-      <Box  bg={useColorModeValue("white", "gray.dark")}>
-        <Accordion allowMultiple w={"full"} minW={300}>
+      <Box bg={useColorModeValue("white", "gray.dark")}>
+        <Accordion
+          allowMultiple
+          w={"full"}
+          minW={300}
+          index={accordionIndex}
+          onChange={setAccordionIndex}
+        >
           {courseDetailData?.course.sections.map((section, index) => (
             <AccordionItem key={index}>
               <h2>
@@ -45,21 +78,16 @@ function LessonList() {
                   <Box as="span" flex="1" textAlign="left">
                     {section.title}
                   </Box>
-                  <CircularProgress
-                    value={80}
-                    color="orange.400"
-                    thickness="6px"
-                  />
                 </AccordionButton>
               </h2>
               <AccordionPanel
-                pl={10}
+                mt={2}
+                pl={5}
                 display={"flex"}
                 flexDir={"column"}
-                gap={3}
+                gap={5}
                 className="accordion-panel"
               >
-                {/* Проходимся по урокам внутри секции */}
                 {section.lessons.map((lesson, lessonIndex) => (
                   <Box
                     key={lessonIndex}

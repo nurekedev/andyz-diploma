@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
   Divider,
@@ -10,6 +9,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 const UserMainInfo = ({ userData }) => {
+  const textColor = useColorModeValue("gray.dark", "white");
   return (
     <>
       <Box
@@ -41,10 +41,9 @@ const UserMainInfo = ({ userData }) => {
               <Input
                 fontSize={20}
                 p={6}
-                color={useColorModeValue("gray.dark", "white")}
+                color={textColor}
                 value={userData?.first_name}
                 _placeholder={{ color: "inherit" }}
-                readonly="readonly"
               />
             ) : (
               <Skeleton height="40px" w={"full"} />
@@ -56,10 +55,9 @@ const UserMainInfo = ({ userData }) => {
               <Input
                 fontSize={20}
                 p={4}
-                color={useColorModeValue("gray.dark", "white")}
+                color={textColor}
                 value={userData?.last_name}
                 _placeholder={{ color: "inherit" }}
-                readonly="readonly"
               />
             ) : (
               <Skeleton height="40px" w={"full"} />
@@ -81,10 +79,9 @@ const UserMainInfo = ({ userData }) => {
               <Input
                 fontSize={20}
                 p={4}
-                color={useColorModeValue("gray.dark", "white")}
+                color={textColor}
                 value={userData?.address_line}
                 _placeholder={{ color: "inherit" }}
-                readonly="readonly"
               />
             ) : (
               <Skeleton height="40px" w={"full"} />
@@ -96,10 +93,9 @@ const UserMainInfo = ({ userData }) => {
               <Input
                 fontSize={20}
                 p={4}
-                color={useColorModeValue("gray.dark", "white")}
+                color={textColor}
                 value={userData?.date_of_birth}
                 _placeholder={{ color: "inherit" }}
-                readonly="readonly"
               />
             ) : (
               <Skeleton height="40px" w={"full"} />
@@ -122,10 +118,9 @@ const UserMainInfo = ({ userData }) => {
               <Input
                 fontSize={20}
                 p={6}
-                color={useColorModeValue("gray.dark", "white")}
+                color={textColor}
                 value={userData?.phone_number}
                 _placeholder={{ color: "inherit" }}
-                readonly="readonly"
               />
             ) : (
               <Skeleton height="40px" w={"full"} />
@@ -138,10 +133,9 @@ const UserMainInfo = ({ userData }) => {
               <Input
                 fontSize={20}
                 p={6}
-                color={useColorModeValue("gray.dark", "white")}
+                color={textColor}
                 value={userData?.email}
                 _placeholder={{ color: "inherit" }}
-                readonly="readonly"
               />
             ) : (
               <Skeleton height="40px" w={"full"} />

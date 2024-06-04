@@ -40,8 +40,7 @@ const WriteComment = ({ courseId, lessonSlug }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await PostComment(`${course_slug}`, `${lesson_slug}`, comment);
-      console.log("Comment submitted successfully!");
+      await addComment(`${courseId}`, `${lessonSlug}`, comment);
       setComment("");
       setIsRateLimited(false);
       localStorage.removeItem("rateLimited");

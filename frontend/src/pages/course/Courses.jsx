@@ -10,10 +10,10 @@ import {
   Text,
   useColorModeValue
 } from "@chakra-ui/react";
-import { fetchData } from "../../requests/DataFetcher";
 import { Link } from "react-router-dom";
 import NotCoursePage from "./NotCoursePage";
 import { useFetchData } from "../../requests/FetchData";
+import axiosInstance from "../../services/axiosInstance";
 
 const Courses = () => {
   const courseData = useFetchData("course", "my-courses/");
@@ -22,18 +22,29 @@ const Courses = () => {
   useEffect(() => {
     async function fetchProgressData() {
       if (courseData && courseData.length > 0) {
-        const progressData = await Promise.all(
-          courseData.map((course) => fetchData(course.slug))
-        );
+        const progressDataPromises = courseData.map(async (course) => {
+          const response = await axiosInstance.get(
+            `/progress/get-enrollment-courses/${course.slug}`
+          );
+          return { slug: course.slug, progress: response.data.score };
+        });
+        const progressData = await Promise.all(progressDataPromises);
         setProgressData(progressData);
       }
     }
     fetchProgressData();
   }, [courseData]);
 
+  const getCourseProgress = (slug) => {
+    const progress = progressData.find((item) => item.slug === slug);
+    return progress ? progress.progress : 0;
+  };
+
+
   return (
     <Box
       display={"flex"}
+      flexWrap={"wrap"}
       gap={5}
       m={{
         base: "0 10px",
@@ -41,19 +52,21 @@ const Courses = () => {
         xl: "0 100px",
         "2xl": "auto"
       }}
-      justifyContent={"center"}
+      justifyContent={{
+        base: "center",
+        md: "flex-start",
+      }}
       mt={10}
       maxWidth={1200}
     >
-      {courseData &&
-        courseData.length > 0 ?
+      {courseData && courseData.length > 0 ? (
         courseData.map((course, index) => (
           <Link key={index} to={`/courses/${course.slug}`}>
             <Box
               boxShadow="md"
               borderRadius={15}
               bg={useColorModeValue("white", "gray.dark")}
-              w={{ base: "300px", xl: "360px" }}
+              w={{ base: "340px", xl: "360px" }}
               m={"auto"}
             >
               <Image
@@ -62,8 +75,10 @@ const Courses = () => {
                 alt={course.title}
                 transform={"translateY(10px)"}
                 m={"auto"}
+                objectFit={"cover"}
+                height={200}
                 w={{
-                  base: "280px",
+                  base: "320px",
                   xl: "340px"
                 }}
               />
@@ -113,7 +128,7 @@ const Courses = () => {
                 <Stack gap={0} mt={2} mb={2}>
                   <Text>Your progress</Text>
                   <Progress
-                    value={progressData[index]?.progress}
+                    value={getCourseProgress(course.slug)}
                     max={100}
                     size="md"
                   />
@@ -134,7 +149,10 @@ const Courses = () => {
               </Box>
             </Box>
           </Link>
-        )) : <NotCoursePage />}
+        ))
+      ) : (
+        <NotCoursePage />
+      )}
     </Box>
   );
 };

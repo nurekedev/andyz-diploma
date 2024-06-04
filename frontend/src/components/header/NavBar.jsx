@@ -21,7 +21,7 @@ const NavBar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return windowSize.width < 600 ? <MobileMenu /> : <DesktopMenu />;
+  return windowSize.width < 768 ? <MobileMenu /> : <DesktopMenu />;
 };
 
 export default NavBar;

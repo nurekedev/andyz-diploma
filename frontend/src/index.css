@@ -78,18 +78,3 @@
   border-radius: 5px 5px 0 0;
   cursor: pointer;
 }
-
-
-@media(max-width: 400px) {
-  .line {
-    position: absolute;
-    display: none;
-  }
-  .avatars {
-    position: absolute;
-    display: none;
-  }
-  .post_img {
-    margin-left: -50px;
-  }
-}
