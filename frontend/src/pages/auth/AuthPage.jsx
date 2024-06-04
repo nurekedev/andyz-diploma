@@ -1,9 +1,9 @@
-import Login from "./Login"
+import Login from "./Login";
 
 export const AuthPage = () => {
-    return (
+  return (
     <>
-         <Login /> 
+      <Login />
     </>
-  )
-}
+  );
+};

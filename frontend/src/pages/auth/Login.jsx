@@ -15,7 +15,7 @@ import {
   useToast
 } from "@chakra-ui/react";
 import loginBanner from '../../../public/login.jpg'
-import {  useState, useRef } from "react";
+import {  useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import handleLogin from "../../services/AuthService";
@@ -26,8 +26,6 @@ export default function Login() {
     email: "",
     password: ""
   });
-
-  const audioRef = useRef(null);
 
   const handleLoginClick = () => {
     if (!inputs.email || !inputs.password) {
@@ -49,7 +47,6 @@ export default function Login() {
         });
       })
       .catch((error) => {
-        // Обработка ошибки, например, показ toast с сообщением об ошибке
         toast({
           title: "Error",
           description: error.message,
@@ -61,8 +58,7 @@ export default function Login() {
   };
 
   return (
-    <Flex justify={"center"} m={"10vh auto 0"}>
-      <audio ref={audioRef} src="whitley.mp3"></audio>
+    <Flex justify={"center"} m={"6rem auto 0"}>
       <Stack spacing={8} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
@@ -72,14 +68,18 @@ export default function Login() {
             Regain, Retrain, Reclaim ✌️
           </Text>
         </Stack>
-        <Box display={"flex"} boxShadow={"lg"} borderRadius={10}>
+        <Box display={"flex"} boxShadow={"lg"} borderRadius={10} width={"100%"}>
           <Image
             src={loginBanner}
             height={500}
-            w={"full"}
+            w={"50%"}
             maxW={500}
             objectFit={"cover"}
             borderLeftRadius={10}
+            display={{
+              base: "none",
+              md: "block"
+            }}
           />
           <Box
             bg={useColorModeValue("white", "gray.dark")}

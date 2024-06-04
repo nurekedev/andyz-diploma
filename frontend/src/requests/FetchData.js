@@ -4,17 +4,16 @@ import { useEffect, useState } from "react";
 
 async function fetchData(pre_slug, slug) {
   let token = Cookies.get("accessToken");
-    if (!token || token === "undefined" || token === "null") {
-      const response = await refreshAccessToken();
-      if (!response.ok) {
-        Cookies.remove("accessToken");
-        Cookies.remove("refreshToken");
-        Cookies.remove("isAuthenticated");
-        location.reload();
-      }
+  if (!token || token === "undefined" || token === "null") {
+    const response = await refreshAccessToken();
+    if (!response.ok) {
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      Cookies.remove("isAuthenticated");
     }
+  }
   try {
-        const response = await fetch(
+    const response = await fetch(
       `http://127.0.0.1:8000/api/v1/${pre_slug}/${slug}`,
       {
         method: "GET",
@@ -46,7 +45,7 @@ export function useFetchData(pre_slug, slug) {
       usefetchData();
     },
     [pre_slug, slug]
-  ); // Добавлен data в зависимости
+  );
 
   return data;
 }

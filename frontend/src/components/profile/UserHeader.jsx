@@ -8,7 +8,6 @@ import {
   VStack,
   useColorModeValue
 } from "@chakra-ui/react";
-import {} from "../../requests/FetchData";
 
 const UserHeader = ({ userData }) => {
   
@@ -18,7 +17,6 @@ const UserHeader = ({ userData }) => {
         alignItems={"center"}
         w={"100%"}
         maxW={1000}
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         bg={useColorModeValue("white", "gray.dark")}
         borderRadius={10}
       >

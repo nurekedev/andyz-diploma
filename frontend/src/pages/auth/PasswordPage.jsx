@@ -22,7 +22,6 @@ const navigate = useNavigate();
 
  const handleLogin = async () => {
    try {
-     console.log(inputs);
      const response = await fetch(
        "http://127.0.0.1:8000/api/v1/auth/users/reset_password/",
        {
@@ -41,7 +40,6 @@ const navigate = useNavigate();
           duration: 2000
         });
        navigate("/auth");
-       window.location.reload();
        // Перенаправление на главную страницу
      } else {
        const { message } = await response.json();

@@ -14,10 +14,7 @@ const Comment = ({ id, lessonSlug }) => {
     lessonSlug = `/${lessonSlug}`;
   }
 
-  const { comments, fetchComments } = useCommentStore((state) => ({
-    comments: state.comments,
-    fetchComments: state.fetchComments
-  }));
+  const { comments, fetchComments } = useCommentStore();
 
   useEffect(() => {
     fetchComments(id, lessonSlug);
@@ -26,7 +23,7 @@ const Comment = ({ id, lessonSlug }) => {
   return (
     <Box>
       <WriteComment courseId={id} lessonSlug={lessonSlug} />
-      <Text fontSize={24} fontWeight={"bold"} mb={5}>
+      <Text fontSize={24} fontWeight={"bold"} mb={5} mt={10}>
         Other Comments
       </Text>
       <OtherComments

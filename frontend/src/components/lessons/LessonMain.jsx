@@ -1,15 +1,40 @@
-import { Box, Divider, Heading, Image, Text, VStack, useColorModeValue } from "@chakra-ui/react";
+import { Box, Divider, Skeleton, useColorModeValue } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useFetchData } from "../../requests/FetchData";
-import Comment from "../../pages/comment/Comment";
+import { findAdjacentLessons } from "../../services/functions";
+import useCourseStore from "../../store/CourseStore";
+import { useEffect } from "react";
+import {
+  LessonComments,
+  LessonContent,
+  LessonHeader
+} from "./LessonMainComponents";
 
 function LessonMain() {
-  const {id} = useParams();
-  const { lessonSlug } = useParams();
+  const { id, lessonSlug } = useParams();
   const lessonDetailData = useFetchData("course/lessons", lessonSlug);
+  const courseData = useFetchData("course", id);
+  const { courseDetailData, setDefaultSectionIndex } = useCourseStore();
+
+  useEffect(() => {
+    if (courseDetailData) {
+      const sectionIndex = courseDetailData.course.sections.findIndex(
+        (section) =>
+          section.lessons.some((lesson) => lesson.slug === lessonSlug)
+      );
+      setDefaultSectionIndex(sectionIndex);
+    }
+  }, [courseDetailData, lessonSlug, setDefaultSectionIndex]);
+
+  const { previousLesson, nextLesson } = findAdjacentLessons(
+    courseData,
+    lessonSlug
+  );
+
   const sortedContents = lessonDetailData
     ? lessonDetailData.lessons.contents.sort((a, b) => a.my_order - b.my_order)
     : [];
+
   return (
     <Box
       display={"flex"}
@@ -19,39 +44,25 @@ function LessonMain() {
       bg={useColorModeValue("white", "gray.dark")}
     >
       <Box w={"full"}>
-        <VStack alignItems={"start"} mb={5}>
-          <Heading fontSize={25}> {lessonDetailData?.lessons.title}</Heading>
-        </VStack>
-
-        {console.log(lessonDetailData?.lessons.contents.photo)}
-        <Divider mt={4} mb={2} />
-        <Text as={"b"} fontSize={24}>
-          What is this course about?
-        </Text>
-        <Box>
-          {lessonDetailData?.lessons.yt_id ? (
-            <iframe
-              src={`https://www.youtube.com/embed/${lessonDetailData?.lessons.yt_id}`}
-              width="100%"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"
-            ></iframe>
-          ) : null}
-        </Box>
-
-        {sortedContents.map((content) => (
-          <div key={content.id}>
-            <h3>{content.text}</h3>
-            {content.photo ? (
-              null
-            ) : (
-              <Image src={content.photo} />
-            )}
-
-            {console.log(content.photo)}
-          </div>
-        ))}
-        <Divider mt={4} mb={2} />
-        <Comment id={id} lessonSlug={`${lessonSlug}`} />
+        {lessonDetailData ? (
+          <>
+            <LessonHeader
+              lessonTitle={lessonDetailData.lessons.title}
+              id={id}
+              previousLesson={previousLesson}
+              nextLesson={nextLesson}
+            />
+            <Divider mt={4} mb={2} />
+            <LessonContent
+              lessonDetailData={lessonDetailData}
+              sortedContents={sortedContents}
+            />
+            <Divider mt={4} mb={2} />
+            <LessonComments id={id} lessonSlug={lessonSlug} />
+          </>
+        ) : (
+          <Skeleton height="100vh" />
+        )}
       </Box>
     </Box>
   );

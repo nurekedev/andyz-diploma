@@ -64,9 +64,9 @@ def get_user_progress_by_course(request, course_slug):
         return Response({"detail": "Course not found"}, status=status.HTTP_404_NOT_FOUND)
     
     
-    print(activities.filter(status=Progress.DONE).aggregate(total_points_done=Sum(Case(When(lesson__lesson_type=Lesson.VIDEO, then=Lesson.VIDEO_WEIGHT), default=0, output_field=IntegerField())) + Sum(Case(When(lesson__lesson_type=Lesson.ARTICLE, then=Lesson.ARTICLE_WEIGHT), default=0, output_field=IntegerField())))['total_points_done'] or 0)
+    # print(activities.filter(status=Progress.DONE).aggregate(total_points_done=Sum(Case(When(lesson__lesson_type=Lesson.VIDEO, then=Lesson.VIDEO_WEIGHT), default=0, output_field=IntegerField())) + Sum(Case(When(lesson__lesson_type=Lesson.ARTICLE, then=Lesson.ARTICLE_WEIGHT), default=0, output_field=IntegerField())))['total_points_done'] or 0)
 
-    return Response({"detail": "custom message"}, status=status.HTTP_404_NOT_FOUND)
+    return Response({"score": total_points}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
