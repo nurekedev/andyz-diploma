@@ -1,13 +1,21 @@
 from djoser.serializers import UserSerializer
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import CustomUser
+from users.models import CustomUser, Marker, Record
 
 user = get_user_model()
 
 
+
+class MarkerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Marker
+        fields = '__all__'
+
+class RecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Record
+        fields = '__all__'
 
 
 class DoctorHideSerializer(UserSerializer):
@@ -21,6 +29,9 @@ class DoctorHideSerializer(UserSerializer):
 
 
 class PatientSerializer(UserSerializer):
+    records = RecordSerializer(many=True, read_only=True)
+    markers = MarkerSerializer(many=True, read_only=True)
+
     class Meta(UserSerializer.Meta):
         fields = ['id',
                   'avatar',
@@ -32,7 +43,10 @@ class PatientSerializer(UserSerializer):
                   'blood_group',
                   'address_line',
                   'date_of_birth',
-                  'phone_number']
+                  'phone_number',
+                  'records',
+                  'markers',
+                  ]
 
 
 

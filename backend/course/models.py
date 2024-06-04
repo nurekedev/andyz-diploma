@@ -1,12 +1,9 @@
 from django.conf import settings
 from django.utils.text import slugify
 from django.urls import reverse
-
-
 from django.db import models
 
 User = settings.AUTH_USER_MODEL
-
 
 
 class Category(models.Model):
@@ -46,8 +43,10 @@ class Course(models.Model):
     created_at = models.DateField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='course', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='uploads/courses', blank=True, null=True)
-    status = models.CharField(max_length=25, choices=STATUS_CHOICES, default=DRAFT)
+    image = models.ImageField(
+        upload_to='uploads/courses', blank=True, null=True)
+    status = models.CharField(
+        max_length=25, choices=STATUS_CHOICES, default=DRAFT)
 
     class Meta:
         verbose_name = 'Courses'
@@ -78,13 +77,13 @@ class Section(models.Model):
     slug = models.SlugField(null=False, unique=True)
     course = models.ForeignKey(
         Course, related_name='sections', on_delete=models.CASCADE)
-    
+
     my_order = models.PositiveIntegerField(
         default=0,
         blank=False,
         null=False,
     )
-    
+
     class Meta:
         verbose_name = 'Sections'
         verbose_name_plural = 'Sections'
@@ -93,7 +92,6 @@ class Section(models.Model):
 
     def __str__(self):
         return self.title
-
 
 
 class Lesson(models.Model):
@@ -110,7 +108,7 @@ class Lesson(models.Model):
 
     ARTICLE_WEIGHT = 10
     VIDEO_WEIGHT = 20
-    
+
     CHOICES_TYPE_LESSON = (
         (ARTICLE, 'Article'),
         (VIDEO, 'Video')
@@ -126,7 +124,7 @@ class Lesson(models.Model):
     slug = models.SlugField(null=False, unique=True)
     status = models.CharField(
         max_length=20, choices=CHOICES_STATUS, default=PUBLISHED)
-    
+
     my_order = models.PositiveIntegerField(
         default=0,
         blank=False,
@@ -146,14 +144,14 @@ class Lesson(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
-    
+
     def get_absolute_url(self):
         return reverse('lesson-detail', kwargs={'slug': self.slug})
-    
 
 
 class VideoContent(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='videos')
+    lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE, related_name='videos')
     yt_id = models.CharField(max_length=20)
     description = models.TextField(blank=True)
     my_order = models.PositiveIntegerField(
@@ -168,8 +166,10 @@ class VideoContent(models.Model):
     def __str__(self):
         return 'Video for {}'.format(self.lesson.title)
 
+
 class ArticleСontent(models.Model):
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='contents')
+    lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE, related_name='contents')
     text = models.TextField(blank=True)
     photo = models.ImageField(upload_to='article_photos/', blank=True)
     my_order = models.PositiveIntegerField(
@@ -183,15 +183,14 @@ class ArticleСontent(models.Model):
 
     def __str__(self):
         return 'Content for {}'.format(self.lesson.title)
-    
+
 
 class Comment(models.Model):
     course = models.ForeignKey(
         Course, related_name='comments', on_delete=models.CASCADE)
-    
+
     lesson = models.ForeignKey(
-        Lesson, related_name='comments', on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=80)
+        Lesson, related_name='comments', on_delete=models.CASCADE, blank=True, null=True)
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -204,7 +203,7 @@ class Comment(models.Model):
         ordering = ('-created',)
 
     def __str__(self):
-        return 'Comment by {} on {}'.format(self.name, self.course or self.lesson)
+        return 'Comment by {} on {}'.format(self.body, self.course or self.lesson)
 
 
 class Rating(models.Model):
@@ -217,8 +216,10 @@ class Rating(models.Model):
         (5, '5_STAR')
     )
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='rating')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name='rating')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True)
     rating = models.PositiveIntegerField(choices=RATING_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -228,4 +229,3 @@ class Rating(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user} {self.rating} for {self.course}"
-
