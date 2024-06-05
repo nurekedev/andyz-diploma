@@ -1,15 +1,22 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
-from djoser.serializers import UserSerializer, UserCreateSerializer
+from djoser.serializers import UserSerializer
 from rest_framework import serializers
 
 
+
 from users.models import CustomUser, Marker, Record
+from course.models import Course
 
 user = get_user_model()
 
-
+class QuestionContactSerializer(serializers.Serializer):
+    name = serializers.CharField(
+        max_length=100, write_only=True, help_text=("Имя"))
+    email = serializers.EmailField(max_length=100, help_text=("Электронная почта"))
+    question_text = serializers.CharField(max_length=255, help_text=("Текст вопроса"))
+    is_followed_mailing = serializers.BooleanField(help_text=('Подписка на рассылку'))
 
 class MarkerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,6 +33,11 @@ class RecordCreateSerializer(serializers.ModelSerializer):
         model = Record
         fields = ('date', 'title', 'description')
 
+class MarkerCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Marker
+        fields = ('date', 'title', 'description')
+
 class UserListSerializer(UserSerializer):
     full_name = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
@@ -40,10 +52,6 @@ class UserListSerializer(UserSerializer):
     def get_avatar(self, obj):
         return f"{settings.DOMAIN_URL}{obj.avatar.url}"
     
-class UserDeleteSerializer(UserSerializer):
-    pass
-
-
 class DoctorHideSerializer(UserSerializer):
     full_name = serializers.SerializerMethodField()
 
@@ -53,7 +61,6 @@ class DoctorHideSerializer(UserSerializer):
     def get_full_name(self, obj):
         return f'{obj.first_name} {obj.last_name}'
     
-
 class PatientSerializer(UserSerializer):
     records = RecordSerializer(many=True, read_only=True)
     markers = MarkerSerializer(many=True, read_only=True)
@@ -75,5 +82,12 @@ class PatientSerializer(UserSerializer):
                   'is_staff', 
                   ]
 
+class CustomCourseListSerializer(serializers.ModelSerializer):
+    created_by = DoctorHideSerializer(read_only=True)
+
+    class Meta:
+        model = Course
+        fields = ('title', 'slug', 'short_description',
+                  'created_by', 'image',)
 
 
