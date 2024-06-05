@@ -28,6 +28,7 @@ const createAxiosInstance = () => {
       if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         const newToken = await RefreshAccessToken();
+        console.log(newToken);
         if (newToken) {
           Cookies.set("accessToken", newToken);
           originalRequest.headers.Authorization = `JWT ${newToken}`;
