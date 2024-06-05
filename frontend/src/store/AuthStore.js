@@ -1,55 +1,29 @@
 import { create } from "zustand";
 import Cookies from "js-cookie";
-import { RefreshAccessToken } from "../services/Token";
+import { devtools } from "zustand/middleware";
 
-const useAuthStore = create(set => ({
-  isStaff: Cookies.get("isStaff") === "true",
-  login: (accessToken, refreshToken) => {
-    Cookies.set("accessToken", accessToken, { expires: 1 / 24 }); // 1 hour
-    Cookies.set("refreshToken", refreshToken, { expires: 7 }); // 7 days
-  },
-  logout: () => {
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
-    Cookies.remove("isStaff");
-    set({ isStaff: false });
-  },
-  setIsStaff: isStaff => {
-    Cookies.set("isStaff", isStaff ? "true" : "false", {
-      expires: 1 / 24 // 1 hour
-    });
-    set({ isStaff: isStaff });
-  },
-  updateStateFromCookies: async () => {
-    const accessToken = Cookies.get("accessToken");
-    const refreshToken = Cookies.get("refreshToken");
-
-    if (refreshToken) {
-      if (accessToken === undefined) {
-        try {
-          await RefreshAccessToken(refreshToken);
-        } catch (error) {
-          set({ isStaff: false });
-          Cookies.remove("accessToken");
-          Cookies.remove("refreshToken");
-          Cookies.remove("isStaff");
-        }
-      }
-      set({
-        isStaff: Cookies.get("isStaff") === "true"
-      });
-    } else {
-      set({ isStaff: false });
+const useAuthStore = create(
+  devtools((set) => ({
+    isStaff: Cookies.get("isStaff") === "true",
+    login: (accessToken, refreshToken) => {
+      Cookies.set("accessToken", accessToken, { expires: 1 / 24 }); // 1 hour
+      Cookies.set("refreshToken", refreshToken, { expires: 7 }); // 7 days
+      set({ isAuthenticated: !!refreshToken });
+    },
+    logout: () => {
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
       Cookies.remove("isStaff");
-    }
-  },
-  isAuthenticated: () => {
-    return !!Cookies.get("refreshToken");
-  }
-}));
-
-useAuthStore.getState().updateStateFromCookies();
+      set({ isStaff: false, isAuthenticated: false });
+    },
+    setIsStaff: isStaff => {
+      Cookies.set("isStaff", isStaff ? "true" : "false", {
+        expires: 1 / 24 // 1 hour
+      });
+      set({ isStaff: isStaff });
+    },
+    isAuthenticated: !!Cookies.get("refreshToken")
+  }))
+);
 
 export default useAuthStore;

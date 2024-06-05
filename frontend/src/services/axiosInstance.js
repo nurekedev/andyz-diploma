@@ -18,21 +18,23 @@ const createAxiosInstance = () => {
       }
       return config;
     },
-    error => {
-      return Promise.reject(error);
-    }
+    error => Promise.reject(error)
   );
 
   axiosInstance.interceptors.response.use(
     response => response,
     async error => {
       const originalRequest = error.config;
-
       if (error.response.status === 401 && !originalRequest._retry) {
-        await RefreshAccessToken();
-        return axiosInstance(originalRequest);
+        originalRequest._retry = true;
+        const newToken = await RefreshAccessToken();
+        console.log(newToken);
+        if (newToken) {
+          Cookies.set("accessToken", newToken);
+          originalRequest.headers.Authorization = `JWT ${newToken}`;
+          return axiosInstance(originalRequest);
+        }
       }
-
       return Promise.reject(error);
     }
   );

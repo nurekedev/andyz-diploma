@@ -1,10 +1,8 @@
 import Cookies from "js-cookie";
-import useAuthStore from "../store/AuthStore";
 
 export const RefreshAccessToken = async () => {
-  const { logout } = useAuthStore();
   try {
-    const token = Cookies.get("refreshToken");
+    const refresh = Cookies.get("refreshToken");
     const response = await fetch(
       "http://127.0.0.1:8000/api/v1/auth/jwt/refresh/",
       {
@@ -12,21 +10,27 @@ export const RefreshAccessToken = async () => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          refresh: `${token}`
-        })
+        body: JSON.stringify({ refresh })
       }
     );
+
     if (!response.ok) {
-      logout();
+      Cookies.remove("refreshToken");
+      throw new Error("Failed to refresh token");
     }
 
-    if (response.ok) {
-      const { access } = await response.json();
-      Cookies.set("accessToken", access, { expires: 5 / (24 * 60) });
+    const data = await response.json(); // Правильно извлекаем JSON из ответа
+    const access = data.access; // Получаем токен доступа из ответа
+
+    if (access) {
+      Cookies.set("accessToken", access, { expires: 5 / (24 * 60) }); // Токен истекает через 5 минут
+      console.log("Access token refreshed:", access);
+      return access; // Возвращаем токен доступа
     }
-    return response;
+
+    throw new Error("No access token in response");
   } catch (error) {
     console.error("Ошибка:", error);
+    throw error;
   }
 };
