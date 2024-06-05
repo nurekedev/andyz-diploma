@@ -1,10 +1,11 @@
-import useFetchData from "../../../services/api";
-
+import DataTable from "../datas/DataTable";
 
 const AllUsers = () => {
-  const users = useFetchData("cm-users/custom-users", "");
-    console.log(users);
-  return <div>{}</div>;
-}
+  return (
+    <div>
+      <DataTable />
+    </div>
+  );
+};
 
-export default AllUsers
+export default AllUsers;

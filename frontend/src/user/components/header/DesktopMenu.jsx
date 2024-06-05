@@ -52,7 +52,6 @@ const DesktopMenu = () => {
             ) : (
               <Link to={"/courses"}>My Courses</Link>
             )}
-            <Link to={"/courses"}>My Courses</Link>
             <LogoutButton />
           </HStack>
         </Container>

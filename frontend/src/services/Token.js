@@ -1,8 +1,6 @@
 import Cookies from "js-cookie";
-import useAuthStore from "../store/AuthStore";
 
 export const RefreshAccessToken = async () => {
-  const { logout } = useAuthStore();
   try {
     const token = Cookies.get("refreshToken");
     const response = await fetch(
@@ -17,16 +15,18 @@ export const RefreshAccessToken = async () => {
         })
       }
     );
-    if (!response.ok) {
-      logout();
-    }
 
+    if (!response.ok) {
+      Cookies.remove("refreshToken");
+      throw new Error("Failed to refresh token");
+    }
     if (response.ok) {
-      const { access } = await response.json();
-      Cookies.set("accessToken", access, { expires: 5 / (24 * 60) });
+      const access  = await response.access;
+      Cookies.set("accessToken", access, { expires: 5 / (24 * 60) }); // Token expires in 5 minutes
     }
     return response;
   } catch (error) {
     console.error("Ошибка:", error);
+    throw error;
   }
 };
