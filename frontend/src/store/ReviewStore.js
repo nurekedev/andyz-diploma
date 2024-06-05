@@ -71,12 +71,12 @@ const useReviewStore = create((set, get) => ({
 
   getUserReview: () => {
     const { reviews, userData } = get();
-    return reviews.filter(review => review.user.id === userData.id);
+    return reviews?.filter(review => review.user.id === userData.id);
   },
 
   getOtherUserReviews: () => {
     const { reviews, userData } = get();
-    return reviews.filter(review => review.user.id !== userData.id);
+    return reviews?.filter(review => review.user.id !== userData.id);
   }
 }));
 

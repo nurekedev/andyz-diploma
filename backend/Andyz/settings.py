@@ -12,6 +12,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = True
 
+DOMAIN_URL = 'http://localhost:8000'
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [

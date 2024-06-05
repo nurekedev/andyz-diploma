@@ -14,12 +14,14 @@ const useCommentStore = create(set => ({
     }
   },
 
-  addComment: async (courseId, lessonSlug, body) => {
+  addComment: async (courseId, lessonSlug, comment) => {
     try {
-      const newComment = await addComment(courseId, lessonSlug, body);
-      set(state => ({ comments: [...state.comments, newComment] }));
+      const response = await addComment(courseId, lessonSlug, comment);
+      set(state => ({ comments: [...state.comments, response] }));
+      return response;
     } catch (error) {
       console.error("Failed to add comment:", error);
+      throw error;
     }
   },
 

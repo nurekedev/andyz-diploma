@@ -71,7 +71,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name", "identifier_number", "date_of_birth"]
+    REQUIRED_FIELDS = ["first_name", 
+                       "last_name", 
+                       "identifier_number", 
+                       "date_of_birth",
+                       "gender",
+                       "phone_number",
+                       "address_line"
+                       ]
 
     objects = CustomUserManager()
     
@@ -81,6 +88,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def get_avatar(self):
+        return self.avatar.url
 
 
 class Marker(models.Model):
@@ -90,8 +100,9 @@ class Marker(models.Model):
     description = models.TextField(_("description"))
 
     def __str__(self):
-        return self.title
-    
+        return self.title    
+
+
 class Record(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='records')
     date = models.DateField(_("date"))

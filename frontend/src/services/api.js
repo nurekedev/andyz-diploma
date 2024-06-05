@@ -1,4 +1,29 @@
 import axiosInstance from "./axiosInstance";
+import { useEffect, useState } from "react";
+
+export const useFetchData = (pre_slug, slug) => {
+  const [data, setData] = useState(null);
+
+  useEffect(
+    () => {
+      const fetchDataEffect = async () => {
+        try {
+          const result = await axiosInstance.get(`${pre_slug}/${slug}`);
+          setData(result.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchDataEffect();
+    },
+    [pre_slug, slug]
+  );
+
+  return data;
+};
+
+export default useFetchData;
 
 export const fetchUser = async () => {
   try {
@@ -6,6 +31,27 @@ export const fetchUser = async () => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch user data:", error);
+    throw error;
+  }
+};
+export const createUser = async credentials => {
+  try {
+    const response = await axiosInstance.post(
+      "cm-users/custom-users/",
+      credentials
+    );
+    return response;
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+    throw error;
+  }
+};
+export const fetchCourseData = async courseId => {
+  try {
+    const response = await axiosInstance.get(`/course/${courseId}/`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch comments:", error);
     throw error;
   }
 };
@@ -31,7 +77,10 @@ export const addComment = async (courseId, lessonSlug, body) => {
     return response.data;
   } catch (error) {
     console.error("Failed to add comment:", error);
-    throw error;
+    return {
+      error: true,
+      message: error.response ? error.response.status : "Unknown error"
+    };
   }
 };
 

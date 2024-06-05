@@ -1,29 +1,43 @@
-
-import useAuthStore from "../store/AuthStore";
+import useAuthStore from "@store/AuthStore";
+import axios from "axios";
 
 const handleLogin = async credentials => {
   try {
-    const response = await fetch(
+    const response = await axios.post(
       "http://127.0.0.1:8000/api/v1/auth/jwt/create/",
+      credentials,
       {
-        method: "POST",
         headers: {
           "Content-Type": "application/json"
-        },
-        body: JSON.stringify(credentials)
+        }
       }
     );
-    
-    if (response.ok) {
-      const { access, refresh } = await response.json();
+
+    if (response.status === 200) {
+      const { access, refresh } = response.data;
+
+      const userResponse = await axios.get(
+        "http://127.0.0.1:8000/api/v1/auth/users/me",
+        {
+          headers: {
+            Authorization: `JWT ${access}`
+          }
+        }
+      );
+
+      const user = userResponse.data;
+      const isStaff = user.is_staff === true;
+
       useAuthStore.getState().login(access, refresh);
-      // Перенаправление на главную страницу
+      useAuthStore.getState().setIsStaff(isStaff);
+      useAuthStore.getState().updateStateFromCookies();
     } else {
-      const { message } = await response.json();
-      console.log(message);
+      const { detail } = response.data;
+      throw new Error(detail || "Login failed");
     }
   } catch (error) {
-    console.log(error);
+    console.error("Login error:", error);
+    throw error;
   }
 };
 

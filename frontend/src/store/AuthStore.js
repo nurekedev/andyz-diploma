@@ -1,27 +1,55 @@
 import { create } from "zustand";
 import Cookies from "js-cookie";
+import { RefreshAccessToken } from "../services/Token";
 
 const useAuthStore = create(set => ({
-  isAuthenticated: Cookies.get("isAuthenticated") === "true",
+  isStaff: Cookies.get("isStaff") === "true",
   login: (accessToken, refreshToken) => {
-    Cookies.set("isAuthenticated", "true", { expires: 15 / (24 * 60) });
-    Cookies.set("accessToken", accessToken, { expires: 5 / (24 * 60) });
-    Cookies.set("refreshToken", refreshToken, { expires: 15 / (24 * 60) });
-    set({ isAuthenticated: true });
+    Cookies.set("accessToken", accessToken, { expires: 1 / 24 }); // 1 hour
+    Cookies.set("refreshToken", refreshToken, { expires: 7 }); // 7 days
   },
   logout: () => {
-    Cookies.remove("isAuthenticated");
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
-    set({ isAuthenticated: false });
+    Cookies.remove("isStaff");
+    set({ isStaff: false });
+  },
+  setIsStaff: isStaff => {
+    Cookies.set("isStaff", isStaff ? "true" : "false", {
+      expires: 1 / 24 // 1 hour
+    });
+    set({ isStaff: isStaff });
+  },
+  updateStateFromCookies: async () => {
+    const accessToken = Cookies.get("accessToken");
+    const refreshToken = Cookies.get("refreshToken");
+
+    if (refreshToken) {
+      if (accessToken === undefined) {
+        try {
+          await RefreshAccessToken(refreshToken);
+        } catch (error) {
+          set({ isStaff: false });
+          Cookies.remove("accessToken");
+          Cookies.remove("refreshToken");
+          Cookies.remove("isStaff");
+        }
+      }
+      set({
+        isStaff: Cookies.get("isStaff") === "true"
+      });
+    } else {
+      set({ isStaff: false });
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
+      Cookies.remove("isStaff");
+    }
+  },
+  isAuthenticated: () => {
+    return !!Cookies.get("refreshToken");
   }
 }));
 
-// Восстановление состояния из куки при загрузке страницы
-if (Cookies.get("isAuthenticated") === "true") {
-  useAuthStore
-    .getState()
-    .login(Cookies.get("accessToken"), Cookies.get("refreshToken"));
-}
+useAuthStore.getState().updateStateFromCookies();
 
 export default useAuthStore;
