@@ -12,10 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { createUser } from "../../../services/api";
+import useUserStore from "../../../store/UserStore";
 
 const CreateUser = () => {
   const toast = useToast();
+  const createUser = useUserStore((state) => state.createUser); // Получите функцию createUser из состояния
   const [inputs, setInputs] = useState({
     first_name: "",
     last_name: "",
@@ -36,7 +37,6 @@ const CreateUser = () => {
   };
 
   const handleCreate = async (inputs) => {
-    // Проверяем на пустые поля
     for (const [key, value] of Object.entries(inputs)) {
       if (!value) {
         toast({
@@ -50,17 +50,33 @@ const CreateUser = () => {
     }
 
     try {
-      const response = await createUser(inputs);
-      if (response.status === 201) {
-        toast({
-          title: "User Created",
-          status: "success",
-          duration: 3000,
-          isClosable: true
-        });
-      }
+      await createUser(inputs);
+      toast({
+        title: "User Created",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
+      setInputs({
+        first_name: "",
+        last_name: "",
+        identifier_number: "",
+        date_of_birth: "",
+        gender: "",
+        phone_number: "",
+        address_line: "",
+        email: "",
+        password: ""
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Error creating user",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
     }
   };
 

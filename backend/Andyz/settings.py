@@ -138,6 +138,12 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'comment': '3/min'
     },
+    
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    
 
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 

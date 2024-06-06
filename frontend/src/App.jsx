@@ -13,20 +13,17 @@ import CourseComment from "@components/comment/CourseComment";
 import useAuthStore from "./store/AuthStore";
 import Review from "@features/review/Review";
 import Users from "./staff/pages/users/Users";
-import Cookies from "js-cookie";
+import UserPage from "./staff/pages/user/UserPage";
 
 function App() {
-  const refreshToken = Cookies.get("refreshToken");
-  const isStaff = useAuthStore((state) => state.isStaff);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  console.log("isAuthenticated:", refreshToken);
-  console.log("isStaff:", isStaff);
   return (
     <Container maxWidth={"100vw"} padding={0}>
       <Routes>
         <Route
           path="/"
-          element={refreshToken ? <Layout /> : <Navigate to="/auth" />}
+          element={isAuthenticated ? <Layout /> : <Navigate to="/auth" />}
         >
           <Route index element={<HomePage />} />
           <Route path="/courses" element={<Courses />} />
@@ -39,10 +36,11 @@ function App() {
           <Route path="/courses/:id/:lessonSlug" element={<LessonPage />} />
 
           <Route path="/users" element={<Users />} />
+          <Route path="/users/:userId" element={<UserPage />} />
         </Route>
         <Route
           path="/auth"
-          element={!refreshToken ? <AuthPage /> : <Navigate to="/" />}
+          element={!isAuthenticated ? <AuthPage /> : <Navigate to="/" />}
         />
         <Route path="/reset-password" element={<PasswordPage />} />
       </Routes>

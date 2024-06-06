@@ -25,6 +25,24 @@ export const useFetchData = (pre_slug, slug) => {
 
 export default useFetchData;
 
+export const deleteRecordApi = async ({ record_id, user_id }) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/cm-users/records/${user_id}`,
+      {
+        data: {
+          record_id: record_id
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to delete record:", error);
+    throw error;
+  }
+};
+
+
 export const fetchUser = async () => {
   try {
     const response = await axiosInstance.get(`auth/users/me`);
