@@ -13,5 +13,5 @@ const OtherReviews = ({ reviews }) => {
       )}
     </Box>
   );
-}
+};
 export default OtherReviews;

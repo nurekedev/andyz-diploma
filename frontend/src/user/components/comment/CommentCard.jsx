@@ -44,7 +44,7 @@ const CommentCard = ({ course_slug, lesson_slug, comment, data }) => {
   }));
 
   const toast = useToast();
-  const canEdit = comment?.created_by.id === data?.id;
+  const canEdit = comment?.created_by?.id === data?.id;
   
   const handleEdit = async () => {
     try {
@@ -98,8 +98,8 @@ const CommentCard = ({ course_slug, lesson_slug, comment, data }) => {
     <Box mb={"20px"} minW={320}>
       <Box display={"flex"} justifyContent={"space-between"}>
         <Box display={"flex"} alignItems={"center"} gap={2}>
-          <Avatar src={comment.created_by.avatar} size={"sm"} />
-          <Text>{comment.created_by.full_name}</Text>
+          <Avatar src={comment?.created_by?.avatar} size={"sm"} />
+          <Text>{comment?.created_by?.full_name}</Text>
         </Box>
 
         {canEdit && (
@@ -119,7 +119,7 @@ const CommentCard = ({ course_slug, lesson_slug, comment, data }) => {
         )}
       </Box>
 
-      <Text>{comment.body}</Text>
+      <Text>{comment?.body}</Text>
       <Divider mt={2} />
 
       <Modal

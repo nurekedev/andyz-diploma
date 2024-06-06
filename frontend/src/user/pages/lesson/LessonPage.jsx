@@ -5,7 +5,7 @@ import MobileLessonMenu from "../../components/lessons/MobileLessonMenu";
 
 const LessonPage = () => {
   return (
-    <Box maxW={1200} margin={"auto"} p={5} borderRadius={10}>
+    <Box maxW={1200} margin={"auto"}  borderRadius={10}>
       <MobileLessonMenu />
       <Box display={"flex"} gap={5}>
         <Box

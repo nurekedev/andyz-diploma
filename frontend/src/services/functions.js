@@ -33,3 +33,21 @@ export function findAdjacentLessons(course, lessonSlug) {
   }
   return { previousLesson, nextLesson };
 }
+
+export function findSectionSlug(course, lessonSlug) {
+    // Мапим секции в новый массив
+    if (course?.course.sections) {
+      const sections = course?.course?.sections.map(section => ({
+        slug: section.slug,
+        lessons: section.lessons
+    }));
+
+    // Ищем slug секции по slug лекции
+    for (const section of sections) {
+        if (section.lessons.some(lesson => lesson.slug === lessonSlug)) {
+            return section.slug;
+        }
+    }
+    }
+    return null; // Return null if the lesson is not found
+}

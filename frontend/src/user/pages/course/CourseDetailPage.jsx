@@ -1,6 +1,7 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/header/Sidebar";
+import MobileCourseMenu from "../../components/course/MobileCourseMenu";
 
 const CourseDetailPage = () => {
   return (
@@ -16,11 +17,12 @@ const CourseDetailPage = () => {
       borderRadius={10}
     >
       <Box
-        as="aside" 
-        position="sticky" 
-        top={"30px"} 
-        height="30vh" 
+        as="aside"
+        position="sticky"
+        top={"30px"}
+        height="30vh"
         borderRadius="10px"
+        display={{base: "none", md: "block"}}
       >
         <Sidebar />
       </Box>
@@ -35,6 +37,7 @@ const CourseDetailPage = () => {
       >
         <Outlet />
       </Box>
+      <MobileCourseMenu />
     </Box>
   );
 };

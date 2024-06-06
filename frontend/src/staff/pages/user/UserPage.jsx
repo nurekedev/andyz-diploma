@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  HStack,
   Tab,
   TabList,
   TabPanel,
@@ -14,8 +13,7 @@ import { Link, useParams } from "react-router-dom";
 import useFetchData from "../../../services/api";
 import Records from "../records/Records";
 import Markers from "../markers/Markers";
-import { MdModeEditOutline } from "react-icons/md";
-import Enrollments from "../enrollments/Enrollments"
+import Enrollments from "../enrollments/Enrollments";
 const UserPage = () => {
   const { userId } = useParams();
   const userData = useFetchData("/cm-users/custom-users", userId);
@@ -28,14 +26,9 @@ const UserPage = () => {
         mt={5}
         borderRadius={10}
       >
-        <HStack alignItems={"center"} mb={10}>
-          <Button as={Link} to={"/users"}>
-            Back to user list
-          </Button>
-          <Button ml={"auto"}>
-            <MdModeEditOutline />
-          </Button>
-        </HStack>
+        <Button as={Link} to={"/users"} mb={10}>
+          Back to user list
+        </Button>
         <UserProfileHeader user={userData} />
       </Box>
       <Box

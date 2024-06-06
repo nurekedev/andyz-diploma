@@ -133,8 +133,8 @@ def track_started(request, course_slug, section_slug, lesson_slug):
     course = Course.objects.get(slug=course_slug)
     section = Section.objects.get(slug=section_slug)
     lesson = Lesson.objects.get(slug=lesson_slug)
-
-    if Progress.objects.filter(created_by=request.user, course=course, section=section, lesson=lesson).exists():
+    print(course, section, lesson)
+    if not Progress.objects.filter(created_by=request.user, course=course, section=section, lesson=lesson).exists():
         Progress.objects.create(
             course=course, 
             lesson=lesson, 
@@ -147,7 +147,7 @@ def track_started(request, course_slug, section_slug, lesson_slug):
     serializer = ProgressSerializer(activity)
 
     return Response(serializer.data)
-
+    
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

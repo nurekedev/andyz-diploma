@@ -112,10 +112,12 @@ class SubscriptionAPIView(APIView):
         serializer = CustomCourseListSerializer(courses, many=True)
         return Response(serializer.data)
     
+    
     def post(self, request, patient_id):
         course_slug = request.data.get("course_slug")
         course = Course.objects.filter(status=Course.PUBLISHED, slug=course_slug).first()
         user = User.objects.filter(is_active=True, id=patient_id).first()
+
         
         if course and user and Enrollment.objects.filter(course=course, user=user).exists():
             return Response({"detail": "You have already subscribed to this course."}, status=status.HTTP_400_BAD_REQUEST)

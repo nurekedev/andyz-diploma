@@ -18,6 +18,7 @@ import AccountActivation from "./user/pages/actiovation/AccountActivation";
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const isStaff = useAuthStore((state) => state.isStaff);
 
   return (
     <Container maxWidth={"100vw"} padding={0}>
@@ -27,17 +28,23 @@ function App() {
           element={isAuthenticated ? <Layout /> : <Navigate to="/auth" />}
         >
           <Route index element={<HomePage />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/courses/:id" element={<CourseDetailPage />}>
-            <Route index element={<CourseInfo />} />
-            <Route path="content" element={<LessonList />} />
-            <Route path="review" element={<Review />} />
-            <Route path="comment" element={<CourseComment />} />
-          </Route>
-          <Route path="/courses/:id/:lessonSlug" element={<LessonPage />} />
-
-          <Route path="/users" element={<Users />} />
-          <Route path="/users/:userId" element={<UserPage />} />
+          {isStaff ? (
+            <>
+              <Route path="/users" element={<Users />} />
+              <Route path="/users/:userId" element={<UserPage />} />
+            </>
+          ) : (
+            <>
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/courses/:id" element={<CourseDetailPage />}>
+                <Route index element={<CourseInfo />} />
+                <Route path="content" element={<LessonList />} />
+                <Route path="review" element={<Review />} />
+                <Route path="comment" element={<CourseComment />} />
+              </Route>
+              <Route path="/courses/:id/:lessonSlug" element={<LessonPage />} />
+            </>
+          )}
         </Route>
         <Route
           path="/auth"

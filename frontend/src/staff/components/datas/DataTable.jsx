@@ -54,9 +54,7 @@ const DataTable = () => {
                 <Th display={{ base: "none", md: "table-cell" }}>Avatar</Th>
                 <Th display={{ base: "none", xl: "table-cell" }}>Email</Th>
                 <Th>Full Name</Th>
-                <Th display={{ base: "none", md: "table-cell" }}>
-                  Identifier number
-                </Th>
+                <Th display={{ base: "none", md: "table-cell" }}>gender</Th>
                 <Th display={{ base: "none", md: "table-cell" }}>Is active</Th>
                 <Th>Actions</Th>
               </Tr>
@@ -79,7 +77,7 @@ const DataTable = () => {
                     </Link>
                   </Td>
                   <Td display={{ base: "none", md: "table-cell" }}>
-                    <Link to={`${item.id}`}>{item.identifier_number}</Link>
+                    <Link to={`${item.id}`}>{item.gender}</Link>
                   </Td>
                   <Td display={{ base: "none", md: "table-cell" }}>
                     {item.is_active ? (

@@ -17,7 +17,8 @@ const useCommentStore = create(set => ({
   addComment: async (courseId, lessonSlug, comment) => {
     try {
       const response = await addComment(courseId, lessonSlug, comment);
-      set(state => ({ comments: [...state.comments, response] }));
+      // Call fetchComments after successfully adding a comment
+      await useCommentStore.getState().fetchComments(courseId, lessonSlug);
       return response;
     } catch (error) {
       console.error("Failed to add comment:", error);

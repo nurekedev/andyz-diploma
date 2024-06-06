@@ -2,7 +2,13 @@ import { Avatar, Box, Heading, Text } from "@chakra-ui/react";
 
 const UserProfileHeader = ({ user }) => {
   return (
-    <Box mb={10} display={{ base: "block", md: "flex" }} gap={5}>
+    <Box
+      mb={10}
+      display={"flex"}
+      flexDir={{ base: "column", md: "row" }}
+      alignItems={"center"}
+      gap={5}
+    >
       <Avatar src={user?.avatar} height={"full"} size="2xl" />
       <Box gap={5} display={{ base: "block", md: "flex" }}>
         <Box>

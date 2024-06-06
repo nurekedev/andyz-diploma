@@ -5,6 +5,7 @@ import useReviewStore from "../../../store/ReviewStore";
 import ReviewCard from "../../components/review/ReviewCard";
 import WriteReview from "../../components/review/WriteReview";
 import OtherReviews from "../../components/review/OtherReviews";
+import AverageReview from "../../components/review/AverageReview";
 
 const Review = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const Review = () => {
 
   return (
     <Box display={"flex"} flexDir={"column"} gap={2} p={4} maxW={850}>
+      <AverageReview />
       {userReview?.length > 0 ? (
         <ReviewCard review={userReview[0]} slug={id} edit={true} />
       ) : (

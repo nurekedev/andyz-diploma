@@ -6,7 +6,7 @@ const useUserStore = create(set => ({
   currentPage: 1,
   itemsPerPage: 20,
   fetchData: async () => {
-    const response = await axiosInstance.get(`/auth/users/`);
+    const response = await axiosInstance.get(`/cm-users/custom-users/`);
     set({ data: response.data });
   },
   setPage: page => set({ currentPage: page }),
@@ -26,10 +26,7 @@ const useUserStore = create(set => ({
     }));
   },
   createUser: async newUserData => {
-    const response = await axiosInstance.post(
-      `/auth/users/`,
-      newUserData
-    );
+    const response = await axiosInstance.post(`/auth/users/`, newUserData);
     set(state => ({
       data: [...state.data, response.data]
     }));

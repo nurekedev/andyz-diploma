@@ -1,6 +1,7 @@
-import { Box, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import Comment from "../../features/comment/Comment";
 import NavigationButtons from "../../features/NavigationButtons";
+import { trackAndMarkLesson } from "../../../services/api";
 
 function LessonHeader({ lessonTitle, id, previousLesson, nextLesson }) {
   return (
@@ -15,8 +16,21 @@ function LessonHeader({ lessonTitle, id, previousLesson, nextLesson }) {
   );
 }
 
+function LessonContent({
+  lessonDetailData,
+  sortedContents,
+  courseSlug,
+  sectionSlug,
+  lessonSlug
+}) {
+  const handleDone = async () => {
+    try {
+      await trackAndMarkLesson(courseSlug, sectionSlug, lessonSlug);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-function LessonContent({ lessonDetailData, sortedContents }) {
   return (
     <Box>
       <Text as={"b"} fontSize={24}>
@@ -37,6 +51,15 @@ function LessonContent({ lessonDetailData, sortedContents }) {
           {content.photo ? <Image src={content.photo} /> : null}
         </div>
       ))}
+      <Button
+        bg={"blue.900"}
+        _hover={{ bg: "blue", color: "white" }}
+        onClick={() => {
+          handleDone();
+        }}
+      >
+        Mark as Done
+      </Button>
     </Box>
   );
 }
@@ -50,4 +73,4 @@ function LessonComments({ id, lessonSlug }) {
   );
 }
 
-export { LessonHeader, LessonContent, LessonComments}
+export { LessonHeader, LessonContent, LessonComments };

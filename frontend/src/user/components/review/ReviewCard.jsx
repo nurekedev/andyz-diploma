@@ -26,7 +26,6 @@ import useReviewStore from "@store/ReviewStore";
 
 const ReviewCard = ({ slug, review, edit }) => {
   const { deleteReview, updateReview } = useReviewStore();
-
   // Состояние для отслеживания развернуто ли описание
   const [isExpanded, setIsExpanded] = useState(false);
   const {
@@ -47,7 +46,7 @@ const ReviewCard = ({ slug, review, edit }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await updateReview(slug,review?.id, rating, description );
+      await updateReview(slug, review?.id, rating, description);
       onEditClose();
     } catch (error) {
       console.error("Error submitting review:", error);
@@ -82,7 +81,7 @@ const ReviewCard = ({ slug, review, edit }) => {
               <div className="rating">
                 {stars.map((star) => (
                   <span
-                    key={star}
+                    key={star} // Добавлен ключ
                     className={`star ${
                       star <= review?.rating ? "gold" : "gray"
                     }`}
@@ -162,10 +161,10 @@ const ReviewCard = ({ slug, review, edit }) => {
                 mt={3}
               >
                 <Box display={"flex"} alignItems={"center"} gap={3}>
-                  {[...Array(5)].map((star, index) => {
+                  {[...Array(5)].map((_, index) => {
                     const currentRating = index + 1;
                     return (
-                      <label key={star}>
+                      <label key={currentRating}>
                         <input
                           className="rating-input"
                           type="radio"

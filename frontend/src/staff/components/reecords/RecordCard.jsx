@@ -21,7 +21,7 @@ const RecordCard = ({ record, userId }) => {
           onClick={() => {
             handleDelete();
           }}
-          color= "red.300"
+          color="red.300"
           _hover={{ color: "red.500" }}
           cursor={"pointer"}
           fontWeight={"bold"}

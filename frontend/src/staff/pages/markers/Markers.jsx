@@ -11,7 +11,6 @@ const Markers = () => {
     useEffect(() => {
       fetchMarkers(userId);
     }, [fetchMarkers, userId])
-    console.log(markers);
   return (
     <div>
       <WriteMarker />

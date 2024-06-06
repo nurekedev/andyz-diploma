@@ -28,9 +28,9 @@ const MobileMenu = () => {
         mb={10}
       >
         <Link to={"/"}>
-          <Image src={"/logo.png"} height={"70px"} objectFit={"cover"} />
+          <Image src={"/logo.png"} height={"40px"} objectFit={"cover"} m={3} />
         </Link>
-        <Button onClick={onOpen} m={5}>
+        <Button onClick={onOpen} m={3}>
           <AiOutlineMenu />
         </Button>
         <Drawer onClose={onClose} isOpen={isOpen}>
@@ -43,11 +43,11 @@ const MobileMenu = () => {
               </Button>
               {isStaff ? (
                 <Button onClick={onClose}>
-                  <Link to={"/courses"}>My Courses</Link>
+                  <Link to={"/users"}>Users</Link>
                 </Button>
               ) : (
                 <Button onClick={onClose}>
-                  <Link to={"/users"}>Users</Link>
+                  <Link to={"/courses"}>My Courses</Link>
                 </Button>
               )}
 

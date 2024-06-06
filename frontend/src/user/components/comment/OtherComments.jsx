@@ -4,8 +4,6 @@ const OtherComments = ({ comments, id, lesson_slug, data }) => {
   return (
     <div>
       {comments
-        .slice()
-        .reverse()
         .map((comment) => (
           <CommentCard
             key={comment.id}

@@ -41,7 +41,26 @@ export const deleteRecordApi = async ({ record_id, user_id }) => {
     throw error;
   }
 };
+
+export const trackAndMarkLesson = async (courseSlug, sectionSlug, lessonSlug) => {
+  const trackStartedUrl = `/progress/track-started/${courseSlug}/${sectionSlug}/${lessonSlug}/`;
+  const markAsDoneUrl = `/progress/mark-as-done/${courseSlug}/${sectionSlug}/${lessonSlug}/`;
+
+  try {
+    // Отправка первого запроса
+    const trackStartedResponse = await axiosInstance.post(trackStartedUrl);
+    console.log("Track Started Response:", trackStartedResponse.data);
+
+    // Отправка второго запроса после успешного выполнения первого
+    const markAsDoneResponse = await axiosInstance.post(markAsDoneUrl);
+    console.log("Mark As Done Response:", markAsDoneResponse.data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 export const deleteMarkerApi = async ({ marker_id, user_id }) => {
+  console.log("deleteMarkerApi", marker_id, user_id);
   try {
     const response = await axiosInstance.delete(
       `/cm-users/markers/${user_id}`,
@@ -61,6 +80,15 @@ export const deleteMarkerApi = async ({ marker_id, user_id }) => {
 export const fetchUser = async () => {
   try {
     const response = await axiosInstance.get(`auth/users/me`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+    throw error;
+  }
+};
+export const fetchEnrollments = async userId => {
+  try {
+    const response = await axiosInstance.get(`/cm-users/enrollments/${userId}`);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch user data:", error);

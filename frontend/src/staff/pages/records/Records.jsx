@@ -33,7 +33,9 @@ const Records = () => {
         .slice()
         .reverse()
         .map((record) => {
-          return <RecordCard key={record.id} record={record} userId={userId} />;
+          return (
+            <RecordCard key={record.id + 12} record={record} userId={userId} />
+          );
         })}
     </div>
   );

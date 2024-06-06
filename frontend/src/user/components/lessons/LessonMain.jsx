@@ -1,6 +1,9 @@
 import { Box, Divider, Skeleton, useColorModeValue } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { findAdjacentLessons } from "../../../services/functions";
+import {
+  findAdjacentLessons,
+  findSectionSlug
+} from "../../../services/functions";
 import useCourseStore from "../../../store/CourseStore";
 import { useEffect } from "react";
 import {
@@ -25,12 +28,12 @@ function LessonMain() {
       setDefaultSectionIndex(sectionIndex);
     }
   }, [courseDetailData, lessonSlug, setDefaultSectionIndex]);
-
   const { previousLesson, nextLesson } = findAdjacentLessons(
     courseData,
     lessonSlug
   );
 
+  const sectionSlug = findSectionSlug(courseDetailData, lessonSlug);
   const sortedContents = lessonDetailData
     ? lessonDetailData.lessons.contents.sort((a, b) => a.my_order - b.my_order)
     : [];
@@ -38,7 +41,7 @@ function LessonMain() {
   return (
     <Box
       display={"flex"}
-      w={"full"}
+      w={"100%"}
       p={5}
       justifyContent={"space-between"}
       bg={useColorModeValue("white", "gray.dark")}
@@ -56,6 +59,9 @@ function LessonMain() {
             <LessonContent
               lessonDetailData={lessonDetailData}
               sortedContents={sortedContents}
+              courseSlug={id}
+              lessonSlug={lessonSlug}
+              sectionSlug={sectionSlug}
             />
             <Divider mt={4} mb={2} />
             <LessonComments id={id} lessonSlug={lessonSlug} />

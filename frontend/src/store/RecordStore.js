@@ -9,7 +9,6 @@ const useRecordStore = create(set => ({
   fetchRecords: async patientId => {
     try {
       const records = await axiosInstance.get(`/cm-users/records/${patientId}`);
-      console.log(records.data);
       set({ records: records.data }); // Установка records.data
     } catch (error) {
       console.error("Failed to fetch records:", error);
@@ -17,12 +16,14 @@ const useRecordStore = create(set => ({
   },
 
   addRecord: async (patientId, body) => {
-    const response = await axiosInstance.post(
-      `/cm-users/records/${patientId}`,
-      body
-    );
-    set(state => ({ records: [...state.records, response.data] }));
+    try {
+      await axiosInstance.post(`/cm-users/records/${patientId}`, body);
+      await useRecordStore.getState().fetchRecords(patientId);
+    } catch (error) {
+      console.error("Failed to add record:", error);
+    }
   },
+
   deleteRecord: async (patientId, recordId) => {
     try {
       await deleteRecordApi({ record_id: recordId, user_id: patientId });

@@ -1,6 +1,8 @@
 import {
   Button,
   Divider,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   Textarea,
@@ -34,41 +36,52 @@ const WriteRecord = () => {
   };
 
   return (
-    <VStack alignItems={"flex-start"} gap={3}>
-      <Heading fontSize={"2xl"}>Type the patient record</Heading>
-      <Input
-        type="text"
-        placeholder="Title of record"
-        value={inputs.title}
-        onChange={(e) => {
-          setInputs((prev) => ({
-            ...prev,
-            title: e.target.value
-          }));
-        }}
-      />
-      <Input
-        type="date"
-        w={200}
-        value={inputs.date}
-        onChange={(e) => {
-          setInputs((prev) => ({
-            ...prev,
-            date: e.target.value
-          }));
-        }}
-      />
-      <Textarea
-        placeholder="Message of record"
-        resize={"none"}
-        value={inputs.description}
-        onChange={(e) => {
-          setInputs((prev) => ({
-            ...prev,
-            description: e.target.value
-          }));
-        }}
-      />
+    <VStack alignItems={"flex-start"} gap={3} mt={10}>
+      <Heading fontSize={32} mb={5}>
+        Type the patient record
+      </Heading>
+      <FormControl>
+        <FormLabel>Title of marker</FormLabel>
+        <Input
+          type="text"
+          placeholder="Title of marker"
+          value={inputs.title}
+          onChange={(e) => {
+            setInputs((prev) => ({
+              ...prev,
+              title: e.target.value
+            }));
+          }}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Pick a date</FormLabel>
+        <Input
+          type="date"
+          w={200}
+          value={inputs.date}
+          onChange={(e) => {
+            setInputs((prev) => ({
+              ...prev,
+              date: e.target.value
+            }));
+          }}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Write more information</FormLabel>
+        <Textarea
+          placeholder="Message of marker"
+          resize={"none"}
+          value={inputs.description}
+          onChange={(e) => {
+            setInputs((prev) => ({
+              ...prev,
+              description: e.target.value
+            }));
+          }}
+        />
+      </FormControl>
       <Button
         onClick={() => {
           handleCreate(inputs);

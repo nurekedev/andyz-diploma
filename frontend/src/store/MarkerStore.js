@@ -16,11 +16,12 @@ const useMarkerStore = create(set => ({
   },
 
   addMarker: async (patientId, body) => {
-    const response = await axiosInstance.post(
-      `/cm-users/markers/${patientId}`,
-      body
-    );
-    set(state => ({ markers: [...state.markers, response.data] }));
+    try {
+      await axiosInstance.post(`/cm-users/markers/${patientId}`, body);
+      await useMarkerStore.getState().fetchMarkers(patientId);
+    } catch (error) {
+      console.error("Failed to add marker:", error);
+    }
   },
   deleteMarker: async (patientId, markerId) => {
     try {
