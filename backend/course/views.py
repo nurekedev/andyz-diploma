@@ -313,6 +313,14 @@ class RatingUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
                 IsAuthenticated, IsOwnerOrAdminPermission]
         return super().get_permissions()
 
+
+class CourseList(ListAPIView):
+    serializer_class = CourseListSerializer
+    queryset = Course.objects.filter(status=Course.PUBLISHED)
+    permission_classes = [IsAdminUser]
+
+
+
 rating_api_view = RatingAPIView.as_view()
 rating_api_destroy_update_view = RatingUpdateDestroyAPIView.as_view()
 rating_api_view = RatingAPIView.as_view()
@@ -321,3 +329,4 @@ course_comment_api_view = CourseCommentAPIView.as_view()
 course_api_destroy_update_view = CourseCommentUpdateDestroyAPIView.as_view()
 lesson_comment_api_view = LessonCommentAPIView.as_view()
 lesson_api_destroy_update_view = LessonCommentUpdateDestroyAPIView.as_view()
+course_list = CourseList.as_view()
