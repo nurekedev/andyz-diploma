@@ -16,7 +16,6 @@ class QuestionContactSerializer(serializers.Serializer):
         max_length=100, write_only=True, help_text=("Имя"))
     email = serializers.EmailField(max_length=100, help_text=("Электронная почта"))
     question_text = serializers.CharField(max_length=255, help_text=("Текст вопроса"))
-    is_followed_mailing = serializers.BooleanField(help_text=('Подписка на рассылку'))
 
 class MarkerSerializer(serializers.ModelSerializer):
     class Meta:
