@@ -32,7 +32,7 @@ from progress.serializers import  EnrollmentCreateSerializer
 User = get_user_model()
 
 class UserViewSet(ModelViewSet):
-    queryset = User.objects.filter(is_active=False, is_staff=False, is_superuser=False)
+    queryset = User.objects.filter(is_staff=False, is_superuser=False)
     permission_classes = [permissions.IsAdminUser]
     filter_backends = [SearchFilter]
 
@@ -101,7 +101,7 @@ class SubscriptionAPIView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, patient_id):
-        patient = User.objects.filter(is_active=True, id=patient_id).first()
+        patient = User.objects.filter( id=patient_id).first()
         if not patient:
             return Response(status=status.HTTP_404_NOT_FOUND)
         enrollments = Enrollment.objects.filter(user=patient)

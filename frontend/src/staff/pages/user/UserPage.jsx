@@ -1,5 +1,7 @@
 import {
   Box,
+  Button,
+  HStack,
   Tab,
   TabList,
   TabPanel,
@@ -8,43 +10,55 @@ import {
   useColorModeValue
 } from "@chakra-ui/react";
 import UserProfileHeader from "../../components/user/UserProfileHeader";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useFetchData from "../../../services/api";
 import Records from "../records/Records";
-import Enrollments from "../enrollments/Enrollments";
-
+import Markers from "../markers/Markers";
+import { MdModeEditOutline } from "react-icons/md";
+import Enrollments from "../enrollments/Enrollments"
 const UserPage = () => {
   const { userId } = useParams();
   const userData = useFetchData("/cm-users/custom-users", userId);
 
   return (
-    <Box
-      maxW={1200}
-      m={"auto"}
-      bg={useColorModeValue("white", "gray.dark")}
-      p={4}
-    >
-      <Box>
+    <Box maxW={1200} m={"auto"}>
+      <Box
+        bg={useColorModeValue("white", "gray.dark")}
+        p={4}
+        mt={5}
+        borderRadius={10}
+      >
+        <HStack alignItems={"center"} mb={10}>
+          <Button as={Link} to={"/users"}>
+            Back to user list
+          </Button>
+          <Button ml={"auto"}>
+            <MdModeEditOutline />
+          </Button>
+        </HStack>
         <UserProfileHeader user={userData} />
       </Box>
-      <Box>
-        <Tabs> 
+      <Box
+        bg={useColorModeValue("white", "gray.dark")}
+        p={4}
+        mt={5}
+        borderRadius={10}
+      >
+        <Tabs>
           <TabList>
-            <Tab>Enrolments</Tab>
             <Tab>Records</Tab>
             <Tab>Markers</Tab>
+            <Tab>Enrollments</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel>
-              <Box>
-                <Enrollments />
-              </Box>
-            </TabPanel>
             <TabPanel>
               <Records />
             </TabPanel>
             <TabPanel>
-              <Box>3</Box>
+              <Markers />
+            </TabPanel>
+            <TabPanel>
+              <Enrollments />
             </TabPanel>
           </TabPanels>
         </Tabs>

@@ -23,7 +23,9 @@ const Records = () => {
       <Box position="relative" padding="10" mt={10} mb={5}>
         <Divider />
         <AbsoluteCenter bg={useColorModeValue("white", "gray.dark")} px={4}>
-          <Text fontSize={24}>Other records</Text>
+          <Text fontSize={24} textAlign={"center"}>
+            Other records
+          </Text>
         </AbsoluteCenter>
       </Box>
 

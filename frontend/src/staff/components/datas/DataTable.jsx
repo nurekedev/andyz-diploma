@@ -39,6 +39,8 @@ const DataTable = () => {
     }
   };
 
+  console.log(data);
+
   return (
     <Box>
       {data.length === 0 ? (
@@ -48,27 +50,51 @@ const DataTable = () => {
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th>ID</Th>
-                <Th>Avatar</Th>
-                <Th>Email</Th>
+                <Th display={{ base: "none", md: "table-cell" }}>ID</Th>
+                <Th display={{ base: "none", md: "table-cell" }}>Avatar</Th>
+                <Th display={{ base: "none", xl: "table-cell" }}>Email</Th>
                 <Th>Full Name</Th>
+                <Th display={{ base: "none", md: "table-cell" }}>
+                  Identifier number
+                </Th>
+                <Th display={{ base: "none", md: "table-cell" }}>Is active</Th>
                 <Th>Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
               {currentData.map((item) => (
                 <Tr key={item.id}>
-                  <Td>{item.id}</Td>
-                  <Td>
+                  <Td display={{ base: "none", md: "table-cell" }}>
+                    {item.id}
+                  </Td>
+                  <Td display={{ base: "none", md: "table-cell" }}>
                     <Avatar src={item.avatar} />
                   </Td>
-                  <Td>
+                  <Td display={{ base: "none", xl: "table-cell" }}>
                     <Link to={`${item.id}`}>{item.email}</Link>
                   </Td>
-                  <Td>{item.full_name}</Td>
+                  <Td>
+                    <Link to={`${item.id}`}>
+                      {item.first_name} {item.last_name}
+                    </Link>
+                  </Td>
+                  <Td display={{ base: "none", md: "table-cell" }}>
+                    <Link to={`${item.id}`}>{item.identifier_number}</Link>
+                  </Td>
+                  <Td display={{ base: "none", md: "table-cell" }}>
+                    {item.is_active ? (
+                      <Text color={"green.500"}>Yes</Text>
+                    ) : (
+                      <Text color={"red.500"}>No</Text>
+                    )}
+                  </Td>
                   <Td>
                     <Button
-                      bg={"red.500"}
+                      bg={"red.400"}
+                      color={"white"}
+                      _hover={{
+                        bg: "red.600"
+                      }}
                       onClick={() => {
                         handleDelete(item.id);
                       }}

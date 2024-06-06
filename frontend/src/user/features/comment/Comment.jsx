@@ -1,9 +1,9 @@
 import { Box, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
+import useFetchData from "../../../services/api";
 import WriteComment from "../../components/comment/WriteComment";
 import OtherComments from "../../components/comment/OtherComments";
-import { useEffect } from "react";
-import useCommentStore from "../../../store/CommentStore";
-import useFetchData from "../../../services/api";
+import useCommentStore from "../../../store/CommentStore"
 
 const Comment = ({ id, lessonSlug }) => {
   const userData = useFetchData("auth/users/me", "");

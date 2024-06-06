@@ -1,8 +1,11 @@
+import { Button } from "@chakra-ui/react";
 
 const Enrollments = () => {
   return (
-    <div>Enrollments</div>
-  )
-}
+    <div>
+      <Button>Add Enrollment</Button>
+    </div>
+  );
+};
 
-export default Enrollments
+export default Enrollments;

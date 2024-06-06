@@ -1,7 +1,6 @@
 venv/
 
 
-
 # Django #
 *.log
 *.pot
@@ -13,6 +12,7 @@ media
 # Backup files # 
 *.bak 
 */.idea
+*.sqlite3
 
 # If you are using PyCharm # 
 # User-specific stuff

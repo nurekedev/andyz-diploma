@@ -38,12 +38,11 @@ class MarkerCreateSerializer(serializers.ModelSerializer):
         fields = ('date', 'title', 'description')
 
 class UserListSerializer(UserSerializer):
-    full_name = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
-        fields = ('id', 'email', 'full_name', 'avatar', 'blood_group', 'gender')
+        fields = ('id', 'first_name', 'last_name','email', 'avatar', 'blood_group', 'gender', 'is_active')
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"

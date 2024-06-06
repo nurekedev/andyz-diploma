@@ -3,7 +3,7 @@ import AllUsers from "../../components/users/AllUsers";
 import CreateUser from "../../components/users/CreateUser";
 const Users = () => {
   return (
-    <Box maxW={1000} m={"auto"} p={4} bg={useColorModeValue( "white","gray.dark",)}>
+    <Box maxW={1200} m={"auto"} p={4} bg={useColorModeValue( "white","gray.dark",)}>
       <Tabs isFitted >
         <TabList>
           <Tab>Users</Tab>

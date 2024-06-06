@@ -4,15 +4,15 @@ import {
   Heading,
   Input,
   Textarea,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
-import useRecordStore from "../../../store/RecordStore";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import useMarkerStore from "../../../store/MarkerStore";
 
-const WriteRecord = () => {
+const WriteMarker = () => {
   const { userId } = useParams();
-  const { addRecord } = useRecordStore();
+  const { addMarker } = useMarkerStore();
   const [inputs, setInputs] = useState({
     date: "",
     title: "",
@@ -20,13 +20,12 @@ const WriteRecord = () => {
   });
 
   const handleCreate = async (inputs) => {
+    console.log(inputs);
     try {
-      console.log(inputs);
-      await addRecord(userId, inputs);
+      await addMarker(userId, inputs);
       setInputs({
         date: "",
-        title: "",
-        description: ""
+        title: ""
       });
     } catch (error) {
       console.log(error);
@@ -35,10 +34,11 @@ const WriteRecord = () => {
 
   return (
     <VStack alignItems={"flex-start"} gap={3}>
-      <Heading fontSize={"2xl"}>Type the patient record</Heading>
+      <Heading fontSize={"2xl"}>Type important markers</Heading>
+
       <Input
         type="text"
-        placeholder="Title of record"
+        placeholder="Title of marker"
         value={inputs.title}
         onChange={(e) => {
           setInputs((prev) => ({
@@ -59,7 +59,7 @@ const WriteRecord = () => {
         }}
       />
       <Textarea
-        placeholder="Message of record"
+        placeholder="Message of marker"
         resize={"none"}
         value={inputs.description}
         onChange={(e) => {
@@ -73,15 +73,12 @@ const WriteRecord = () => {
         onClick={() => {
           handleCreate(inputs);
         }}
-        color={"white"}
-        bg={"green.600"}
-        _hover={{ bg: "green.800" }}
       >
-        Add record
+        Add marker
       </Button>
       <Divider></Divider>
     </VStack>
   );
 };
 
-export default WriteRecord;
+export default WriteMarker;

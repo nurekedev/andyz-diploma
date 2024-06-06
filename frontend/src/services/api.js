@@ -41,7 +41,22 @@ export const deleteRecordApi = async ({ record_id, user_id }) => {
     throw error;
   }
 };
-
+export const deleteMarkerApi = async ({ marker_id, user_id }) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/cm-users/markers/${user_id}`,
+      {
+        data: {
+          marker_id: marker_id
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to delete record:", error);
+    throw error;
+  }
+};
 
 export const fetchUser = async () => {
   try {

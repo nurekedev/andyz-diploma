@@ -14,6 +14,7 @@ import useAuthStore from "./store/AuthStore";
 import Review from "@features/review/Review";
 import Users from "./staff/pages/users/Users";
 import UserPage from "./staff/pages/user/UserPage";
+import AccountActivation from "./user/pages/actiovation/AccountActivation";
 
 function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -43,6 +44,7 @@ function App() {
           element={!isAuthenticated ? <AuthPage /> : <Navigate to="/" />}
         />
         <Route path="/reset-password" element={<PasswordPage />} />
+        <Route path="/activate/:uid/:token" element={<AccountActivation />} />
       </Routes>
     </Container>
   );

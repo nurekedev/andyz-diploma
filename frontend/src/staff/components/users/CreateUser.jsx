@@ -16,7 +16,7 @@ import useUserStore from "../../../store/UserStore";
 
 const CreateUser = () => {
   const toast = useToast();
-  const createUser = useUserStore((state) => state.createUser); // Получите функцию createUser из состояния
+  const createUser = useUserStore((state) => state.createUser);
   const [inputs, setInputs] = useState({
     first_name: "",
     last_name: "",
@@ -26,7 +26,8 @@ const CreateUser = () => {
     phone_number: "",
     address_line: "",
     email: "",
-    password: ""
+    password: "",
+    re_password: ""
   });
 
   const handleGenderChange = (gender) => {
@@ -36,8 +37,11 @@ const CreateUser = () => {
     }));
   };
 
-  const handleCreate = async (inputs) => {
-    for (const [key, value] of Object.entries(inputs)) {
+  const handleCreate = async () => {
+    const updatedInputs = { ...inputs, re_password: inputs.password };
+    console.log(updatedInputs);
+
+    for (const [key, value] of Object.entries(updatedInputs)) {
       if (!value) {
         toast({
           title: `Field ${key.replace(/_/g, " ")} is required`,
@@ -50,7 +54,7 @@ const CreateUser = () => {
     }
 
     try {
-      await createUser(inputs);
+      await createUser(updatedInputs);
       toast({
         title: "User Created",
         status: "success",
@@ -66,7 +70,8 @@ const CreateUser = () => {
         phone_number: "",
         address_line: "",
         email: "",
-        password: ""
+        password: "",
+        re_password: ""
       });
     } catch (error) {
       console.log(error);
@@ -81,7 +86,13 @@ const CreateUser = () => {
   };
 
   return (
-    <Box display={"flex"} flexDir={"column"} gap={10} maxW={600} m={"auto"}>
+    <Box
+      display={"flex"}
+      flexDir={"column"}
+      gap={5}
+      maxW={600}
+      m={"3rem auto "}
+    >
       <Box
         display={{
           base: "block",
@@ -234,7 +245,7 @@ const CreateUser = () => {
           />
         </FormControl>
       </Box>
-      <Button onClick={() => handleCreate(inputs)}>Create User</Button>
+      <Button onClick={handleCreate}>Create User</Button>
     </Box>
   );
 };

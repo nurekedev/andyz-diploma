@@ -13,13 +13,20 @@ const RecordCard = ({ record, userId }) => {
   };
   return (
     <Box mb={4}>
-      <HStack>
+      <HStack justifyContent={"space-between"}>
         <Heading fontSize={20}>{record.title}</Heading>
         <Box
+          display={"flex"}
+          alignItems={"center"}
           onClick={() => {
             handleDelete();
           }}
+          color= "red.300"
+          _hover={{ color: "red.500" }}
+          cursor={"pointer"}
+          fontWeight={"bold"}
         >
+          Delete
           <MdDelete />
         </Box>
       </HStack>

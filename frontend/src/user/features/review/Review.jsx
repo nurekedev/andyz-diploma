@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import OtherReviews from "../../components/review/OtherReviews";
-import WriteReview from "../../components/review/WriteReview";
 import { Divider, Box, Text } from "@chakra-ui/react";
-import useReviewStore from "@store/ReviewStore";
 import { useEffect } from "react";
+import useReviewStore from "../../../store/ReviewStore";
 import ReviewCard from "../../components/review/ReviewCard";
+import WriteReview from "../../components/review/WriteReview";
+import OtherReviews from "../../components/review/OtherReviews";
 
 const Review = () => {
   const { id } = useParams();
