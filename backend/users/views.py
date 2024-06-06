@@ -32,7 +32,7 @@ from progress.serializers import  EnrollmentCreateSerializer
 User = get_user_model()
 
 class UserViewSet(ModelViewSet):
-    queryset = User.objects.filter(is_active=False, is_staff=False, is_superuser=False)
+    queryset = User.objects.filter(is_staff=False, is_superuser=False)
     permission_classes = [permissions.IsAdminUser]
     filter_backends = [SearchFilter]
 

@@ -325,9 +325,8 @@ class CourseList(ListAPIView):
 def get_average_rating(request, course_slug):
     course = get_object_or_404(Course, slug=course_slug)
     average_rating = Rating.objects.filter(course=course).aggregate(Avg('rating'))
-    rating_by_star = Rating.objects.filter(course=course).values('rating').annotate(rating_count=Count('rating'))
-    print(rating_by_star)
-
+    rating_by_star = Rating.objects.filter(course=course).values('rating').annotate(rating_count=Count('rating')) 
+    
 
     return Response({'average_rating': average_rating, 'rating_by_star': rating_by_star})
 
