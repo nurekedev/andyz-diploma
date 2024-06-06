@@ -320,6 +320,18 @@ class CourseList(ListAPIView):
     permission_classes = [IsAdminUser]
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_average_rating(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+    average_rating = Rating.objects.filter(course=course).aggregate(Avg('rating'))
+    rating_by_star = Rating.objects.filter(course=course).values('rating').annotate(rating_count=Count('rating'))
+    print(rating_by_star)
+
+
+    return Response({'average_rating': average_rating, 'rating_by_star': rating_by_star})
+
+
 
 rating_api_view = RatingAPIView.as_view()
 rating_api_destroy_update_view = RatingUpdateDestroyAPIView.as_view()

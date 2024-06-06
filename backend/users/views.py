@@ -130,7 +130,6 @@ class QuestionContactView(APIView):
     - name: имя (str)
     - email: почта (str)
     - question_text: текст вопроса (str)
-    - is_followed_mailing: подписка на рассылку (bool)
     """
     permission_classes = [permissions.AllowAny]
 
@@ -143,7 +142,7 @@ class QuestionContactView(APIView):
                 applicant_question_text = serializer.validated_data['question_text']
 
 
-                html = render_to_string('email_form.html', {
+                html = render_to_string('main/question.html', {
                     'name': applicant_name,
                     'email': applicant_email,
                     'question': applicant_question_text
@@ -167,5 +166,6 @@ class QuestionContactView(APIView):
 record_get_post_delete = RecordAPIView.as_view()
 marker_get_post_delete = MarkerAPIView.as_view()
 enrollment_list_create = SubscriptionAPIView.as_view()
+question_contact = QuestionContactView.as_view()
 
 

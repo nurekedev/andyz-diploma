@@ -8,6 +8,7 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 urlpatterns = [
     path('all-courses/', course_list, name='all-course'),
     path('my-courses/', get_my_courses),
+    path('get_average_rating/<slug:course_slug>', get_average_rating),
     path('<slug:slug>/', get_course, name='course-detail'),
     path('lessons/<slug:slug>/', get_lesson_by_section, name='lesson-detail'),
     
