@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import axiosInstance from "../../../services/axiosInstance";
+import { Box, Button, Heading, VStack } from "@chakra-ui/react";
 
 const AccountActivation = () => {
-  const { uid, token } = useParams();
+  const [searchParams] = useSearchParams();
+  const uid = searchParams.get("uid");
+  const token = searchParams.get("token");
   const [activationStatus, setActivationStatus] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const activateAccount = async () => {
       try {
-        const response = await axios.post("/api/auth/activate/", {
+        const response = await axiosInstance.post("/auth/users/activation/", {
           uid,
           token
         });
@@ -19,6 +22,7 @@ const AccountActivation = () => {
         }
         setActivationStatus("success");
       } catch (error) {
+        console.log(error);
         setActivationStatus("failure");
       }
     };
@@ -27,21 +31,44 @@ const AccountActivation = () => {
   }, [uid, token]);
 
   return (
-    <div>
+    <Box
+      display={"flex"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      h={"100vh"}
+    >
       {activationStatus === "success" ? (
-        <div>
-          <h1>Ваш аккаунт успешно активирован!</h1>
-          <button onClick={() => navigate("/login")}>Перейти к входу</button>
-        </div>
+        <Box>
+          <Heading fontSize={24} textAlign={"center"}>
+            Your account has been successfully activated!
+          </Heading>
+          <Button
+            onClick={() => navigate("/")}
+            bg={"green.500"}
+            color={"white"}
+            _hover={{ bg: "green.700" }}
+          >
+            Back to main page
+          </Button>
+        </Box>
       ) : activationStatus === "failure" ? (
-        <div>
-          <h1>Произошла ошибка при активации аккаунта.</h1>
-          <button onClick={() => navigate("/")}>Вернуться на главную</button>
-        </div>
+        <VStack>
+          <Heading fontSize={24} textAlign={"center"}>
+            An error occurred <br /> while activating the account
+          </Heading>
+          <Button
+            onClick={() => navigate("/")}
+            bg={"red.500"}
+            color={"white"}
+            _hover={{ bg: "red.700" }}
+          >
+            Back to main page
+          </Button>
+        </VStack>
       ) : (
         <h1>Активация аккаунта...</h1>
       )}
-    </div>
+    </Box>
   );
 };
 

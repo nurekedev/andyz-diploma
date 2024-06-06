@@ -44,7 +44,7 @@ function App() {
           element={!isAuthenticated ? <AuthPage /> : <Navigate to="/" />}
         />
         <Route path="/reset-password" element={<PasswordPage />} />
-        <Route path="/activate/:uid/:token" element={<AccountActivation />} />
+        <Route path="/activate" element={<AccountActivation />} />
       </Routes>
     </Container>
   );
