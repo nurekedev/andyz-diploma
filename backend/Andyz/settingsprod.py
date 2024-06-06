@@ -203,7 +203,6 @@ DJOSER = {
         'activation': 'users.email.ActivationEmail',
 
     }
-
 }
 
 CORS_ALLOW_ALL_ORIGINS = True

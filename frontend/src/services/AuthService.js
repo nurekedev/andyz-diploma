@@ -7,7 +7,7 @@ const handleLogin = async credentials => {
       data,
       status
     } = await axios.post(
-      "http://127.0.0.1:8000/api/v1/auth/jwt/create/",
+      "http://api.andyz.kz/api/v1/auth/jwt/create/",
       credentials,
       {
         headers: {
@@ -21,7 +21,7 @@ const handleLogin = async credentials => {
 
       const {
         data: user
-      } = await axios.get("http://127.0.0.1:8000/api/v1/auth/users/me", {
+      } = await axios.get("http://api.andyz.kz/api/v1/auth/users/me", {
         headers: {
           Authorization: `JWT ${access}`
         }

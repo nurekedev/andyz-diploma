@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework import status
 
 
-from course.serializers import CourseListSerializer, LessonSerializer
+from course.serializers import CourseListSerializer, LessonSlugSerializer
 from course.models import Course, Section, Lesson
 from progress.models import Progress, Enrollment
 from progress.serializers import ProgressSerializer, EnrollmentSerializer
@@ -171,3 +171,12 @@ def marks_as_done(request, course_slug, section_slug, lesson_slug):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_marked_lessons_by_user_and_course(request, course_slug):
+    course = Course.objects.get(slug=course_slug)
+    activities = Progress.objects.filter(created_by=request.user, course=course, status=Progress.DONE)
+    lessons = Lesson.objects.filter(activities__in=activities)
+    serializer = LessonSlugSerializer(lessons, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
