@@ -64,7 +64,7 @@ const Courses = () => {
     >
       {courseData && courseData.length > 0 ? (
         courseData.map((course, index) => (
-          <Link key={index} to={`/courses/${course.slug}`}>
+          <Link key={index} to={`/app/courses/${course.slug}`}>
             <Box
               boxShadow="md"
               borderRadius={15}

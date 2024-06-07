@@ -95,7 +95,7 @@ function LessonList() {
                     _hover={{ color: accordionButtonHoverColor }}
                   >
                     <NavLink
-                      to={`/courses/${courseDetailData?.course.slug}/${lesson.slug}`}
+                      to={`app/courses/${courseDetailData?.course.slug}/${lesson.slug}`}
                       activeClassName="active"
                       style={{
                         display: "flex",
@@ -113,7 +113,9 @@ function LessonList() {
                         )}
                       </Box>
                       {lesson.title}
-                      {doneLessons.some(doneLesson => doneLesson.slug === lesson.slug) && (
+                      {doneLessons.some(
+                        (doneLesson) => doneLesson.slug === lesson.slug
+                      ) && (
                         <Tag
                           size={"md"}
                           borderRadius="full"

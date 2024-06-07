@@ -78,7 +78,7 @@ const MobileCourseMenu = () => {
                     justifyContent={"space-between"}
                   >
                     <Link
-                      to={`/courses/${courseDetailData.course.slug}/${firstLesson}`}
+                      to={`app/courses/${courseDetailData.course.slug}/${firstLesson}`}
                     >
                       <Button
                         bg={buttonBg}
@@ -96,20 +96,20 @@ const MobileCourseMenu = () => {
                     </Link>
                   </Box>
                   <Box mt={4} display={"flex"} flexDir={"column"}>
-                    <NavLink to={`/courses/${id}/`} className="side-link">
+                    <NavLink to={`/app/courses/${id}/`} className="side-link">
                       Description
                     </NavLink>
                     <NavLink
-                      to={`/courses/${id}/content`}
+                      to={`/app/courses/${id}/content`}
                       className="side-link"
                     >
                       Content
                     </NavLink>
-                    <NavLink to={`/courses/${id}/review`} className="side-link">
+                    <NavLink to={`app/courses/${id}/review`} className="side-link">
                       Reviews
                     </NavLink>
                     <NavLink
-                      to={`/courses/${id}/comment`}
+                      to={`/app/courses/${id}/comment`}
                       className="side-link"
                     >
                       Comments
