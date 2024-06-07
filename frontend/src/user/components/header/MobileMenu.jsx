@@ -39,15 +39,15 @@ const MobileMenu = () => {
             <DrawerHeader borderBottomWidth="1px">Menu</DrawerHeader>
             <DrawerBody display={"flex"} flexDir={"column"} gap={5}>
               <Button onClick={onClose}>
-                <Link to={"/"}>My Account</Link>
+                <Link to={"/app"}>My Account</Link>
               </Button>
               {isStaff ? (
                 <Button onClick={onClose}>
-                  <Link to={"/users"}>Users</Link>
+                  <Link to={"users"}>Users</Link>
                 </Button>
               ) : (
                 <Button onClick={onClose}>
-                  <Link to={"/courses"}>My Courses</Link>
+                  <Link to={"courses"}>My Courses</Link>
                 </Button>
               )}
 

@@ -15,6 +15,7 @@ const useAuthStore = create(
       Cookies.remove("refreshToken");
       Cookies.remove("isStaff");
       set({ isStaff: false, isAuthenticated: false });
+      location.reload();
     },
     setIsStaff: isStaff => {
       Cookies.set("isStaff", isStaff ? "true" : "false", {

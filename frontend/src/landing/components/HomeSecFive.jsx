@@ -2,6 +2,7 @@ import { Button, Input, Textarea, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import { API_2 } from "../../services/functions";
+
 const HomeSecFive = () => {
   const toast = useToast();
   const [inputs, setInputs] = useState({
@@ -22,12 +23,12 @@ const HomeSecFive = () => {
           duration: 3000,
           isClosable: true
         });
-        setInputs({
-          date: "",
-          title: "",
-          description: ""
-        });
       }
+      setInputs({
+        name: "",
+        email: "",
+        question_text: ""
+      });
     } catch (error) {
       console.log(error);
     }
@@ -53,12 +54,10 @@ const HomeSecFive = () => {
             </li>
             <li>
               <p>Phone</p>
-
               <span>+7 747 041 5206</span>
             </li>
             <li>
-              <p>location</p>
-
+              <p>Location</p>
               <span>Almaty. Manas st. 31</span>
             </li>
           </ul>

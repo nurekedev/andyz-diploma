@@ -30,7 +30,7 @@ const DesktopMenu = () => {
           justifyContent={"space-between"}
           display={"flex"}
         >
-          <Link to={"/"}>
+          <Link to={"/app"}>
             <Image
               src={logo}
               alt={"logo"}
@@ -44,13 +44,13 @@ const DesktopMenu = () => {
             ) : (
               <FaRegMoon onClick={toggleColorMode} fontSize={24} />
             )}
-            <Link to={"/"} activeclassname={"active"}>
+            <Link to={"/app"} activeclassname={"active"}>
               My Account
             </Link>
             {isStaff ? (
-              <Link to={"/users"}>Users</Link>
+              <Link to={"users"}>Users</Link>
             ) : (
-              <Link to={"/courses"}>My Courses</Link>
+              <Link to={"courses"}>My Courses</Link>
             )}
             <LogoutButton />
           </HStack>
