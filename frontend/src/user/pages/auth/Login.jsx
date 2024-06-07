@@ -15,6 +15,7 @@ import {
   useToast
 } from "@chakra-ui/react";
 import loginBanner from '../../../../public/login.jpg'
+import logo from '../../../assets/logo.png'
 import {  useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
@@ -90,13 +91,7 @@ export default function Login() {
             }}
             p={8}
           >
-            <Image
-              w={100}
-              mb={4}
-              scale={2}
-              objectFit={"cover"}
-              src="../../public/logo.png"
-            />
+            <Image w={100} mb={4} scale={2} objectFit={"cover"} src={logo} />
             <Stack spacing={4} mt={10}>
               <FormControl isRequired>
                 <FormLabel>Email</FormLabel>

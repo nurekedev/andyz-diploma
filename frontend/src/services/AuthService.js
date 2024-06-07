@@ -1,5 +1,6 @@
 import useAuthStore from "@store/AuthStore";
 import axios from "axios";
+import { API } from "./functions";
 
 const handleLogin = async credentials => {
   try {
@@ -7,7 +8,7 @@ const handleLogin = async credentials => {
       data,
       status
     } = await axios.post(
-      "http://127.0.0.1:8000/api/v1/auth/jwt/create/",
+      `${API}/auth/jwt/create/`,
       credentials,
       {
         headers: {
@@ -21,7 +22,7 @@ const handleLogin = async credentials => {
 
       const {
         data: user
-      } = await axios.get("http://127.0.0.1:8000/api/v1/auth/users/me", {
+      } = await axios.get(`${API}/auth/users/me`, {
         headers: {
           Authorization: `JWT ${access}`
         }

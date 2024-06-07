@@ -4,6 +4,7 @@
   margin: 0;
   font-family: "Plus Jakarta Sans", sans-serif;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 .read-more {

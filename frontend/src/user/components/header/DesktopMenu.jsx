@@ -11,7 +11,7 @@ import { TiAdjustBrightness } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { LogoutButton } from "./LogoutButton";
 import useAuthStore from "../../../store/AuthStore";
-
+import logo from '../../../assets/logo.png'
 const DesktopMenu = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const isStaff = useAuthStore((state) => state.isStaff);
@@ -32,7 +32,7 @@ const DesktopMenu = () => {
         >
           <Link to={"/"}>
             <Image
-              src={"/logo.png"}
+              src={logo}
               alt={"logo"}
               height={"50px"}
               objectFit={"cover"}

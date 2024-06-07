@@ -14,7 +14,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { LogoutButton } from "./LogoutButton";
 import useAuthStore from "../../../store/AuthStore";
-
+import logo from '../../../assets/logo.png'
 const MobileMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isStaff = useAuthStore((state) => state.isStaff);
@@ -28,7 +28,7 @@ const MobileMenu = () => {
         mb={10}
       >
         <Link to={"/"}>
-          <Image src={"/logo.png"} height={"40px"} objectFit={"cover"} m={3} />
+          <Image src={logo} height={"40px"} objectFit={"cover"} m={3} />
         </Link>
         <Button onClick={onOpen} m={3}>
           <AiOutlineMenu />

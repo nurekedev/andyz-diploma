@@ -1,7 +1,8 @@
 import { Box, Button, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import Comment from "../../features/comment/Comment";
 import NavigationButtons from "../../features/NavigationButtons";
-import { trackAndMarkLesson } from "../../../services/api";
+import useFetchData, { trackAndMarkLesson } from "../../../services/api";
+import { useParams } from "react-router-dom";
 
 function LessonHeader({ lessonTitle, id, previousLesson, nextLesson }) {
   return (
@@ -23,6 +24,12 @@ function LessonContent({
   sectionSlug,
   lessonSlug
 }) {
+  const { id } = useParams();
+  const doneLessons = useFetchData("/progress/get-done-lessons", id);
+
+  const isDone = doneLessons?.some(
+    (doneLesson) => doneLesson.slug === lessonSlug
+  );
   const handleDone = async () => {
     try {
       await trackAndMarkLesson(courseSlug, sectionSlug, lessonSlug);
@@ -57,8 +64,9 @@ function LessonContent({
         onClick={() => {
           handleDone();
         }}
+        isDisabled={isDone}
       >
-        Mark as Done
+        {isDone ? "You passed this lesson" : "Mark as Done"}
       </Button>
     </Box>
   );

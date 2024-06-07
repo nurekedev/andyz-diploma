@@ -15,8 +15,8 @@ const styles = {
 };
 
 const config = {
-  initialColorMode: "dark",
-  useSystemColorMode: true,
+  initialColorMode: "light",
+  useSystemColorMode: true
 };
 
 const colors = {

@@ -76,6 +76,10 @@ class CourseListSerializer(serializers.ModelSerializer):
                   'created_by', 'image', 'categories')
 
 
+class LessonSlugSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ['slug']
 
 class ArticleContentSerializer(serializers.ModelSerializer):
     class Meta:

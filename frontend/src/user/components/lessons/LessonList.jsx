@@ -19,10 +19,9 @@ import useFetchData from "../../../services/api";
 function LessonList() {
   const { id, lessonSlug } = useParams();
   const courseDetailData = useFetchData("course", id);
-
+  const doneLessons = useFetchData("/progress/get-done-lessons", id);
   const { defaultSectionIndex, setDefaultSectionIndex, setCourseDetailData } =
     useCourseStore();
-
   const [accordionIndex, setAccordionIndex] = useState([]);
 
   useEffect(() => {
@@ -35,12 +34,7 @@ function LessonList() {
       setDefaultSectionIndex(sectionIndex);
       setAccordionIndex([sectionIndex]);
     }
-  }, [
-    courseDetailData,
-    lessonSlug,
-    setCourseDetailData,
-    setDefaultSectionIndex
-  ]);
+  }, [courseDetailData, lessonSlug, setCourseDetailData, setDefaultSectionIndex]);
 
   const accordionButtonBg = useColorModeValue("gray.400", "gray.300");
   const accordionButtonColor = useColorModeValue("white", "gray.800");
@@ -119,14 +113,16 @@ function LessonList() {
                         )}
                       </Box>
                       {lesson.title}
-                      <Tag
-                        size={"md"}
-                        borderRadius="full"
-                        variant="solid"
-                        colorScheme="green"
-                      >
-                        <TagLabel>done</TagLabel>
-                      </Tag>
+                      {doneLessons.some(doneLesson => doneLesson.slug === lesson.slug) && (
+                        <Tag
+                          size={"md"}
+                          borderRadius="full"
+                          variant="solid"
+                          colorScheme="green"
+                        >
+                          <TagLabel>done</TagLabel>
+                        </Tag>
+                      )}
                     </NavLink>
                   </Box>
                 ))}

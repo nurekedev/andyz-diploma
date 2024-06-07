@@ -37,6 +37,8 @@ const Courses = () => {
 
   const getCourseProgress = (slug) => {
     const progress = progressData.find((item) => item.slug === slug);
+    console.log(progress);
+
     return progress ? progress.progress : 0;
   };
 

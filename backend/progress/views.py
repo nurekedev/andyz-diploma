@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework import status
 
 
-from course.serializers import CourseListSerializer, LessonSerializer
+from course.serializers import CourseListSerializer, LessonSlugSerializer
 from course.models import Course, Section, Lesson
 from progress.models import Progress, Enrollment
 from progress.serializers import ProgressSerializer, EnrollmentSerializer
@@ -54,22 +54,23 @@ def get_user_progress_by_course(request, course_slug):
     print(total_points)
 
     coefficient = 100 / total_points if total_points != 0 else 0
+    total_points = coefficient * total_points
     
     print(coefficient)
-
-
     activities = Progress.objects.filter(created_by=request.user, course=course)
     if not course:
         return Response({"detail": "Course not found"}, status=status.HTTP_404_NOT_FOUND)
     
     
-    # print(activities.filter(status=Progress.DONE).aggregate(total_points_done=Sum(Case(When(lesson__lesson_type=Lesson.VIDEO, then=Lesson.VIDEO_WEIGHT), default=0, output_field=IntegerField())) + Sum(Case(When(lesson__lesson_type=Lesson.ARTICLE, then=Lesson.ARTICLE_WEIGHT), default=0, output_field=IntegerField())))['total_points_done'] or 0)
+    progress_points = activities.filter(status=Progress.DONE).aggregate(total_points_done=Sum(Case(When(lesson__lesson_type=Lesson.VIDEO, then=Lesson.VIDEO_WEIGHT), default=0, output_field=IntegerField())) + Sum(Case(When(lesson__lesson_type=Lesson.ARTICLE, then=Lesson.ARTICLE_WEIGHT), default=0, output_field=IntegerField())))['total_points_done'] or 0
 
-    return Response({"score": total_points}, status=status.HTTP_200_OK)
+    progress_percentage = coefficient * progress_points
+
+    return Response({"score": progress_percentage}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([AllowAny])
 def get_patient_progress_by_course(request, course_slug, patient_id):
 
     patient = User.objects.get(id=patient_id)
@@ -98,15 +99,18 @@ def get_patient_progress_by_course(request, course_slug, patient_id):
     print(total_points)
 
     coefficient = 100 / total_points if total_points != 0 else 0
+    total_points = coefficient * total_points
     
-    print(coefficient)
-
-
     activities = Progress.objects.filter(created_by=patient, course=course)
     if not course:
         return Response({"detail": "Course not found"}, status=status.HTTP_404_NOT_FOUND)
     
-    return Response({"score": total_points}, status=status.HTTP_200_OK)
+    
+    progress_points = activities.filter(status=Progress.DONE).aggregate(total_points_done=Sum(Case(When(lesson__lesson_type=Lesson.VIDEO, then=Lesson.VIDEO_WEIGHT), default=0, output_field=IntegerField())) + Sum(Case(When(lesson__lesson_type=Lesson.ARTICLE, then=Lesson.ARTICLE_WEIGHT), default=0, output_field=IntegerField())))['total_points_done'] or 0
+
+    progress_percentage = coefficient * progress_points
+
+    return Response({"score": progress_percentage}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -171,3 +175,12 @@ def marks_as_done(request, course_slug, section_slug, lesson_slug):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_marked_lessons_by_user_and_course(request, course_slug):
+    course = Course.objects.get(slug=course_slug)
+    activities = Progress.objects.filter(created_by=request.user, course=course, status=Progress.DONE)
+    lessons = Lesson.objects.filter(activities__in=activities)
+    serializer = LessonSlugSerializer(lessons, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)

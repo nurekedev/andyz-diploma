@@ -1,10 +1,11 @@
 import Cookies from "js-cookie";
+import { API } from "./functions";
 
 export const RefreshAccessToken = async () => {
   try {
     const refresh = Cookies.get("refreshToken");
     const response = await fetch(
-      "http://127.0.0.1:8000/api/v1/auth/jwt/refresh/",
+      `${API}/auth/jwt/refresh/`,
       {
         method: "POST",
         headers: {

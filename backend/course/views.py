@@ -317,7 +317,7 @@ class RatingUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 class CourseList(ListAPIView):
     serializer_class = CourseListSerializer
     queryset = Course.objects.filter(status=Course.PUBLISHED)
-    permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
 
 
 @api_view(['GET'])

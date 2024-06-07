@@ -1,6 +1,7 @@
 import axiosInstance from "./axiosInstance";
 import { useEffect, useState } from "react";
 
+
 export const useFetchData = (pre_slug, slug) => {
   const [data, setData] = useState(null);
 

@@ -1,3 +1,6 @@
+export const API = "https://api.andyz.kz/api/v1";
+
+
 export function findAdjacentLessons(course, lessonSlug) {
   let previousLesson = null;
   let nextLesson = null;
