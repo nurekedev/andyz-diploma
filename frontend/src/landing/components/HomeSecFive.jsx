@@ -1,5 +1,38 @@
-import { Button, Input, Textarea } from "@chakra-ui/react";
+import { Button, Input, Textarea, useToast } from "@chakra-ui/react";
+import { useState } from "react";
+import axios from "axios";
+import { API_2 } from "../../services/functions";
 const HomeSecFive = () => {
+  const toast = useToast();
+  const [inputs, setInputs] = useState({
+    name: "",
+    email: "",
+    question_text: ""
+  });
+
+  const handleContact = async (inputs) => {
+    try {
+      console.log(inputs);
+      const response = await axios.post(`${API_2}/submit_contact/`, inputs);
+      if (response.status === 200) {
+        toast({
+          title: "Message created.",
+          description: "Message has been successfully created",
+          status: "success",
+          duration: 3000,
+          isClosable: true
+        });
+        setInputs({
+          date: "",
+          title: "",
+          description: ""
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="home-5">
       <div className="container">
@@ -36,20 +69,48 @@ const HomeSecFive = () => {
             type="text"
             _placeholder={{ color: "black" }}
             variant={"flushed"}
+            value={inputs.name}
+            onChange={(e) => {
+              setInputs((prev) => ({
+                ...prev,
+                name: e.target.value
+              }));
+            }}
           />
           <Input
             variant={"flushed"}
-            placeholder="Enter your phone number"
-            type="tel"
+            placeholder="Enter your email"
+            type="email"
             _placeholder={{ color: "black" }}
+            value={inputs.email}
+            onChange={(e) => {
+              setInputs((prev) => ({
+                ...prev,
+                email: e.target.value
+              }));
+            }}
           />
           <Textarea
             placeholder="Enter your message"
-                      _placeholder={{ color: "black" }}
-                      resize={"none"}
+            _placeholder={{ color: "black" }}
+            resize={"none"}
             h={"full"}
-                  />
-                  <Button py={2}>Send message</Button>
+            value={inputs.question_text}
+            onChange={(e) => {
+              setInputs((prev) => ({
+                ...prev,
+                question_text: e.target.value
+              }));
+            }}
+          />
+          <Button
+            py={2}
+            onClick={() => {
+              handleContact(inputs);
+            }}
+          >
+            Send message
+          </Button>
         </div>
       </div>
     </div>
