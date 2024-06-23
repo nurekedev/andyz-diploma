@@ -23,3 +23,6 @@ Listing of technologies and tools used in the project.
 - Қуанышбек Мағжан ([holyPaladu](https://github.com/mako135)) - Фронтенд-Разработчик 
 - Сақтағанов Нұржан (@me) ([nurekedev](https://github.com/nurekedev)) - Бэкенд-Разработчик
 
+## Preview
+
+![](https://github.com/nurekedev/andyz-diploma/blob/main/frontend/guide.gif)
