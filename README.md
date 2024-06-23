@@ -1,7 +1,7 @@
 <img src="https://github.com/nurekedev/andyz-diploma/blob/main/frontend/src/assets/logo.png" alt="Alt Text" style="height: 80px;">
 
 
-# Andyz - Interactive online courses on rehabilitation of patients after stroke: development and implementation of the website. [Diploma]
+## Andyz - Interactive online courses on rehabilitation of patients after stroke: development and implementation of the website. [Diploma]
 
 
 ## Description
