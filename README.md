@@ -25,4 +25,4 @@ Listing of technologies and tools used in the project.
 
 ## Preview
 
-![](https://github.com/nurekedev/andyz-diploma/blob/main/frontend/guide)
+![](https://github.com/nurekedev/andyz-diploma/blob/main/frontend/preview.gif)
