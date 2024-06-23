@@ -1,4 +1,4 @@
-![imresizer-1704781125255](https://github.com/nurekedev/zhan-production/assets/91678403/f540079d-f26d-4927-9e63-615f18bfd0a3)
+![imresizer-1704781125255]([https://github.com/nurekedev/zhan-production/assets/91678403/f540079d-f26d-4927-9e63-615f18bfd0a3](https://github.com/nurekedev/andyz-diploma/blob/main/frontend/src/assets/logo.png))
 
 
 # Andyz - Interactive online courses on rehabilitation of patients after stroke: development and implementation of the website. [Diploma]
